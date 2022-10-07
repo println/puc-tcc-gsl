@@ -22,10 +22,10 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class RabbitMqConfig {
 
-    @Value("\${event.queue.name}")
+    @Value("\${eventsourcing.queues.event.name}")
     private lateinit var eventQueue: String
 
-    @Value("\${command.queue.name}")
+    @Value("\${eventsourcing.queues.command.name}")
     private lateinit var commandQueue: String
 
     @Bean

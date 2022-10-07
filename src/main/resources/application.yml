@@ -1,0 +1,18 @@
+server:
+  port: ${PORT:8081}
+
+spring:
+  rabbitmq:
+    port: ${RABBITMQ_PORT:5672}
+    host: ${RABBITMQ_HOST:192.168.0.2}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASS:guest}
+  application:
+    name: skeleton
+
+eventsourcing:
+  queues:
+    event:
+      name: ${RABBITMQ_QUEUE_EVENT:event.collector}
+    command:
+      name: ${RABBITMQ_QUEUE_COMMAND:command.collector}
