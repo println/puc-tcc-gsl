@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "namespace": "gsl.schemas",
+  "name": "FreightPurchaseCommand",
+  "fields": [
+    {
+      "name": "client",
+      "type": "string",
+      "default": "test"
+    },
+    {
+      "name": "consumer",
+      "type": "string"
+    },
+    {
+      "name": "product",
+      "type": "string"
+    }
+  ]
+}

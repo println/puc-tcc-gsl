@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "namespace": "gsl.schemas",
+  "name": "FreightPurchasedEvent",
+  "fields": [
+    {
+      "name": "client",
+      "type": "string"
+    },
+    {
+      "name": "consumer",
+      "type": "string"
+    },
+    {
+      "name": "product",
+      "type": "string"
+    }
+  ]
+}
