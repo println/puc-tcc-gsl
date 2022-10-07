@@ -74,6 +74,10 @@ tasks.getByName<Test>("integrationTest") {
     }
 }
 
+tasks.bootJar {
+    archiveFileName.set("app.jar")
+}
+
 tasks.check {
     dependsOn(integrationTest)
 }
