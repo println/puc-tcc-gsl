@@ -1,0 +1,1 @@
+docker run --name xpto-container -p 8080:8080 gsl/xpto-service:v1

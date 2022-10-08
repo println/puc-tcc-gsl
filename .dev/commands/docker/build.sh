@@ -1,0 +1,1 @@
+docker build -t gsl/xpto-service:v1 .
