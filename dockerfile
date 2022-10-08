@@ -1,13 +1,18 @@
-FROM openjdk:20-ea-11-slim-buster as build
+##Compile image
+FROM gradle:7.5.1-jdk11-alpine AS build
 WORKDIR /workspace/app
 
-COPY gradle gradle
-COPY build.gradle.kts settings.gradle.kts gradlew ./
+COPY build.gradle.kts settings.gradle.kts ./
+
+RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
+
 COPY src src
 
-RUN ./gradlew build -x test
+RUN gradle clean build --no-daemon
 
-FROM openjdk:20-ea-11-slim-buster
+
+#Binary image
+FROM openjdk:11-jre-slim
 VOLUME /tmp
 
 ARG DEPENDENCY=/workspace/app/build/libs
