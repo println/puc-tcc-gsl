@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gsl-module
+spec:
+  selector:
+    matchLabels:
+      app: gsl-module
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: gsl-module
+    spec:
+      containers:
+        - name: gsl-module
+          image: gsl/xpto-service
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
