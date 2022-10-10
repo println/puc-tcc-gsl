@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gsl-order
+  namespace: gsl
+spec:
+  selector:
+    matchLabels:
+      app: gsl-order
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: gsl-order
+    spec:
+      containers:
+        - name: gsl-order-unit
+          image: gsl/order:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
