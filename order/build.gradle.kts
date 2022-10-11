@@ -6,6 +6,7 @@ plugins {
     id("com.github.davidmc24.gradle.plugin.avro") version "1.5.0"
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
+    kotlin("plugin.jpa") version "1.6.10"
 }
 
 group = "boaentrega.gsl"
@@ -42,6 +43,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
     implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
+
+    runtimeOnly("com.h2database:h2")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testIntegrationImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -81,6 +85,7 @@ tasks.bootJar {
 }
 
 tasks.check {
+    //dependsOn(gradle.includedBuild(":shared:support").task(":app:build"))
     dependsOn(integrationTest)
 }
 
@@ -99,10 +104,3 @@ avro {
 tasks.getByName<com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask>("generateAvroJava") {
     source("src/main/resources/schemas/avro")
 }
-
-
-
-tasks.register("run") {
-    dependsOn(gradle.includedBuild(":shared:support").task(":app:build"))
-}
-

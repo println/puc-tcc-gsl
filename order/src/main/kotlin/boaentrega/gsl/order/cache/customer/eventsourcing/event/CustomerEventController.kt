@@ -1,0 +1,37 @@
+package boaentrega.gsl.order.cache.customer.eventsourcing.event
+
+import boaentrega.gsl.order.cache.customer.Customer
+import boaentrega.gsl.order.cache.customer.CustomerService
+import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
+import boaentrega.gsl.support.eventsourcing.connectors.ConsumerConnector
+import boaentrega.gsl.support.eventsourcing.controller.AbstractConsumerController
+import boaentrega.gsl.support.eventsourcing.controller.annotations.ConsumptionHandler
+import gsl.schemas.CustomerCreatedEvent
+import gsl.schemas.CustomerDeletedEvent
+import gsl.schemas.CustomerUpdatedEvent
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.stereotype.Component
+import java.util.*
+
+@Component
+class CustomerEventController(
+        @Qualifier(EventSourcingBeansConstants.CONTEXT_EVENT_CONSUMER)
+        private val consumerConnector: ConsumerConnector,
+        private val service: CustomerService
+) : AbstractConsumerController(consumerConnector) {
+
+    @ConsumptionHandler(CustomerCreatedEvent::class)
+    fun listenCustomerCreated(event: CustomerCreatedEvent) {
+        service.create(Customer())
+    }
+
+    @ConsumptionHandler(CustomerUpdatedEvent::class)
+    fun listenCustomerUpdated(event: CustomerUpdatedEvent) {
+        service.update(UUID.randomUUID(), Customer())
+    }
+
+    @ConsumptionHandler(CustomerDeletedEvent::class)
+    fun listenCustomerDeleted(event: CustomerDeletedEvent) {
+        service.delete(UUID.randomUUID())
+    }
+}

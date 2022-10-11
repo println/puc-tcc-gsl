@@ -17,9 +17,18 @@ repositories {
 
 dependencies {
     implementation("org.apache.avro:avro:1.11.1")
+
+    //spring
     implementation("org.springframework.boot:spring-boot:2.6.7")
     implementation("org.springframework:spring-context:5.3.19")
     implementation("org.springframework.amqp:spring-rabbit:2.4.4")
+
+    //jpa-spring
+    implementation("org.springframework.data:spring-data-commons:2.6.4")
+    implementation("org.springframework.data:spring-data-jpa:2.6.4")
+    implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
+    implementation("org.hibernate:hibernate-core:5.6.8.Final")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

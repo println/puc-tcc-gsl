@@ -1,12 +1,12 @@
-package boaentrega.gsl.order.domain.context.web
+package boaentrega.gsl.order.domain.order.web
 
-import boaentrega.gsl.order.domain.context.ContextService
+import boaentrega.gsl.order.domain.order.OrderService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
 
 @RestController
-class ContextController(val service: ContextService) {
+class OrderController(val service: OrderService) {
     @GetMapping
     fun checkEvents(): String {
         val date = Date().toString()

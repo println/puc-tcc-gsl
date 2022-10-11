@@ -8,7 +8,21 @@ spring:
     username: ${RABBITMQ_USER:rabbitmq}
     password: ${RABBITMQ_PASS:rabbitmq}
   application:
-    name: skeleton
+    name: order
+  h2:
+    console:
+      settings:
+        web-allow-others: 'false'
+        trace: 'false'
+      path: /h2-console
+  datasource:
+    url: jdbc:h2:mem:order-db;Mode=Oracle;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+  sql:
+    init:
+      platform: h2
+      continue-on-error: 'true'
 
 eventsourcing:
   queues:
@@ -16,3 +30,7 @@ eventsourcing:
       name: ${RABBITMQ_QUEUE_EVENT:gsl.events}
     command:
       name: ${RABBITMQ_QUEUE_COMMAND:gsl.commands}
+
+
+
+
