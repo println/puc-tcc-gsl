@@ -2,6 +2,14 @@ server:
   port: ${PORT:8081}
 
 spring:
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: configure-me_group-id
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      client-id: configure-me_client-id
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:192.168.0.2:9092}
   rabbitmq:
     port: ${RABBITMQ_PORT:5672}
     host: ${RABBITMQ_HOST:192.168.0.2}
@@ -25,11 +33,17 @@ spring:
       continue-on-error: 'true'
 
 eventsourcing:
-  queues:
-    event:
-      name: ${RABBITMQ_QUEUE_EVENT:gsl.events}
-    command:
-      name: ${RABBITMQ_QUEUE_COMMAND:gsl.commands}
+  platform: kafka
+  kafka:
+    topics:
+      order: order
+      freight: freight
+  amqp:
+    queues:
+      event:
+        name: ${EVENTSOURCING_QUEUE_EVENT:gsl.events}
+      command:
+        name: ${EVENTSOURCING_QUEUE_COMMAND:gsl.commands}
 
 
 

@@ -1,31 +1,32 @@
 package boaentrega.gsl.order.configuration.config
 
 import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
+import boaentrega.gsl.support.eventsourcing.connectors.ConnectorFactory
 import boaentrega.gsl.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.support.eventsourcing.connectors.ProducerConnector
-import boaentrega.gsl.support.eventsourcing.connectors.amqp.AmqpConsumerConnector
-import boaentrega.gsl.support.eventsourcing.connectors.amqp.AmqpProducerConnector
+import boaentrega.gsl.support.eventsourcing.connectors.amqp.AmqpConnectorFactory
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter
 import org.springframework.amqp.support.converter.MessageConverter
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 
 @Configuration
+@ConditionalOnProperty(prefix = "eventsourcing", name = ["platform"], havingValue = "rabbitmq")
 class RabbitMqConfig {
 
-    @Value("\${eventsourcing.queues.event.name}")
+    @Value("\${eventsourcing.amqp.queues.event.name}")
     private lateinit var eventQueue: String
 
-    @Value("\${eventsourcing.queues.command.name}")
+    @Value("\${eventsourcing.amqp.queues.command.name}")
     private lateinit var commandQueue: String
 
     @Bean
@@ -43,27 +44,29 @@ class RabbitMqConfig {
         return Jackson2JsonMessageConverter(objectMapper)
     }
 
+    @Bean
+    fun defineConnectorsFactory( connectionFactory: ConnectionFactory,
+                               messageConverter: MessageConverter):ConnectorFactory{
+        return AmqpConnectorFactory(connectionFactory, messageConverter)
+    }
+
     @Bean(EventSourcingBeansConstants.CONTEXT_EVENT_PRODUCER)
-    fun createEventProducerConnector(
-            connectionFactory: ConnectionFactory,
-            messageConverter: MessageConverter): ProducerConnector {
-        return AmqpProducerConnector(eventQueue, connectionFactory, messageConverter)
+    fun createEventProducerConnector(connectorFactory: ConnectorFactory): ProducerConnector {
+        return connectorFactory.createProducer(eventQueue)
     }
 
     @Bean(EventSourcingBeansConstants.CONTEXT_COMMAND_PRODUCER)
-    fun createCommandProducerConnector(
-            connectionFactory: ConnectionFactory,
-            messageConverter: MessageConverter): ProducerConnector {
-        return AmqpProducerConnector(commandQueue, connectionFactory, messageConverter)
+    fun createCommandProducerConnector(connectorFactory: ConnectorFactory): ProducerConnector {
+        return connectorFactory.createProducer(commandQueue)
     }
 
     @Bean(EventSourcingBeansConstants.CONTEXT_EVENT_CONSUMER)
-    fun createEventConsumerConnector(connectionFactory: ConnectionFactory): ConsumerConnector {
-        return AmqpConsumerConnector(eventQueue, connectionFactory)
+    fun createEventConsumerConnector(connectorFactory: ConnectorFactory): ConsumerConnector {
+        return connectorFactory.createConsumer(eventQueue)
     }
 
     @Bean(EventSourcingBeansConstants.CONTEXT_COMMAND_CONSUMER)
-    fun createCommandConsumerConnector(connectionFactory: ConnectionFactory): ConsumerConnector {
-        return AmqpConsumerConnector(commandQueue, connectionFactory)
+    fun createCommandConsumerConnector(connectorFactory: ConnectorFactory): ConsumerConnector {
+        return connectorFactory.createConsumer(commandQueue)
     }
 }

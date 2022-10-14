@@ -1,0 +1,1 @@
+docker compose -f ../environment/kafka-docker-compose.yml up -d

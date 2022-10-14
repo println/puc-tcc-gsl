@@ -36,6 +36,7 @@ dependencies {
 
     implementation("org.apache.avro:avro:1.11.1")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

@@ -21,7 +21,10 @@ dependencies {
     //spring
     implementation("org.springframework.boot:spring-boot:2.6.7")
     implementation("org.springframework:spring-context:5.3.19")
+
+    //messaging
     implementation("org.springframework.amqp:spring-rabbit:2.4.4")
+    implementation("org.springframework.kafka:spring-kafka:2.8.5")
 
     //jpa-spring
     implementation("org.springframework.data:spring-data-commons:2.6.4")

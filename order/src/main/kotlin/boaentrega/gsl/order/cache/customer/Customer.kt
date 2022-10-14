@@ -1,3 +1,8 @@
 package boaentrega.gsl.order.cache.customer
 
-data class Customer(val name:String="")
+import java.util.*
+import javax.persistence.Entity
+import javax.persistence.Id
+
+@Entity
+data class Customer(@Id val id: UUID)

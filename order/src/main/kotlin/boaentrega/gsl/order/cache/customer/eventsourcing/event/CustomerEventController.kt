@@ -22,12 +22,12 @@ class CustomerEventController(
 
     @ConsumptionHandler(CustomerCreatedEvent::class)
     fun listenCustomerCreated(event: CustomerCreatedEvent) {
-        service.create(Customer())
+        service.create(Customer(UUID.randomUUID()))
     }
 
     @ConsumptionHandler(CustomerUpdatedEvent::class)
     fun listenCustomerUpdated(event: CustomerUpdatedEvent) {
-        service.update(UUID.randomUUID(), Customer())
+        service.update(UUID.randomUUID(), Customer(UUID.randomUUID()))
     }
 
     @ConsumptionHandler(CustomerDeletedEvent::class)

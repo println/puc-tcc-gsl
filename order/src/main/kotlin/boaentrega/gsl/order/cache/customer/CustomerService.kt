@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class CustomerService(/*private val customerRepository: CustomerRepository*/) {
+class CustomerService(
+        private val customerRepository: CustomerRepository) {
+
     fun create(customer: Customer) {
 
     }

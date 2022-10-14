@@ -3,7 +3,7 @@ package boaentrega.gsl.support.eventsourcing.connectors
 import boaentrega.gsl.support.eventsourcing.messages.Message
 import boaentrega.gsl.support.extensions.ClassExtensions.logger
 
-abstract class AbstractConsumerConnector : boaentrega.gsl.support.eventsourcing.connectors.ConsumerConnector {
+abstract class AbstractConsumerConnector : ConsumerConnector {
 
     private val logger = logger()
     private var isRunning = false
