@@ -11,7 +11,7 @@ class GenericConsumerConnector(val bean: String) : AbstractConsumerConnector() {
     }
 
     override fun getId(): String {
-        return "teste"
+        return "dummy"
     }
 
     override fun startConsumer() {

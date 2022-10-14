@@ -14,6 +14,7 @@ import org.springframework.kafka.support.TopicPartitionOffset
 class KafkaConsumerConnector(
         consumerFactory: ConsumerFactory<String, String>,
         private val topic: String,
+        private val groupId: String
 ): MessageListener<String, String>, AbstractConsumerConnector() {
 
     private val listenerContainer: KafkaMessageListenerContainer<String, String>
@@ -25,7 +26,7 @@ class KafkaConsumerConnector(
     }
 
     override fun onMessage(data: ConsumerRecord<String, String>) {
-        val messageBody = data.toString()
+        val messageBody = data.value()
         val obj = messageBody.toObject(Message::class.java)
         consume(obj)
     }

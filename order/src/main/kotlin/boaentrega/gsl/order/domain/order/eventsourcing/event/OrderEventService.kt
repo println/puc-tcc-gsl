@@ -18,6 +18,6 @@ class OrderEventService(
     fun emit(data: Any) {
         val message = EventMessage(data)
         producerConnector.publish(message)
-        logger.info("Event has been emitted: ${message.toJsonString()}")
+        logger.info("Event has been emitted to [${producerConnector.getId()}]: ${message.toJsonString()}")
     }
 }

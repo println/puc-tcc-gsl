@@ -19,7 +19,7 @@ class OrderCommandService(
     fun send(data: Any) {
         val message = CommandMessage(data)
         producerConnector.publish(message)
-        logger.info("Command has been sent: ${message.toJsonString()}")
+        logger.info("Command has been sent to [${producerConnector.getId()}]: ${message.toJsonString()}")
     }
 
 }

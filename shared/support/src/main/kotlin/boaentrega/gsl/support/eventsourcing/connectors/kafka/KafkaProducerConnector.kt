@@ -27,4 +27,8 @@ class KafkaProducerConnector(
     override fun publish(message: Message) {
         template.send(topic, message.toJsonString())
     }
+
+    override fun getId(): String {
+        return topic
+    }
 }

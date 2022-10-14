@@ -4,9 +4,9 @@ import boaentrega.gsl.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.support.extensions.ClassExtensions.logger
 
 class ConsumerBinder(
-        private val controller: boaentrega.gsl.support.eventsourcing.controller.AbstractConsumerController,
+        private val controller: AbstractConsumerController,
         private val consumerConnector: ConsumerConnector,
-        private val dispatcher: boaentrega.gsl.support.eventsourcing.controller.MessageDispatcher = boaentrega.gsl.support.eventsourcing.controller.MessageDispatcher(controller)
+        private val dispatcher: MessageDispatcher = MessageDispatcher(controller, consumerConnector.getId())
 ) {
     private val logger = logger()
 

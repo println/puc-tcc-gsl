@@ -7,4 +7,8 @@ class GenericProducerConnector(val bean: String) : ProducerConnector {
     override fun publish(message: Message) {
         TODO("Not yet implemented")
     }
+
+    override fun getId(): String {
+        return "dummy"
+    }
 }

@@ -25,4 +25,8 @@ class AmqpProducerConnector(
     override fun publish(message: Message) {
         template.convertAndSend(queueName, message)
     }
+
+    override fun getId(): String {
+        return queueName
+    }
 }

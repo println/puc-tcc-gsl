@@ -5,7 +5,7 @@ spring:
   kafka:
     consumer:
       auto-offset-reset: earliest
-      group-id: configure-me_group-id
+      group-id: ${spring.application.name}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       client-id: configure-me_client-id
@@ -35,6 +35,7 @@ spring:
 eventsourcing:
   platform: kafka
   kafka:
+    group-id: ${spring.application.name}
     topics:
       order: order
       freight: freight

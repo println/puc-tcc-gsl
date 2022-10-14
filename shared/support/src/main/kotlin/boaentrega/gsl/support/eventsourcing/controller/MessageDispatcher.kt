@@ -10,17 +10,18 @@ import org.springframework.util.ReflectionUtils
 import java.lang.reflect.Method
 
 class MessageDispatcher(
-        private val instance: Any
+        private val instance: Any,
+        private val sourceId: String
 ) {
     private val logger = logger()
-    private val errorHandler = boaentrega.gsl.support.eventsourcing.controller.MessageErrorDispatcher(instance)
+    private val errorHandler = MessageErrorDispatcher(instance)
     private val dispatchTable: Map<String, Pair<Class<*>, Method>>
 
 
     init {
         dispatchTable = extractDispatchTable()
         if (!canRun()) {
-            logger.error("Dispatcher not has handle methods")
+            logger.error("[$sourceId] Dispatcher not has handle methods")
         }
     }
 
@@ -35,18 +36,18 @@ class MessageDispatcher(
 
     fun dispatch(message: Message): Boolean {
         if (dispatchTable.isEmpty()) {
-            logger.error("Not have handlers")
+            logger.error("[$sourceId] Not have handlers")
             errorHandler.dispatchError(ErrorType.EMPTY_HANDLERS, message.identifier, message.content)
             return false
         }
 
         if (!dispatchTable.containsKey(message.identifier)) {
-            logger.error("Handle Id not found")
+            logger.error("[$sourceId] Handle Id not found")
             return errorHandler.dispatchError(ErrorType.NOT_FOUND, message.identifier, message.content)
         }
 
         if (!Functions.Json.isValid(message.content)) {
-            logger.error("Can't parse message content")
+            logger.error("[$sourceId] Can't parse message content")
             return errorHandler.dispatchError(ErrorType.PARSE_FAILED, message.identifier, message.content)
         }
 

@@ -4,17 +4,20 @@ import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
 import boaentrega.gsl.support.eventsourcing.connectors.ConnectorFactory
 import boaentrega.gsl.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.support.eventsourcing.connectors.ProducerConnector
+import boaentrega.gsl.support.eventsourcing.connectors.dummy.DummyConnectorFactory
 import boaentrega.gsl.support.eventsourcing.connectors.kafka.KafkaConnectorFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.ProducerFactory
 
 
+//@EnableKafka
 @Configuration
 @ConditionalOnProperty(prefix = "eventsourcing", name = ["platform"], havingValue = "kafka")
 class KafkaConfig {
@@ -27,10 +30,13 @@ class KafkaConfig {
     @Value(value = "\${spring.kafka.bootstrap-servers}")
     private lateinit var bootstrapAddress: String
 
+    @Value(value = "\${spring.kafka.consumer.group-id}")
+    private lateinit var groupId: String
+
     fun createProps(): Map<String, String> {
         val props = mutableMapOf<String, String>()
         props["bootstrap.servers"] = bootstrapAddress
-        props["group.id"] = "order"
+        props["group.id"] = groupId
         props["enable.auto.commit"] = "true"
         props["auto.commit.interval.ms"] = "1000"
         props["session.timeout.ms"] = "30000"
@@ -38,7 +44,6 @@ class KafkaConfig {
         props["value.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
         props["key.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
         props["value.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"
-        props["partition.assignment.strategy"] = "range"
         return props
     }
 
@@ -47,7 +52,7 @@ class KafkaConfig {
         val props = createProps()
         val consumerConnector: ConsumerFactory<String, String> = DefaultKafkaConsumerFactory(props)
         val producerConnector: ProducerFactory<String, String> = DefaultKafkaProducerFactory(props)
-        return KafkaConnectorFactory(consumerConnector, producerConnector)
+        return KafkaConnectorFactory(consumerConnector, producerConnector, groupId)
     }
 
     @Bean(EventSourcingBeansConstants.CONTEXT_EVENT_PRODUCER)

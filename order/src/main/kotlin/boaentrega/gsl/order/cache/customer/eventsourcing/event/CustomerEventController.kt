@@ -13,25 +13,25 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 import java.util.*
 
-@Component
-class CustomerEventController(
-        @Qualifier(EventSourcingBeansConstants.CONTEXT_EVENT_CONSUMER)
-        private val consumerConnector: ConsumerConnector,
-        private val service: CustomerService
-) : AbstractConsumerController(consumerConnector) {
-
-    @ConsumptionHandler(CustomerCreatedEvent::class)
-    fun listenCustomerCreated(event: CustomerCreatedEvent) {
-        service.create(Customer(UUID.randomUUID()))
-    }
-
-    @ConsumptionHandler(CustomerUpdatedEvent::class)
-    fun listenCustomerUpdated(event: CustomerUpdatedEvent) {
-        service.update(UUID.randomUUID(), Customer(UUID.randomUUID()))
-    }
-
-    @ConsumptionHandler(CustomerDeletedEvent::class)
-    fun listenCustomerDeleted(event: CustomerDeletedEvent) {
-        service.delete(UUID.randomUUID())
-    }
-}
+////@Component
+//class CustomerEventController(
+//        @Qualifier(EventSourcingBeansConstants.CONTEXT_EVENT_CONSUMER)
+//        private val consumerConnector: ConsumerConnector,
+//        private val service: CustomerService
+//) : AbstractConsumerController(consumerConnector) {
+//
+//    @ConsumptionHandler(CustomerCreatedEvent::class)
+//    fun listenCustomerCreated(event: CustomerCreatedEvent) {
+//        service.create(Customer(UUID.randomUUID()))
+//    }
+//
+//    @ConsumptionHandler(CustomerUpdatedEvent::class)
+//    fun listenCustomerUpdated(event: CustomerUpdatedEvent) {
+//        service.update(UUID.randomUUID(), Customer(UUID.randomUUID()))
+//    }
+//
+//    @ConsumptionHandler(CustomerDeletedEvent::class)
+//    fun listenCustomerDeleted(event: CustomerDeletedEvent) {
+//        service.delete(UUID.randomUUID())
+//    }
+//}

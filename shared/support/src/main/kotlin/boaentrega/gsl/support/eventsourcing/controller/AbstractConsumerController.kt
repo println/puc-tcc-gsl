@@ -12,7 +12,7 @@ abstract class AbstractConsumerController(
 
     private val logger = logger()
 
-    private val binder: boaentrega.gsl.support.eventsourcing.controller.ConsumerBinder = boaentrega.gsl.support.eventsourcing.controller.ConsumerBinder(this, consumerConnector)
+    private val binder: ConsumerBinder = ConsumerBinder(this, consumerConnector)
 
     @EventListener(ApplicationReadyEvent::class)
     fun startConsuming() {

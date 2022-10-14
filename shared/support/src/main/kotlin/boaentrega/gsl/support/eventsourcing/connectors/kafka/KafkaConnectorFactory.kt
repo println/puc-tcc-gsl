@@ -8,13 +8,14 @@ import org.springframework.kafka.core.ProducerFactory
 
 class KafkaConnectorFactory(
         private val consumerFactory: ConsumerFactory<String, String>,
-        private val producerFactory: ProducerFactory<String, String>) : ConnectorFactory {
+        private val producerFactory: ProducerFactory<String, String>,
+        private val groupId: String) : ConnectorFactory {
 
     override fun createProducer(topic: String): ProducerConnector {
-        return KafkaProducerConnector(producerFactory,topic)
+        return KafkaProducerConnector(producerFactory,topic, groupId)
     }
 
     override fun createConsumer(topic: String): ConsumerConnector {
-        return KafkaConsumerConnector(consumerFactory, topic)
+        return KafkaConsumerConnector(consumerFactory, topic, groupId)
     }
 }
