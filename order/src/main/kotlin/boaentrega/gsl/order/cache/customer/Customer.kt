@@ -4,5 +4,5 @@ import java.util.*
 import javax.persistence.Entity
 import javax.persistence.Id
 
-@Entity
-data class Customer(@Id val id: UUID)
+//@Entity
+//data class Customer(@Id val id: UUID)

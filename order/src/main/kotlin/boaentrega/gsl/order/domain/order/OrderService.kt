@@ -3,9 +3,8 @@ package boaentrega.gsl.order.domain.order
 import boaentrega.gsl.order.domain.order.eventsourcing.command.OrderCommandService
 import boaentrega.gsl.order.domain.order.eventsourcing.event.OrderEventService
 import gsl.schemas.FreightPurchaseCommand
-import gsl.schemas.FreightPurchasedEvent
 import org.springframework.stereotype.Service
-import java.util.*
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class OrderService(
@@ -18,12 +17,14 @@ class OrderService(
     }
 
     fun applyCommand(command: FreightPurchaseCommand) {
-        eventService.emit(FreightPurchasedEvent(command.client, command.consumer, command.product))
+
     }
 
-    fun createOrder(data: Order): Order {
-        repository.save(data)
-        return Order()
+    @Transactional
+    fun createOrder(order: Order): Order {
+        val entity = repository.save(Order())
+        eventService.notifyCreated(entity)
+        return entity
     }
 
     fun findByIdAndUser(): Order {

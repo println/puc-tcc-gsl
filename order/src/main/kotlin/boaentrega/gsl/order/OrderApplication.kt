@@ -1,9 +1,13 @@
 package boaentrega.gsl.order
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.runApplication
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
+
+@EnableJpaRepositories
+@EnableJpaAuditing
 @SpringBootApplication()
 class DemoApplication
 

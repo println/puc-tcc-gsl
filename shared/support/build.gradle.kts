@@ -21,6 +21,7 @@ dependencies {
     //spring
     implementation("org.springframework.boot:spring-boot:2.6.7")
     implementation("org.springframework:spring-context:5.3.19")
+    implementation("org.springframework.boot:spring-boot-autoconfigure:2.6.7")
 
     //messaging
     implementation("org.springframework.amqp:spring-rabbit:2.4.4")

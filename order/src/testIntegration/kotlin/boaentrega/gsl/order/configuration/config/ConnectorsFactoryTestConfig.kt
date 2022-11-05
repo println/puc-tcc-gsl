@@ -1,7 +1,6 @@
 package boaentrega.gsl.order.configuration.config
 
-import boaentrega.gsl.support.eventsourcing.connectors.ConnectorFactory
-import boaentrega.gsl.support.eventsourcing.connectors.dummy.DummyConnectorFactory
+import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyConnectorFactory
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 
@@ -10,7 +9,7 @@ import org.springframework.context.annotation.Bean
 class ConnectorsFactoryTestConfig {
 
     @Bean
-    fun defineConnectorsFactory(): ConnectorFactory {
+    fun defineConnectorsFactory(): boaentrega.gsl.order.support.eventsourcing.connectors.AbstractConnectorFactory {
         return DummyConnectorFactory()
     }
 }

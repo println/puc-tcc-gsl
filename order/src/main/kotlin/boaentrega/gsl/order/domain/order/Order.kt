@@ -1,9 +1,12 @@
 package boaentrega.gsl.order.domain.order
 
-import boaentrega.gsl.support.jpa.AuditableModel
+import boaentrega.gsl.order.support.jpa.AuditableModel
 import javax.persistence.Entity
+import javax.persistence.Table
 
 @Entity
-class Order() : AuditableModel<Order>() {
+@Table(name = "orders")
+class Order : AuditableModel<Order>() {
+    val name = "test"
 
 }

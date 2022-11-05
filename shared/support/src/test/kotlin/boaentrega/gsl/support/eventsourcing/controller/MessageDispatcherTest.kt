@@ -24,11 +24,11 @@ internal class MessageDispatcherTest {
         }
     }
 
-    private lateinit var dispatcher: boaentrega.gsl.support.eventsourcing.controller.MessageDispatcher
+    private lateinit var dispatcher: MessageDispatcher
 
     @BeforeEach
     fun setup(){
-        dispatcher = boaentrega.gsl.support.eventsourcing.controller.MessageDispatcher(Controllers.SimpleController())
+        dispatcher = MessageDispatcher(Controllers.SimpleController(), "test")
     }
 
     @AfterEach
@@ -55,7 +55,7 @@ internal class MessageDispatcherTest {
 
     @Test
     fun dispatchErrorEmptyHandlers() {
-        dispatcher = boaentrega.gsl.support.eventsourcing.controller.MessageDispatcher(Controllers.WithoutController())
+        dispatcher = MessageDispatcher(Controllers.WithoutController(), "test")
         dispatcher.dispatch(EventMessage(Constants.HANDLE_ID_ANY, Constants.EMPTY_MESSAGE))
         assertNotNull(errorType)
         assertNotNull(handleId)

@@ -1,17 +1,15 @@
 package boaentrega.gsl.order.cache.customer.eventsourcing.event
 
-import boaentrega.gsl.order.cache.customer.Customer
-import boaentrega.gsl.order.cache.customer.CustomerService
-import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
-import boaentrega.gsl.support.eventsourcing.connectors.ConsumerConnector
-import boaentrega.gsl.support.eventsourcing.controller.AbstractConsumerController
-import boaentrega.gsl.support.eventsourcing.controller.annotations.ConsumptionHandler
-import gsl.schemas.CustomerCreatedEvent
-import gsl.schemas.CustomerDeletedEvent
-import gsl.schemas.CustomerUpdatedEvent
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.stereotype.Component
-import java.util.*
+//import boaentrega.gsl.order.cache.customer.Customer
+//import boaentrega.gsl.order.cache.customer.CustomerService
+//import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
+//import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
+//import gsl.schemas.CustomerCreatedEvent
+//import gsl.schemas.CustomerDeletedEvent
+//import gsl.schemas.CustomerUpdatedEvent
+//import org.springframework.beans.factory.annotation.Qualifier
+//import org.springframework.stereotype.Component
+//import java.util.*
 
 ////@Component
 //class CustomerEventController(
