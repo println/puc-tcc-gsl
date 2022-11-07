@@ -1,0 +1,11 @@
+{
+  "type": "enum",
+  "namespace": "gsl.schemas",
+  "name": "OrderEventStatus",
+  "symbols": [
+    "CREATED",
+    "PROCESSING_PAYMENT",
+    "REFUSED",
+    "ACCEPTED"
+  ]
+}

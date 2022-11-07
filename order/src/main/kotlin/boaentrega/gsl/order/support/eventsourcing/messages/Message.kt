@@ -4,23 +4,26 @@ import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.functions.Functions
 import com.fasterxml.jackson.annotation.JsonCreator
 import org.apache.avro.specific.SpecificRecordBase
+import java.util.*
 
 open class Message {
+    val trackId: UUID?
     val type: MessageType
     val identifier: String
     val content: String
 
     @JsonCreator
-    constructor(type: MessageType, identifier: String, content: String) {
+    constructor(trackId: UUID?, type: MessageType, identifier: String, content: String) {
+        this.trackId = trackId
         this.type = type
         this.identifier = identifier
         this.content = content
     }
 
-    constructor(type: MessageType, data: Any) {
+    constructor(trackId: UUID?, type: MessageType, data: Any) {
+        this.trackId = trackId
         this.type = type
         this.identifier = Functions.Message.extractIdentifier(data)
-
-        this.content = if (data is SpecificRecordBase) (data as SpecificRecordBase).toString() else data.toJsonString()
+        this.content = if (data is SpecificRecordBase) data.toString() else data.toJsonString()
     }
 }

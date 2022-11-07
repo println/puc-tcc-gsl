@@ -3,6 +3,7 @@ package boaentrega.gsl.order.support.eventsourcing.connectors.dummy
 import boaentrega.gsl.order.support.eventsourcing.connectors.AbstractConnectorFactory
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.ProducerConnector
+import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
 
 
 class DummyConnectorFactory : AbstractConnectorFactory() {
@@ -11,7 +12,7 @@ class DummyConnectorFactory : AbstractConnectorFactory() {
         return DummyProducerConnector()
     }
 
-    override fun createConsumer(queue: String): ConsumerConnector {
-        return DummyConsumerConnector(queue)
+    override fun createConsumer(eventSourcingContext: EventSourcingContext, target: String): ConsumerConnector {
+        return DummyConsumerConnector(eventSourcingContext, target)
     }
 }

@@ -1,9 +1,14 @@
 package boaentrega.gsl.order.support.eventsourcing.connectors
 
+import boaentrega.gsl.order.configuration.config.EventSourcingScopeConfig
 import boaentrega.gsl.order.support.eventsourcing.messages.Message
+import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
+import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingScope
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
+import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
-abstract class AbstractConsumerConnector : ConsumerConnector {
+
+abstract class AbstractConsumerConnector() : ConsumerConnector {
 
     private val logger = logger()
     private var isRunning = false
@@ -43,7 +48,13 @@ abstract class AbstractConsumerConnector : ConsumerConnector {
             logger.info("No dispatcher to: ${getId()}")
             return
         }
-        val dispatched = dispatcher?.invoke(message)
+       // val bean = eventSourcingScope.get()
+//        ctx.use { ctx ->
+//            ctx.register(EventSourcingScope::class.java)
+//            ctx.refresh()
+//            ctx.getBean()
+//            val dispatched = dispatcher?.invoke(message)
+//        }
     }
 
     override fun stop() {
@@ -62,7 +73,7 @@ abstract class AbstractConsumerConnector : ConsumerConnector {
         stop()
     }
 
-    internal open fun afterStart(){}
+    internal open fun afterStart() {}
 
     internal abstract fun startConsumer()
     internal abstract fun stopConsumer()

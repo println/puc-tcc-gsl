@@ -28,7 +28,7 @@ class OutboxMessage {
 
     val destination: String
 
-    @Column(length=512, updatable = false, nullable = false)
+    @Column(length = 512, updatable = false, nullable = false)
     val payload: String
 
     val createdAt: OffsetDateTime

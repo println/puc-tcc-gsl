@@ -31,6 +31,16 @@ spring:
     init:
       platform: h2
       continue-on-error: 'true'
+  data:
+    web:
+      pageable:
+        size-parameter: size
+        prefix: ''
+        one-indexed-parameters: 'false'
+        page-parameter: page
+        default-page-size: '20'
+        qualifier-delimiter: _
+        max-page-size: '2000'
 
 
 outbox:
@@ -59,6 +69,10 @@ eventsourcing:
     routing:
       event: ${EVENTSOURCING_ROUTING_EVENT:gsl.event.routing}
       command: ${EVENTSOURCING_ROUTING_COMMAND:gsl.command.routing}
+    freight:
+      command: ${EVENTSOURCING_FREIGHT_COMMAND:gsl.command.freight}
+      event: ${EVENTSOURCING_FREIGHT_EVENT:gsl.event.freight}
+
 
 
 

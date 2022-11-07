@@ -2,11 +2,9 @@ package boaentrega.gsl.order.support.outbox
 
 import boaentrega.gsl.order.support.eventsourcing.connectors.ProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
-import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-import kotlin.collections.ArrayList
 
 @Service
 class OutboxConnectorService(

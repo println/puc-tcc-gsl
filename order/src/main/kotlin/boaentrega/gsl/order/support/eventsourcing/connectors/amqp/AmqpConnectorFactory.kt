@@ -3,6 +3,7 @@ package boaentrega.gsl.order.support.eventsourcing.connectors.amqp
 import boaentrega.gsl.order.support.eventsourcing.connectors.AbstractConnectorFactory
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.ProducerConnector
+import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.support.converter.MessageConverter
 
@@ -13,7 +14,7 @@ class AmqpConnectorFactory(private val connectionFactory: ConnectionFactory,
         return AmqpProducerConnector(connectionFactory, messageConverter)
     }
 
-    override fun createConsumer(queue: String): ConsumerConnector {
-        return AmqpConsumerConnector(queue, connectionFactory)
+    override fun createConsumer(eventSourcingContext: EventSourcingContext, target: String): ConsumerConnector {
+        return AmqpConsumerConnector(eventSourcingContext, target, connectionFactory)
     }
 }

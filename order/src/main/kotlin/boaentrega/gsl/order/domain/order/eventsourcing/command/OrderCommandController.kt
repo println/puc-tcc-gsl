@@ -5,20 +5,24 @@ import boaentrega.gsl.order.domain.order.OrderService
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.order.support.eventsourcing.controller.annotations.ConsumptionHandler
-import gsl.schemas.FreightPurchaseCommand
+import gsl.schemas.*
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 
 @Component
 class OrderCommandController(
-        @Qualifier(EventSourcingBeansConstants.CONTEXT_COMMAND_CONSUMER)
-        private val consumerConnector: ConsumerConnector,
+        @Qualifier(EventSourcingBeansConstants.ORDER_COMMAND_CONSUMER)
+        consumerConnector: ConsumerConnector,
         private val service: OrderService
 ) : AbstractConsumerController(consumerConnector) {
 
-    @ConsumptionHandler(FreightPurchaseCommand::class)
-    fun receive(command: FreightPurchaseCommand) {
-        println(command)
-        service.applyCommand(command)
+    @ConsumptionHandler(OrderApproveCommand::class)
+    fun approve(command: OrderApproveCommand) {
+        service.approvePayment(command.orderId, command.value)
+    }
+
+    @ConsumptionHandler(OrderRefuseCommand::class)
+    fun refuse(command: OrderRefuseCommand) {
+        service.refusePayment(command.orderId, command.reason)
     }
 }
