@@ -39,7 +39,9 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.14.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
@@ -49,6 +51,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testIntegrationImplementation("org.springframework.boot:spring-boot-starter-test")
+    testIntegrationImplementation("org.jeasy:easy-random-core:4.0.0")
 }
 
 val integrationTest = task<Test>("integrationTest") {

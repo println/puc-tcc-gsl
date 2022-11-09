@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-class OrderApplicationTests : AbstractIntegrationTest() {
+class OrderApiTests : AbstractIntegrationTest() {
 
     @Autowired
     private lateinit var repository: OrderRepository

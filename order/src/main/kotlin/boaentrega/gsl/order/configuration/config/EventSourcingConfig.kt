@@ -5,7 +5,6 @@ import boaentrega.gsl.order.support.eventsourcing.connectors.AbstractConnectorFa
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.DedicatedProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.ProducerConnector
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
 import boaentrega.gsl.order.support.outbox.OutboxConnectorService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -47,22 +46,19 @@ class EventSourcingConfig {
 
     @Bean(EventSourcingBeansConstants.FREIGHT_EVENT_CONSUMER)
     fun createEventConsumerConnector(
-            connectorFactory: AbstractConnectorFactory,
-            eventSourcingContext: EventSourcingContext): ConsumerConnector {
-        return connectorFactory.createConsumer(eventSourcingContext, freightEventTarget)
+            connectorFactory: AbstractConnectorFactory): ConsumerConnector {
+        return connectorFactory.createConsumer(freightEventTarget)
     }
 
     @Bean(EventSourcingBeansConstants.FREIGHT_COMMAND_CONSUMER)
-    fun createCommandConsumerConnector(connectorFactory: AbstractConnectorFactory,
-                                       eventSourcingContext: EventSourcingContext): ConsumerConnector {
-        return connectorFactory.createConsumer(eventSourcingContext, freightCommandTarget)
+    fun createCommandConsumerConnector(connectorFactory: AbstractConnectorFactory): ConsumerConnector {
+        return connectorFactory.createConsumer(freightCommandTarget)
     }
 
     @Bean(EventSourcingBeansConstants.ORDER_EVENT_CONSUMER)
     fun createOrderEventConsumerConnector(
-            connectorFactory: AbstractConnectorFactory,
-            eventSourcingContext: EventSourcingContext): ConsumerConnector {
-        return connectorFactory.createConsumer(eventSourcingContext, orderEventTarget)
+            connectorFactory: AbstractConnectorFactory): ConsumerConnector {
+        return connectorFactory.createConsumer(orderEventTarget)
     }
 
     @Bean(EventSourcingBeansConstants.ORDER_COMMAND_PRODUCER)
@@ -79,9 +75,8 @@ class EventSourcingConfig {
     }
 
     @Bean(EventSourcingBeansConstants.ORDER_COMMAND_CONSUMER)
-    fun createOrderCommandConsumerConnector(connectorFactory: AbstractConnectorFactory,
-                                            eventSourcingContext: EventSourcingContext): ConsumerConnector {
-        return connectorFactory.createConsumer(eventSourcingContext, orderCommandTarget)
+    fun createOrderCommandConsumerConnector(connectorFactory: AbstractConnectorFactory): ConsumerConnector {
+        return connectorFactory.createConsumer(orderCommandTarget)
     }
 
 }

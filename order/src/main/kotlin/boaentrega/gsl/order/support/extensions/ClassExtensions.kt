@@ -1,13 +1,14 @@
 package boaentrega.gsl.order.support.extensions
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 object ClassExtensions {
-
     val mapper: ObjectMapper = jacksonObjectMapper()
+            .registerModule(JavaTimeModule())
 
     fun <R : Any> R.logger(): Logger {
         return LoggerFactory.getLogger((this.javaClass).name)

@@ -2,7 +2,6 @@ package boaentrega.gsl.order.support.eventsourcing.connectors.amqp
 
 import boaentrega.gsl.order.support.eventsourcing.connectors.AbstractConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.Message
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
 import com.rabbitmq.client.Channel
@@ -13,7 +12,6 @@ import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener
 
 
 class AmqpConsumerConnector(
-        eventSourcingContext: EventSourcingContext,
         private val queueName: String,
         connectionFactory: ConnectionFactory) : ChannelAwareMessageListener, AbstractConsumerConnector() {
 

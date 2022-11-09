@@ -1,7 +1,6 @@
 package boaentrega.gsl.order.support.eventsourcing.controller
 
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
 
 class ConsumerBinder(

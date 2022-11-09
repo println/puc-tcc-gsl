@@ -2,7 +2,6 @@ package boaentrega.gsl.order.domain.order.eventsourcing.command
 
 import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
 import boaentrega.gsl.order.domain.collector.PickupRequestService
-import boaentrega.gsl.order.domain.order.OrderService
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.order.support.eventsourcing.controller.annotations.ConsumptionHandler

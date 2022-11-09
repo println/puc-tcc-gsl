@@ -5,10 +5,9 @@ import boaentrega.gsl.order.support.eventsourcing.controller.annotations.ErrorHa
 import boaentrega.gsl.order.support.eventsourcing.controller.constants.ErrorType
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
 import boaentrega.gsl.order.support.eventsourcing.messages.EventMessage
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
-
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.*

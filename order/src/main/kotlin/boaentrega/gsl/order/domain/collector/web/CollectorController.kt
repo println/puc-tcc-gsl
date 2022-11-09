@@ -5,6 +5,7 @@ import boaentrega.gsl.order.domain.collector.PickupRequestFilter
 import boaentrega.gsl.order.domain.collector.PickupRequestService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -14,7 +15,7 @@ import java.util.*
 class CollectorController(
         private val service: PickupRequestService
 ) {
-    @GetMapping
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getAll(
             @RequestParam(required = false) coordinates: String?,
             pageable: Pageable): Page<PickupRequest> {
@@ -28,29 +29,30 @@ class CollectorController(
         return service.findById(pickupRequestId)
     }
 
-    @PutMapping("/{id}/status/pickup")
+    @PutMapping("/{id}/pickup")
     fun markAsOutToPickupTheProduct(
-            @PathVariable("id") pickupRequestId: UUID, collectorEmployee: String): PickupRequest {
-        return service.markAsOutToPickupTheProduct(pickupRequestId, collectorEmployee)
+            @PathVariable("id") pickupRequestId: UUID,
+            @RequestBody data: EmployeeDto): PickupRequest {
+        return service.markAsOutToPickupTheProduct(pickupRequestId, data.employee)
     }
 
-    @PutMapping("/{id}/status/taken")
+    @PutMapping("/{id}/taken")
     fun markAsTaken(
             @PathVariable("id") pickupRequestId: UUID): PickupRequest {
         return service.markAsTaken(pickupRequestId)
     }
 
-    @PutMapping("/{id}/status/packing")
+    @PutMapping("/{id}/packaging")
     fun markAsOnPackaging(
             @PathVariable("id") pickupRequestId: UUID,
-            @RequestParam("employee") packerEmployee: String): PickupRequest {
-        return service.markAsOnPackaging(pickupRequestId, packerEmployee)
+            @RequestBody data: EmployeeDto): PickupRequest {
+        return service.markAsOnPackaging(pickupRequestId, data.employee)
     }
 
-    @PutMapping("/{id}/status/ready")
+    @PutMapping("/{id}/ready")
     fun markAsReadyToStartDelivery(
             @PathVariable("id") pickupRequestId: UUID,
-            @RequestParam("address") packageAddress: String): PickupRequest {
-        return service.markAsReadyToStartDelivery(pickupRequestId, packageAddress)
+            @RequestBody data: WithdrawAddressDto): PickupRequest {
+        return service.markAsReadyToStartDelivery(pickupRequestId, data.address)
     }
 }

@@ -36,12 +36,11 @@ spring:
       pageable:
         size-parameter: size
         prefix: ''
-        one-indexed-parameters: 'false'
+        one-indexed-parameters: true
         page-parameter: page
-        default-page-size: '20'
+        default-page-size: 20
         qualifier-delimiter: _
-        max-page-size: '2000'
-
+        max-page-size: 2000
 
 outbox:
   storage:
@@ -51,6 +50,9 @@ outbox:
 eventsourcing:
   platform: kafka
   messaging:
+    freight:
+      command: ${EVENTSOURCING_FREIGHT_COMMAND:gsl.command.freight}
+      event: ${EVENTSOURCING_FREIGHT_EVENT:gsl.event.freight}
     order:
       event: ${EVENTSOURCING_ORDER_EVENT:gsl.event.order}
       command: ${EVENTSOURCING_ORDER_COMMAND:gsl.command.order}
@@ -69,9 +71,7 @@ eventsourcing:
     routing:
       event: ${EVENTSOURCING_ROUTING_EVENT:gsl.event.routing}
       command: ${EVENTSOURCING_ROUTING_COMMAND:gsl.command.routing}
-    freight:
-      command: ${EVENTSOURCING_FREIGHT_COMMAND:gsl.command.freight}
-      event: ${EVENTSOURCING_FREIGHT_EVENT:gsl.event.freight}
+
 
 
 

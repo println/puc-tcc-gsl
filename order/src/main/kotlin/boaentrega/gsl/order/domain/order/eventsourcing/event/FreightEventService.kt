@@ -3,7 +3,6 @@ package boaentrega.gsl.order.domain.order.eventsourcing.event
 import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
 import boaentrega.gsl.order.support.eventsourcing.connectors.DedicatedProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.EventMessage
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import gsl.schemas.FreightEvent

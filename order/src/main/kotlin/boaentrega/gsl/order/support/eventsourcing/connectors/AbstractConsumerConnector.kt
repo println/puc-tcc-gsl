@@ -1,11 +1,7 @@
 package boaentrega.gsl.order.support.eventsourcing.connectors
 
-import boaentrega.gsl.order.configuration.config.EventSourcingScopeConfig
 import boaentrega.gsl.order.support.eventsourcing.messages.Message
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingScope
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
-import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 
 abstract class AbstractConsumerConnector() : ConsumerConnector {

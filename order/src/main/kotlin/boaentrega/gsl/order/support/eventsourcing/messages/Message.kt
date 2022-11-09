@@ -1,5 +1,6 @@
 package boaentrega.gsl.order.support.eventsourcing.messages
 
+import boaentrega.gsl.order.support.extensions.AvroExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.functions.Functions
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -24,6 +25,7 @@ open class Message {
         this.trackId = trackId
         this.type = type
         this.identifier = Functions.Message.extractIdentifier(data)
-        this.content = if (data is SpecificRecordBase) data.toString() else data.toJsonString()
+        this.content = if (data is SpecificRecordBase) data.toJsonString() else data.toJsonString()
     }
+
 }

@@ -11,6 +11,7 @@ class DummyProducerConnector() : AbstractProducerConnector() {
     companion object {
         val consumers: MutableList<DummyConsumerConnector> = mutableListOf()
         val registry: MutableMap<String, MutableList<String>> = mutableMapOf()
+
     }
 
     private val logger = logger()

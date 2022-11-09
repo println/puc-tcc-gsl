@@ -2,8 +2,6 @@ package boaentrega.gsl.order.support.eventsourcing.connectors.kafka
 
 import boaentrega.gsl.order.support.eventsourcing.connectors.AbstractConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.Message
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingContext
-import boaentrega.gsl.order.support.eventsourcing.scope.EventSourcingScope
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -15,7 +13,6 @@ import org.springframework.kafka.support.TopicPartitionOffset
 
 
 class KafkaConsumerConnector(
-        eventSourcingContext: EventSourcingContext,
         consumerFactory: ConsumerFactory<String, String>,
         private val topic: String,
         private val groupId: String
