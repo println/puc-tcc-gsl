@@ -10,8 +10,8 @@ import java.util.*
 import javax.persistence.*
 
 @MappedSuperclass
-@EntityListeners(value = [AuditingEntityListener::class])
-abstract class AuditableModel<T : AuditableModel<T>> : Serializable {
+
+abstract class AuditableModel<T : AuditableModel<T>> : Auditable<T>() {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -27,13 +27,5 @@ abstract class AuditableModel<T : AuditableModel<T>> : Serializable {
     )
     @Column(name = "id", updatable = false, nullable = false)
     var id: UUID? = null
-
-    @CreatedDate
-    @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
-    var createdAt: Date? = null
-
-    @LastModifiedDate
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
-    var lastModified: Date? = null
 
 }

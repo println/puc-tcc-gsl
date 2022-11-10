@@ -1,0 +1,22 @@
+{
+  "type": "record",
+  "namespace": "gsl.schemas",
+  "name": "DocumentRemove",
+  "fields": [
+    {
+      "name": "documentId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "date",
+      "type": {
+        "type": "int",
+        "logicalType": "date"
+      }
+    }
+  ]
+}
+

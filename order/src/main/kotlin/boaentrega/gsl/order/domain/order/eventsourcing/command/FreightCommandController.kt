@@ -21,7 +21,7 @@ class FreightCommandController(
 
     }
 
-    @ConsumptionHandler(FreightCreateCommand::class)
+    @ConsumptionHandler(FreightPickupProductCommand::class)
     fun pickupProduct(command: FreightPickupProductCommand) {
         pickupRequestService.createPickupRequest(command.trackId, command.orderId, command.freightId, command.pickupAddress, command.destination)
     }

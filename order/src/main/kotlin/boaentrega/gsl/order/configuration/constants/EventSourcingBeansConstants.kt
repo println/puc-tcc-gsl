@@ -9,4 +9,7 @@ object EventSourcingBeansConstants {
     const val ORDER_EVENT_PRODUCER = "order-event-producer"
     const val ORDER_COMMAND_CONSUMER = "order-command-consumer"
     const val ORDER_COMMAND_PRODUCER = "order-command-producer"
+    const val ORDER_DOCUMENT_CONSUMER = "order-document-consumer"
+    const val ORDER_DOCUMENT_PRODUCER = "order-document-producer"
+    const val CUSTOMER_DOCUMENT_CONSUMER = "customer-document-consumer"
 }

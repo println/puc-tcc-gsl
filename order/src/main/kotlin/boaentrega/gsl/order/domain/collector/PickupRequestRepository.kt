@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface PickupRequestRepository : JpaRepository<PickupRequest, UUID>, JpaSpecificationExecutor<PickupRequest>
+interface PickupRequestRepository : JpaRepository<PickupRequest, UUID>, JpaSpecificationExecutor<PickupRequest> {
+    fun existsByTrackIdOrOrderIdOrFreightId(trackId: UUID, orderId: UUID, freightId: UUID): Boolean
+}

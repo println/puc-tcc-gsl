@@ -36,6 +36,10 @@ object Functions {
             return clazz.simpleName.toString().toLowerDashCase()
         }
 
+        fun extractIdentifier(clazz: Class<*>): String {
+            return extractIdentifier(clazz.kotlin)
+        }
+
         fun extractIdentifier(data: Any): String {
             return extractIdentifier(data::class)
         }

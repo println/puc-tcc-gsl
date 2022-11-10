@@ -1,11 +1,14 @@
 package boaentrega.gsl.order.domain.order.web
 
+import boaentrega.gsl.order.domain.collector.web.EmployeeDto
 import boaentrega.gsl.order.domain.order.Order
+import boaentrega.gsl.order.domain.order.OrderFilter
 import boaentrega.gsl.order.domain.order.OrderService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 import java.util.*
@@ -18,9 +21,24 @@ class OrderController(val service: OrderService) {
         //service.sendCreateOrderCommand(UUID.randomUUID(), "pickupAddress", "deliveryAddress")
     }
 
+    @GetMapping
+    fun getAll(
+            @RequestParam(required = false) coordinates: String?,
+            pageable: Pageable): Page<Order> {
+        val filter = OrderFilter()
+        return service.findAll(filter, pageable)
+    }
+
+    @GetMapping("/{id}")
+    fun getById(
+            @PathVariable("id") id: UUID): Order {
+        return service.findById(id)
+    }
+
     @PostMapping
-    fun createOrder(): ResponseEntity<Order> {
-        val entity = service.createOrder(UUID.randomUUID(), "pickupAddress", "deliveryAddress")
+    fun createOrder(
+            @RequestBody data: OrderDto): ResponseEntity<Order> {
+        val entity = service.createOrder(data.customerId, data.pickupAddress, data.deliveryAddress)
 
         val location: URI = ServletUriComponentsBuilder
                 .fromCurrentRequest()

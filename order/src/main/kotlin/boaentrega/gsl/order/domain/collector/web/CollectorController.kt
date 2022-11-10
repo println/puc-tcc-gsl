@@ -15,7 +15,7 @@ import java.util.*
 class CollectorController(
         private val service: PickupRequestService
 ) {
-    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping
     fun getAll(
             @RequestParam(required = false) coordinates: String?,
             pageable: Pageable): Page<PickupRequest> {
@@ -23,10 +23,10 @@ class CollectorController(
         return service.findAll(filter, pageable)
     }
 
-    @GetMapping("/{id}")
-    fun getById(
-            @PathVariable("id") pickupRequestId: UUID): PickupRequest {
-        return service.findById(pickupRequestId)
+   @GetMapping("/{id}")
+        fun getById(
+                @PathVariable("id") pickupRequestId: UUID): PickupRequest {
+            return service.findById(pickupRequestId)
     }
 
     @PutMapping("/{id}/pickup")

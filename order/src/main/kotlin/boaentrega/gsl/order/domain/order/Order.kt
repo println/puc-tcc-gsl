@@ -14,5 +14,5 @@ data class Order(
         val deliveryAddress: String,
         var value: BigDecimal? = null,
         var comment: String = "",
-        var status: OrderStatus = OrderStatus.CREATED
+        var status: OrderStatus = OrderStatus.WAITING_PAYMENT
 ) : AuditableModel<Order>()

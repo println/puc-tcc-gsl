@@ -44,13 +44,7 @@ abstract class AbstractConsumerConnector() : ConsumerConnector {
             logger.info("No dispatcher to: ${getId()}")
             return
         }
-       // val bean = eventSourcingScope.get()
-//        ctx.use { ctx ->
-//            ctx.register(EventSourcingScope::class.java)
-//            ctx.refresh()
-//            ctx.getBean()
-//            val dispatched = dispatcher?.invoke(message)
-//        }
+        val dispatched = dispatcher?.invoke(message)
     }
 
     override fun stop() {

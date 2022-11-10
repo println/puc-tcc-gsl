@@ -26,14 +26,27 @@ class PickupRequestService(
         return repository.findAll(specification, pageable)
     }
 
+    fun findById(pickupRequestId: UUID): PickupRequest {
+        val entityOptional = repository.findById(pickupRequestId)
+        if (entityOptional.isEmpty) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found")
+        }
+        return entityOptional.get()
+    }
+
     @Transactional
     fun createPickupRequest(
-            trackId: UUID, orderId: UUID, deliveryId: UUID,
-            pickupAddress: String, destination: String): PickupRequest {
-        val pickupRequest = PickupRequest(trackId, orderId, deliveryId, pickupAddress, destination)
+            trackId: UUID, orderId: UUID, freightId: UUID,
+            pickupAddress: String, destination: String): Optional<PickupRequest> {
+
+        if (repository.existsByTrackIdOrOrderIdOrFreightId(trackId, orderId, freightId)) {
+            return Optional.empty()
+        }
+
+        val pickupRequest = PickupRequest(trackId, orderId, freightId, pickupAddress, destination)
         val entity = repository.save(pickupRequest)
         eventService.notifyCollectionStarted(trackId, SOURCE, "Pickup process started")
-        return entity
+        return Optional.of(entity)
     }
 
     @Transactional
@@ -76,11 +89,4 @@ class PickupRequestService(
         return entity
     }
 
-    fun findById(pickupRequestId: UUID): PickupRequest {
-        val entityOptional = repository.findById(pickupRequestId)
-        if (entityOptional.isEmpty) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found")
-        }
-        return entityOptional.get()
-    }
 }

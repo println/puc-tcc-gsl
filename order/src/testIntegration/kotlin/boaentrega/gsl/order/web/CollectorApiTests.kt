@@ -1,12 +1,12 @@
-package boaentrega.gsl.order
+package boaentrega.gsl.order.web
 
+import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.domain.collector.PickupRequest
 import boaentrega.gsl.order.domain.collector.PickupRequestRepository
 import boaentrega.gsl.order.domain.collector.PickupRequestService
 import boaentrega.gsl.order.domain.collector.PickupRequestStatus
 import boaentrega.gsl.order.domain.collector.web.CollectorController
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
-import boaentrega.gsl.order.support.eventsourcing.messages.Message
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
 import boaentrega.gsl.order.support.outbox.OutboxConnectorService
@@ -14,22 +14,17 @@ import boaentrega.gsl.order.support.outbox.OutboxRepository
 import gsl.schemas.FreightEvent
 import gsl.schemas.FreightEventStatus
 import gsl.schemas.FreightMovePackageCommand
-import org.hamcrest.Matchers.hasSize
-import org.jeasy.random.EasyRandom
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import kotlin.streams.toList
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-internal class CollectorApiTests : AbstractIntegrationTest() {
+internal class CollectorApiTests : AbstractWebTest<PickupRequest>() {
 
     @Autowired
     private lateinit var repository: PickupRequestRepository
@@ -43,55 +38,26 @@ internal class CollectorApiTests : AbstractIntegrationTest() {
     @Autowired
     private lateinit var outboxConnectorService: OutboxConnectorService
 
-
     override fun createResource(): Any {
         return CollectorController(service)
     }
 
-    val easyRandom = EasyRandom()
-    var entities = listOf<PickupRequest>()
+    override fun getRepository() = repository
+    override fun getEntityType() = PickupRequest::class.java
+    override fun preProcessing(data: List<PickupRequest>) = data.forEach { it.status = PickupRequestStatus.WAITING }
+    override fun getResource() = "/collector"
 
     @AfterEach
     fun reset() {
         repository.deleteAll()
         outboxRepository.deleteAll()
-        DummyProducerConnector.registry.clear()
-    }
-
-    @BeforeEach
-    fun setup() {
-        val values = easyRandom.objects(PickupRequest::class.java, 200).toList()
-        values.forEach { it.status = PickupRequestStatus.WAITING }
-        entities = repository.saveAllAndFlush(values)
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-            "'', true, 0, false",
-            "?page=1, true, 0, false",
-            "?page=2, false, 1, false",
-            "?page=10, false, 9, true"
-    )
-    fun getAll(page: String, first: Boolean, index: Int, last: Boolean) {
-        restMockMvc.perform(get("/collector$page")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk)
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("\$.content", hasSize<String>(20)))
-                .andExpect(jsonPath("\$.first").value(first))
-                .andExpect(jsonPath("\$.number").value(index))
-                .andExpect(jsonPath("\$.last").value(last))
-                .andExpect(jsonPath("\$.totalPages").value(10))
-                .andExpect(jsonPath("\$.numberOfElements").value(20))
-                .andExpect(jsonPath("\$.size").value(20))
+        DummyProducerConnector.clearMessages()
     }
 
     @Test
-    fun getById() {
+    fun checkStatusById() {
         val id = entities.first().id
-        restMockMvc.perform(get("/collector/{id}", id)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk)
+        restMockMvc.perform(get("/collector/{id}", id))
                 .andExpect(jsonPath("\$.status").value(PickupRequestStatus.WAITING.toString()))
     }
 
@@ -159,14 +125,13 @@ internal class CollectorApiTests : AbstractIntegrationTest() {
 
     private fun checkEventSourcingEvents(freightStatus: FreightEventStatus) {
         releaseMessages()
-
-        val message = DummyProducerConnector.registry.entries.first().value[0].toObject<Message>()
+        val message = DummyProducerConnector.findAll(FreightEvent::class.java).first()
         val event = message.content.toObject<FreightEvent>()
         Assertions.assertEquals(freightStatus, event.status)
     }
 
     private fun checkEventSourcingCommands(pickupRequest: PickupRequest) {
-        val message = DummyProducerConnector.registry.entries.first { it.key.contains("command") }.value[0].toObject<Message>()
+        val message = DummyProducerConnector.findAll(FreightMovePackageCommand::class.java).first()
         val command = message.content.toObject<FreightMovePackageCommand>()
 
         Assertions.assertEquals(pickupRequest.trackId, command.trackId)
@@ -181,5 +146,6 @@ internal class CollectorApiTests : AbstractIntegrationTest() {
         outboxConnectorService.releaseMessages()
         Assertions.assertTrue(outboxRepository.getTop10ByIsPublishedFalse().isEmpty())
     }
+
 
 }

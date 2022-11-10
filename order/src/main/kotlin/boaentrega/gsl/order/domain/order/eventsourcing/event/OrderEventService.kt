@@ -25,15 +25,8 @@ class OrderEventService(
 
     fun notifyOrderCreated(trackId: UUID) {
         val source = ORDER_SERVICE
-        val description = "Order created successfully"
-        val status = OrderEventStatus.CREATED
-        notify(trackId, status, source, description)
-    }
-
-    fun notifyOrderProcessingPayment(trackId: UUID, source: String, description: String) {
-        val source = ORDER_SERVICE
         val description = "Order is waiting payment process"
-        val status = OrderEventStatus.PROCESSING_PAYMENT
+        val status = OrderEventStatus.WAITING_PAYMENT
         notify(trackId, status, source, description)
     }
 

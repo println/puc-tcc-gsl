@@ -20,8 +20,7 @@ class OrderEventController(
     @ConsumptionHandler(OrderEvent::class)
     fun listen(event: OrderEvent) {
         when (event.status) {
-            CREATED -> {}
-            PROCESSING_PAYMENT -> {}
+            WAITING_PAYMENT -> {}
             REFUSED -> {}
             ACCEPTED -> {}
             else -> {}

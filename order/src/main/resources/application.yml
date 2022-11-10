@@ -53,12 +53,15 @@ eventsourcing:
     freight:
       command: ${EVENTSOURCING_FREIGHT_COMMAND:gsl.command.freight}
       event: ${EVENTSOURCING_FREIGHT_EVENT:gsl.event.freight}
+      document: ${EVENTSOURCING_FREIGHT_DOCUMENT:gsl.document.freight}
     order:
       event: ${EVENTSOURCING_ORDER_EVENT:gsl.event.order}
       command: ${EVENTSOURCING_ORDER_COMMAND:gsl.command.order}
+      document: ${EVENTSOURCING_ORDER_DOCUMENT:gsl.document.order}
     customer:
       event: ${EVENTSOURCING_CUSTOMER_EVENT:gsl.event.customer}
       command: ${EVENTSOURCING_CUSTOMER_COMMAND:gsl.command.customer}
+      document: ${EVENTSOURCING_CUSTOMER_DOCUMENT:gsl.document.customer}
     delivery:
       event: ${EVENTSOURCING_DELIVERY_EVENT:gsl.event.delivery}
       command: ${EVENTSOURCING_DELIVERY_COMMAND:gsl.command.delivery}

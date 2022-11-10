@@ -4,6 +4,7 @@ import boaentrega.gsl.order.support.eventsourcing.connectors.AbstractProducerCon
 import boaentrega.gsl.order.support.eventsourcing.messages.Message
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
+import boaentrega.gsl.order.support.functions.Functions
 
 
 class DummyProducerConnector() : AbstractProducerConnector() {
@@ -12,6 +13,18 @@ class DummyProducerConnector() : AbstractProducerConnector() {
         val consumers: MutableList<DummyConsumerConnector> = mutableListOf()
         val registry: MutableMap<String, MutableList<String>> = mutableMapOf()
 
+        fun findAll(clazz: Class<*>): List<Message> {
+            val ref = Functions.Message.extractIdentifier(clazz)
+            val bucketRef = ref.split("-").last()
+            return registry
+                    .filterKeys { it.contains(bucketRef) }
+                    .map { it.value }
+                    .flatten()
+                    .filter { it.contains(ref) }
+                    .map { it.toObject() }
+        }
+
+        fun clearMessages() = registry.clear()
     }
 
     private val logger = logger()
