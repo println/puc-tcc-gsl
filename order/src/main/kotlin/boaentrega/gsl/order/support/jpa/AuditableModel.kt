@@ -2,12 +2,11 @@ package boaentrega.gsl.order.support.jpa
 
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.Parameter
-import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.annotation.LastModifiedDate
-import org.springframework.data.jpa.domain.support.AuditingEntityListener
-import java.io.Serializable
 import java.util.*
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 

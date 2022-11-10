@@ -1,7 +1,7 @@
 package boaentrega.gsl.order.replicas.customer.eventsourcing.document
 
 
-import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
+import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.replicas.customer.CustomerDocument
 import boaentrega.gsl.order.replicas.customer.CustomerDocumentService
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomerDocumentController(
-        @Qualifier(EventSourcingBeansConstants.CUSTOMER_DOCUMENT_CONSUMER)
+        @Qualifier(EventSourcingBeanQualifiers.CUSTOMER_DOCUMENT_CONSUMER)
         private val consumerConnector: ConsumerConnector,
         private val service: CustomerDocumentService
 ) : AbstractConsumerController(consumerConnector) {

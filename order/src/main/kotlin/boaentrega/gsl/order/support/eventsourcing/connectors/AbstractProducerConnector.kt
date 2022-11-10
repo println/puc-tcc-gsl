@@ -2,7 +2,7 @@ package boaentrega.gsl.order.support.eventsourcing.connectors
 
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
 
-abstract class AbstractProducerConnector: ProducerConnector {
+abstract class AbstractProducerConnector : ProducerConnector {
 
     private val logger = logger()
 

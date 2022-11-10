@@ -16,7 +16,7 @@ class AmqpProducerConnector(
 
     private val template: RabbitTemplate = RabbitTemplate(connectionFactory)
 
-    init{
+    init {
         logger.info("Creating AMQP Producer Connector")
         template.messageConverter = messageConverter
     }

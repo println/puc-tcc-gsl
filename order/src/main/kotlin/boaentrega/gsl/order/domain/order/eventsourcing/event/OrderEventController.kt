@@ -1,6 +1,6 @@
 package boaentrega.gsl.order.domain.order.eventsourcing.event
 
-import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
+import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.domain.order.OrderService
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.controller.AbstractConsumerController
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class OrderEventController(
-        @Qualifier(EventSourcingBeansConstants.ORDER_EVENT_CONSUMER)
+        @Qualifier(EventSourcingBeanQualifiers.ORDER_EVENT_CONSUMER)
         consumerConnector: ConsumerConnector,
         private val service: OrderService
 ) : AbstractConsumerController(consumerConnector) {

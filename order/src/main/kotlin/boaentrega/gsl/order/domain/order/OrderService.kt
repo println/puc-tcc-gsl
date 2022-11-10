@@ -45,10 +45,10 @@ class OrderService(
     }
 
     @Transactional
-    fun approvePayment(id: UUID, value: BigDecimal){
+    fun approvePayment(id: UUID, value: BigDecimal) {
         val entityOptional = repository.findById(id)
         entityOptional.ifPresent {
-            if(it.status == OrderStatus.ACCEPTED){
+            if (it.status == OrderStatus.ACCEPTED) {
                 return@ifPresent
             }
 
@@ -65,7 +65,7 @@ class OrderService(
     fun refusePayment(id: UUID, reason: String) {
         val entityOptional = repository.findById(id)
         entityOptional.ifPresent {
-            if(it.status == OrderStatus.REFUSED){
+            if (it.status == OrderStatus.REFUSED) {
                 return@ifPresent
             }
 

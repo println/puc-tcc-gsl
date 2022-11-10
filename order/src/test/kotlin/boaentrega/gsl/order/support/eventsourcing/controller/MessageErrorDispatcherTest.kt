@@ -117,7 +117,8 @@ internal class MessageErrorDispatcherTest {
 
         class ErrorNoReturnController {
             @ErrorHandler
-            fun consumeError(errorType: ErrorType, handleId: String, message: Any){}
+            fun consumeError(errorType: ErrorType, handleId: String, message: Any) {
+            }
         }
 
         class ErrorReturnTrueController {

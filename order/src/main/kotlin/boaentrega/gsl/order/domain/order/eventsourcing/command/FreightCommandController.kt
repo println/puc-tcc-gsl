@@ -1,7 +1,7 @@
 package boaentrega.gsl.order.domain.order.eventsourcing.command
 
-import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
-import boaentrega.gsl.order.domain.collector.PickupRequestService
+import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
+import boaentrega.gsl.order.domain.collection.PickupRequestService
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.order.support.eventsourcing.controller.annotations.ConsumptionHandler
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class FreightCommandController(
-        @Qualifier(EventSourcingBeansConstants.FREIGHT_COMMAND_CONSUMER)
+        @Qualifier(EventSourcingBeanQualifiers.FREIGHT_COMMAND_CONSUMER)
         consumerConnector: ConsumerConnector,
         private val pickupRequestService: PickupRequestService
 ) : AbstractConsumerController(consumerConnector) {

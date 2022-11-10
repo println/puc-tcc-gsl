@@ -6,12 +6,12 @@ import java.util.*
 @Service
 class OrderDocumentService(private val repository: OrderDocumentRepository) {
 
-    fun save(documentId: UUID, order: OrderDocument) {
-        val optionalCustomer = findById(documentId)
-        var entity = order
-        if (optionalCustomer.isPresent) {
-            entity = optionalCustomer.get()
-            entity.name = order.name
+    fun save(documentId: UUID, document: OrderDocument) {
+        val optionalDocument = findById(documentId)
+        var entity = document
+        if (optionalDocument.isPresent) {
+            entity = optionalDocument.get()
+            entity.name = document.name
         }
         repository.save(entity)
     }

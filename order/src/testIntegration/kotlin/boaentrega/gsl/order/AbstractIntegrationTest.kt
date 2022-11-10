@@ -1,27 +1,24 @@
 package boaentrega.gsl.order
 
-import boaentrega.gsl.order.configuration.config.ConnectorsFactoryTestConfig
+import boaentrega.gsl.order.configuration.config.DummyConnectorFactoryTestConfig
 import org.junit.jupiter.api.BeforeEach
 import org.mockito.MockitoAnnotations
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver
-import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder
-import org.springframework.web.context.WebApplicationContext
-import java.beans.beancontext.BeanContextMembershipEvent
 
 
 @ActiveProfiles("test", "integration-test")
 @SpringBootTest(properties = ["spring.main.allow-bean-definition-overriding=true"])
-@Import(value = [ConnectorsFactoryTestConfig::class])
-@ContextConfiguration(classes = [ConnectorsFactoryTestConfig::class])
+@Import(value = [DummyConnectorFactoryTestConfig::class])
+@ContextConfiguration(classes = [DummyConnectorFactoryTestConfig::class])
 abstract class AbstractIntegrationTest {
 
     @Autowired

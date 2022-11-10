@@ -16,7 +16,7 @@ class KafkaConsumerConnector(
         consumerFactory: ConsumerFactory<String, String>,
         private val topic: String,
         private val groupId: String
-): MessageListener<String, String>, AbstractConsumerConnector() {
+) : MessageListener<String, String>, AbstractConsumerConnector() {
 
     private val logger = logger()
 
@@ -24,7 +24,7 @@ class KafkaConsumerConnector(
 
     init {
         logger.info("Creating Kafka Consumer Connector: $topic")
-        val cProps = ContainerProperties(TopicPartitionOffset(topic,  0,  0L))
+        val cProps = ContainerProperties(TopicPartitionOffset(topic, 0, 0L))
         listenerContainer = KafkaMessageListenerContainer<String, String>(consumerFactory, cProps)
         listenerContainer.setupMessageListener(this)
     }

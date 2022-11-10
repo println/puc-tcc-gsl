@@ -18,7 +18,7 @@ internal class MessageDispatcherTest {
         var message: Any? = null
         var handleId: String? = null
         var errorType: ErrorType? = null
-        var id =  UUID.randomUUID()
+        var id = UUID.randomUUID()
 
         fun clear() {
             message = null
@@ -30,7 +30,7 @@ internal class MessageDispatcherTest {
     private lateinit var dispatcher: MessageDispatcher
 
     @BeforeEach
-    fun setup(){
+    fun setup() {
         id = UUID.randomUUID()
         dispatcher = MessageDispatcher(Controllers.SimpleController(), "test")
     }
@@ -80,10 +80,10 @@ internal class MessageDispatcherTest {
         assertEquals(Constants.WRONG_MESSAGE, message)
     }
 
-    private object Controllers{
-        class WithoutController:ErrorController()
+    private object Controllers {
+        class WithoutController : ErrorController()
 
-        class SimpleController:ErrorController() {
+        class SimpleController : ErrorController() {
             @ConsumptionHandler(Any::class)
             fun consume(obj: Any) {
                 message = obj

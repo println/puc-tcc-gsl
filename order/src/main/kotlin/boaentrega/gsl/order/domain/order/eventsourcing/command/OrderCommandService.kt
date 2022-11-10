@@ -1,12 +1,13 @@
 package boaentrega.gsl.order.domain.order.eventsourcing.command
 
 
-import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
+import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.support.eventsourcing.connectors.DedicatedProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
-import gsl.schemas.*
+import gsl.schemas.OrderApproveCommand
+import gsl.schemas.OrderRefuseCommand
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
@@ -15,7 +16,7 @@ import java.util.*
 
 @Service
 class OrderCommandService(
-        @Qualifier(EventSourcingBeansConstants.ORDER_COMMAND_PRODUCER)
+        @Qualifier(EventSourcingBeanQualifiers.ORDER_COMMAND_PRODUCER)
         private val dedicatedProducerConnector: DedicatedProducerConnector) {
 
     private val logger = logger()

@@ -12,7 +12,8 @@ import kotlin.reflect.KClass
 
 object Functions {
     object Json {
-        val mapper: ObjectMapper =  jacksonObjectMapper().registerModule((KotlinModule.Builder()
+        val mapper: ObjectMapper = jacksonObjectMapper()
+                .registerModule((KotlinModule.Builder()
                 .withReflectionCacheSize(512)
                 .configure(KotlinFeature.NullToEmptyCollection, false)
                 .configure(KotlinFeature.NullToEmptyMap, false)

@@ -1,6 +1,6 @@
 package boaentrega.gsl.order.domain.order.eventsourcing.event
 
-import boaentrega.gsl.order.configuration.constants.EventSourcingBeansConstants
+import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.support.eventsourcing.connectors.DedicatedProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.EventMessage
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
@@ -14,7 +14,7 @@ import java.util.*
 
 @Service
 class FreightEventService(
-        @Qualifier(EventSourcingBeansConstants.FREIGHT_EVENT_PRODUCER)
+        @Qualifier(EventSourcingBeanQualifiers.FREIGHT_EVENT_PRODUCER)
         private val dedicatedProducerConnector: DedicatedProducerConnector) {
 
     private val logger = logger()

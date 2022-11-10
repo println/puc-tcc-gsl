@@ -1,5 +1,6 @@
 package boaentrega.gsl.order.replicas.customer
 
+import boaentrega.gsl.order.configuration.constants.TableNames
 import boaentrega.gsl.order.support.jpa.Auditable
 import java.util.*
 import javax.persistence.Entity
@@ -7,7 +8,7 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@Table(name = "document_customers")
+@Table(name = TableNames.Replica.CUSTOMER)
 data class CustomerDocument(
         @Id
         val id: UUID,
