@@ -9,7 +9,7 @@ import gsl.schemas.OrderEvent
 import gsl.schemas.OrderEventStatus
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
-import java.time.LocalDate
+import java.time.Instant
 import java.util.*
 
 @Service
@@ -45,7 +45,7 @@ class OrderEventService(
     }
 
     private fun notify(trackId: UUID, status: OrderEventStatus, source: String, description: String) {
-        val payload = OrderEvent(trackId, status, source, description, LocalDate.now())
+        val payload = OrderEvent(trackId, status, source, description, Instant.now())
         val message = EventMessage(trackId, payload)
         dedicatedProducerConnector.publish(message)
         logger.info("Event has been emitted to [${dedicatedProducerConnector.getId()}]: ${message.toJsonString()}")

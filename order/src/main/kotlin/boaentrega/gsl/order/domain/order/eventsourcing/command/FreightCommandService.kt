@@ -9,7 +9,7 @@ import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import gsl.schemas.*
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
-import java.time.LocalDate
+import java.time.Instant
 import java.util.*
 
 @Service
@@ -20,32 +20,32 @@ class FreightCommandService(
     private val logger = logger()
 
     fun create(trackId: UUID, orderId: UUID, pickupAddress: String, deliveryAddress: String) {
-        val command = FreightCreateCommand(trackId, orderId, pickupAddress, deliveryAddress, LocalDate.now())
+        val command = FreightCreateCommand(trackId, orderId, pickupAddress, deliveryAddress, Instant.now())
         send(trackId, command)
     }
 
     fun pickupProduct(trackId: UUID, orderId: UUID, freightId: UUID, pickupAddress: String, destination: String) {
-        val command = FreightPickupProductCommand(trackId, orderId, freightId, pickupAddress, destination, LocalDate.now())
+        val command = FreightPickupProductCommand(trackId, orderId, freightId, pickupAddress, destination, Instant.now())
         send(trackId, command)
     }
 
     fun movePackage(trackId: UUID, orderId: UUID, freightId: UUID, from: String, to: String) {
-        val command = FreightMovePackageCommand(trackId, orderId, freightId, from, to, LocalDate.now())
+        val command = FreightMovePackageCommand(trackId, orderId, freightId, from, to, Instant.now())
         send(trackId, command)
     }
 
     fun deliverPackage(trackId: UUID, orderId: UUID, freightId: UUID, deliveryAddress: String) {
-        val command = FreightDeliverPackageCommand(trackId, orderId, freightId, deliveryAddress, LocalDate.now())
+        val command = FreightDeliverPackageCommand(trackId, orderId, freightId, deliveryAddress, Instant.now())
         send(trackId, command)
     }
 
     fun finish(trackId: UUID, orderId: UUID, freightId: UUID) {
-        val command = FreightFinishCommand(trackId, orderId, freightId, LocalDate.now())
+        val command = FreightFinishCommand(trackId, orderId, freightId, Instant.now())
         send(trackId, command)
     }
 
     fun cancel(trackId: UUID, orderId: UUID, freightId: UUID, reason: String) {
-        val command = FreightCancelCommand(trackId, orderId, freightId, reason, LocalDate.now())
+        val command = FreightCancelCommand(trackId, orderId, freightId, reason, Instant.now())
         send(trackId, command)
     }
 

@@ -2,6 +2,7 @@ package boaentrega.gsl.order.support.eventsourcing.messages
 
 import boaentrega.gsl.order.support.extensions.AvroExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
+import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
 import boaentrega.gsl.order.support.functions.Functions
 import com.fasterxml.jackson.annotation.JsonCreator
 import org.apache.avro.specific.SpecificRecordBase
@@ -27,5 +28,7 @@ open class Message {
         this.identifier = Functions.Message.extractIdentifier(data)
         this.content = if (data is SpecificRecordBase) data.toJsonString() else data.toJsonString()
     }
+
+    inline fun <reified T : Any> getContentObject(): T = content.toObject()
 
 }

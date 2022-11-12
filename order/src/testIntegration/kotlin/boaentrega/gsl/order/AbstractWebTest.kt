@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import kotlin.streams.toList
 
-abstract class AbstractWebTest<T : AuditableModel<T>> : AbstractIntegrationTest() {
+abstract class AbstractWebTest<T : AuditableModel<T>> : AbstractEventSourcingTest() {
     val easyRandom = EasyRandom()
     var entities = listOf<AuditableModel<T>>()
 

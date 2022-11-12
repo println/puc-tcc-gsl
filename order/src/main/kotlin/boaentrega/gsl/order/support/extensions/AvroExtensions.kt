@@ -7,12 +7,9 @@ import java.lang.reflect.Modifier
 object AvroExtensions {
     fun <R : SpecificRecordBase> R.toJsonString(): String {
         val fields = this.javaClass.declaredFields
-        fields.forEach { it.isAccessible = true }
-
-        val dataMap = fields
+        return fields
                 .filterNot { Modifier.isStatic(it.modifiers) }
-                .associate { it.name to it.get(this) }
-
-        return dataMap.toJsonString()
+                .associate { it.name to it.apply { isAccessible = true }.get(this) }
+                .toJsonString()
     }
 }

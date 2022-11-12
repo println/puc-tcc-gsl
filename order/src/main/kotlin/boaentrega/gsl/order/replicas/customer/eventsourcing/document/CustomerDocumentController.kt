@@ -8,8 +8,8 @@ import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.order.support.eventsourcing.controller.annotations.ConsumptionHandler
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
-import gsl.schemas.DocumentRemove
-import gsl.schemas.DocumentSave
+import gsl.schemas.DocumentExpired
+import gsl.schemas.DocumentReleased
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 
@@ -20,14 +20,14 @@ class CustomerDocumentController(
         private val service: CustomerDocumentService
 ) : AbstractConsumerController(consumerConnector) {
 
-    @ConsumptionHandler(DocumentSave::class)
-    fun saveDocument(document: DocumentSave) {
+    @ConsumptionHandler(DocumentReleased::class)
+    fun saveDocument(document: DocumentReleased) {
         val data = document.document.toObject<CustomerDocument>()
         service.save(document.documentId, data)
     }
 
-    @ConsumptionHandler(DocumentRemove::class)
-    fun removeDocument(document: DocumentRemove) {
+    @ConsumptionHandler(DocumentExpired::class)
+    fun removeDocument(document: DocumentExpired) {
         service.delete(document.documentId)
     }
 }

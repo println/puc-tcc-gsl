@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class FreightDocumentService(private val repository: FreightDocumentRepository) {
+class FreightDocService(private val repository: FreightDocumentRepository) {
 
     fun save(documentId: UUID, document: FreightDocument) {
         val optionalDocument = findById(documentId)

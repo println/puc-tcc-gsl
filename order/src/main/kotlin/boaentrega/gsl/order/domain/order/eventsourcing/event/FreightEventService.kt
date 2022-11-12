@@ -9,7 +9,7 @@ import gsl.schemas.FreightEvent
 import gsl.schemas.FreightEventStatus
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
-import java.time.LocalDate
+import java.time.Instant
 import java.util.*
 
 @Service
@@ -19,100 +19,95 @@ class FreightEventService(
 
     private val logger = logger()
 
-    companion object {
-        const val ORDER_SERVICE = "order"
-        const val FREIGHT_SERVICE = "freight"
-        const val COLLECTOR_SERVICE = "collector"
-        const val DELIVERY_SERVICE = "delivery"
-    }
-
-    fun notifyCreated(trackId: UUID, source: String, description: String) {
+    fun notifyCreated(trackId: UUID, freightId: UUID, source: String, description: String, lastUpdated: Instant) {
         val status = FreightEventStatus.CREATED
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description, lastUpdated)
     }
 
-    fun notifyCanceling(trackId: UUID, source: String, description: String) {
+    fun notifyCanceling(trackId: UUID, freightId: UUID, source: String, description: String) {
         val status = FreightEventStatus.CANCELING
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyCanceled(trackId: UUID, source: String, description: String) {
+    fun notifyCanceled(trackId: UUID, freightId: UUID, source: String, description: String) {
         val status = FreightEventStatus.CANCELED
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyFinished(trackId: UUID, source: String, description: String) {
+    fun notifyFinished(trackId: UUID, freightId: UUID, source: String, description: String, lastUpdated: Instant) {
         val status = FreightEventStatus.FINISHED
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description, lastUpdated)
     }
 
-    fun notifyCollectionStarted(trackId: UUID, source: String, description: String) {
+    fun notifyCollectionStarted(trackId: UUID, freightId: UUID, source: String, description: String) {
         val status = FreightEventStatus.COLLECTION_STARTED
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyCollectionPickupOut(trackId: UUID, source: String, description: String) {
+    fun notifyCollectionPickupOut(trackId: UUID, freightId: UUID, source: String, description: String) {
         val status = FreightEventStatus.COLLECTION_PICKUP_OUT
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyCollectionPickupTaken(trackId: UUID, source: String, description: String) {
+    fun notifyCollectionPickupTaken(trackId: UUID, freightId: UUID, source: String, description: String) {
         val status = FreightEventStatus.COLLECTION_PICKUP_TAKEN
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyCollectionPackagePreparing(trackId: UUID, source: String, description: String) {
+    fun notifyCollectionPackagePreparing(trackId: UUID, freightId: UUID, source: String, description: String) {
         val status = FreightEventStatus.COLLECTION_PACKAGE_PREPARING
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyCollectionPackageReadyToMove(trackId: UUID, source: String, description: String) {
+    fun notifyCollectionPackageReadyToMove(trackId: UUID, freightId: UUID, source: String, description: String) {
         val status = FreightEventStatus.COLLECTION_PACKAGE_READY_TO_MOVE
-        notify(trackId, status, source, description)
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyPackageMoveStarted(trackId: UUID, source: String, description: String) {
-        val status = FreightEventStatus.PACKAGE_MOVE_STARTED
-        notify(trackId, status, source, description)
+    fun notifyPackageMoveStarted(trackId: UUID, freightId: UUID, source: String, description: String) {
+        val status = FreightEventStatus.IN_TRANSIT_PACKAGE_STARTED
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyPackageMovingOnToNextStorage(trackId: UUID, source: String, description: String) {
-        val status = FreightEventStatus.PACKAGE_MOVING_ON_TO_NEXT_STORAGE
-        notify(trackId, status, source, description)
+    fun notifyPackageMovingOnToNextStorage(trackId: UUID, freightId: UUID, source: String, description: String) {
+        val status = FreightEventStatus.IN_TRANSIT_PACKAGE_MOVING_ON_TO_NEXT_STORAGE
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyPackageReceivedByStorage(trackId: UUID, source: String, description: String) {
-        val status = FreightEventStatus.PACKAGE_RECEIVED_BY_STORAGE
-        notify(trackId, status, source, description)
+    fun notifyPackageReceivedByStorage(trackId: UUID, freightId: UUID, source: String, description: String) {
+        val status = FreightEventStatus.IN_TRANSIT_PACKAGE_RECEIVED_BY_STORAGE
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyPackageReachedFinalStorage(trackId: UUID, source: String, description: String) {
-        val status = FreightEventStatus.PACKAGE_REACHED_FINAL_STORAGE
-        notify(trackId, status, source, description)
+    fun notifyPackageReachedFinalStorage(trackId: UUID, freightId: UUID, source: String, description: String) {
+        val status = FreightEventStatus.IN_TRANSIT_PACKAGE_REACHED_FINAL_STORAGE
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyPackageOutForDelivery(trackId: UUID, source: String, description: String) {
-        val status = FreightEventStatus.PACKAGE_OUT_FOR_DELIVERY
-        notify(trackId, status, source, description)
+    fun notifyPackageOutForDelivery(trackId: UUID, freightId: UUID, source: String, description: String) {
+        val status = FreightEventStatus.DELIVERY_OUT_FOR
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyPackageDelivered(trackId: UUID, source: String, description: String) {
-        val status = FreightEventStatus.PACKAGE_DELIVERED
-        notify(trackId, status, source, description)
+    fun notifyPackageDelivered(trackId: UUID, freightId: UUID, source: String, description: String) {
+        val status = FreightEventStatus.DELIVERY_SUCCESS
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyPackageDeliveryFailed(trackId: UUID, source: String, description: String) {
-        val status = FreightEventStatus.PACKAGE_DELIVERY_FAILED
-        notify(trackId, status, source, description)
+    fun notifyPackageDeliveryFailed(trackId: UUID, freightId: UUID, source: String, description: String) {
+        val status = FreightEventStatus.DELIVERY_FAILED
+        notify(trackId, freightId, status, source, description)
     }
 
-    fun notifyPackageDeliveryProcessReset(trackId: UUID, source: String, description: String) {
-        val status = FreightEventStatus.PACKAGE_DELIVERY_PROCESS_RESET
-        notify(trackId, status, source, description)
+    fun notifyPackageDeliveryProcessReset(trackId: UUID, freightId: UUID, source: String, description: String) {
+        val status = FreightEventStatus.DELIVERY_PROCESS_RESTART
+        notify(trackId, freightId, status, source, description)
     }
 
-    private fun notify(trackId: UUID, status: FreightEventStatus, source: String, description: String) {
-        val payload = FreightEvent(trackId, status, source, description, LocalDate.now())
+    private fun notify(
+            trackId: UUID, freightId: UUID, status: FreightEventStatus, source: String,
+            description: String, lastUpdated: Instant = Instant.now()) {
+        val payload = FreightEvent(trackId, freightId, status, source, description, lastUpdated)
         val message = EventMessage(trackId, payload)
         dedicatedProducerConnector.publish(message)
         logger.info("Event has been emitted to [${dedicatedProducerConnector.getId()}]: ${message.toJsonString()}")

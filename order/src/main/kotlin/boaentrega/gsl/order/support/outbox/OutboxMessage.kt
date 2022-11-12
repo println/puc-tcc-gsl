@@ -4,10 +4,7 @@ import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.Parameter
 import java.time.OffsetDateTime
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class OutboxMessage {
@@ -28,6 +25,7 @@ class OutboxMessage {
 
     val destination: String
 
+    @Lob
     @Column(length = 512, updatable = false, nullable = false)
     val payload: String
 

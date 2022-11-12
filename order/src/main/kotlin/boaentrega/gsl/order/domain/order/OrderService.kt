@@ -1,6 +1,7 @@
 package boaentrega.gsl.order.domain.order
 
 import boaentrega.gsl.order.domain.order.eventsourcing.command.FreightCommandService
+import boaentrega.gsl.order.domain.order.eventsourcing.document.OrderDocumentBroadcastService
 import boaentrega.gsl.order.domain.order.eventsourcing.event.OrderEventService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -16,6 +17,7 @@ import java.util.*
 class OrderService(
         private val freightCommandService: FreightCommandService,
         private val orderEventService: OrderEventService,
+        private val orderDocumentBroadcastService: OrderDocumentBroadcastService,
         private val repository: OrderRepository) {
 
     fun findAll(orderFilter: OrderFilter, pageable: Pageable): Page<Order> {
@@ -41,6 +43,7 @@ class OrderService(
         val order = Order(customerId, pickupAddress, deliveryAddress)
         val entity = repository.save(order)
         orderEventService.notifyOrderCreated(entity.id!!)
+        orderDocumentBroadcastService.release(entity)
         return entity
     }
 
@@ -54,10 +57,11 @@ class OrderService(
 
             it.status = OrderStatus.ACCEPTED
             it.value = value
-            repository.save(it)
-            val orderId = it.id!!
+            val updatedEntity = repository.save(it)
+            val orderId = updatedEntity.id!!
             orderEventService.notifyOrderAccepted(orderId)
-            freightCommandService.create(orderId, orderId, it.pickupAddress, it.deliveryAddress)
+            freightCommandService.create(orderId, orderId, updatedEntity.pickupAddress, updatedEntity.deliveryAddress)
+            orderDocumentBroadcastService.release(updatedEntity)
         }
     }
 
@@ -71,8 +75,9 @@ class OrderService(
 
             it.status = OrderStatus.REFUSED
             it.comment = reason
-            repository.save(it)
-            orderEventService.notifyOrderRefused(it.id!!)
+            val updatedEntity = repository.save(it)
+            orderEventService.notifyOrderRefused(updatedEntity.id!!)
+            orderDocumentBroadcastService.release(updatedEntity)
         }
     }
 

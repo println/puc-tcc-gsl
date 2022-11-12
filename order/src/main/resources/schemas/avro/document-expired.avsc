@@ -1,7 +1,7 @@
 {
   "type": "record",
   "namespace": "gsl.schemas",
-  "name": "DocumentRemove",
+  "name": "DocumentExpired",
   "fields": [
     {
       "name": "documentId",
@@ -13,8 +13,8 @@
     {
       "name": "date",
       "type": {
-        "type": "int",
-        "logicalType": "date"
+        "type": "long",
+        "logicalType": "timestamp-millis"
       }
     }
   ]

@@ -11,7 +11,7 @@ import gsl.schemas.OrderRefuseCommand
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import java.time.LocalDate
+import java.time.Instant
 import java.util.*
 
 @Service
@@ -22,12 +22,12 @@ class OrderCommandService(
     private val logger = logger()
 
     fun approve(trackId: UUID, orderId: UUID, value: BigDecimal) {
-        val command = OrderApproveCommand(trackId, orderId, value, LocalDate.now())
+        val command = OrderApproveCommand(trackId, orderId, value, Instant.now())
         send(trackId, command)
     }
 
     fun refuse(trackId: UUID, orderId: UUID, reason: String) {
-        val command = OrderRefuseCommand(trackId, orderId, reason, LocalDate.now())
+        val command = OrderRefuseCommand(trackId, orderId, reason, Instant.now())
         send(trackId, command)
     }
 

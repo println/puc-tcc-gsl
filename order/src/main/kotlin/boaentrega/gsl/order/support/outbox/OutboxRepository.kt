@@ -14,6 +14,10 @@ interface OutboxRepository : JpaRepository<OutboxMessage, UUID> {
 
     fun getTop10ByIsPublishedFalse(): List<OutboxMessage>
 
+    fun countByIsPublishedFalse(): Long
+
+    fun countByIsPublishedTrue(): Long
+
     @Modifying(clearAutomatically = true)
     @Query("update OutboxMessage m set m.isPublished = true where m.messageId in (:ids)")
     fun markAsPublished(@Param("ids") messageIds: List<UUID>)

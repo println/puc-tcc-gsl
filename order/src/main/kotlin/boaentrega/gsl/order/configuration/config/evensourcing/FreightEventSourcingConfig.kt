@@ -51,4 +51,11 @@ class FreightEventSourcingConfig {
         return connectorFactory.createConsumer(documentTarget)
     }
 
+    @Bean(EventSourcingBeanQualifiers.FREIGHT_DOCUMENT_PRODUCER)
+    fun createDocumentDedicatedProducer(connectorFactory: AbstractConnectorFactory,
+                                       outboxConnectorService: OutboxConnectorService): DedicatedProducerConnector {
+        return connectorFactory.createDedicatedProducer(outboxConnectorService, documentTarget)
+    }
+
+
 }

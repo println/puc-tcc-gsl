@@ -11,6 +11,13 @@
       }
     },
     {
+      "name": "freightId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
       "name": "status",
       "type": "FreightEventStatus"
     },
@@ -25,8 +32,8 @@
     {
       "name": "date",
       "type": {
-        "type": "int",
-        "logicalType": "date"
+        "type": "long",
+        "logicalType": "timestamp-millis"
       }
     }
   ]

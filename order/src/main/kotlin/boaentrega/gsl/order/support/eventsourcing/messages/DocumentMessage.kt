@@ -7,6 +7,6 @@ class DocumentMessage : Message {
         val type = MessageType.DOCUMENT
     }
 
-    constructor(trackId: UUID?, data: Any) : super(trackId, EventMessage.type, data)
-    constructor(trackId: UUID?, identifier: String, content: String) : super(trackId, EventMessage.type, identifier, content)
+    constructor(trackId: UUID?, data: Any) : super(trackId, DocumentMessage.type, data)
+    constructor(trackId: UUID?, identifier: String, content: String) : super(trackId, DocumentMessage.type, identifier, content)
 }

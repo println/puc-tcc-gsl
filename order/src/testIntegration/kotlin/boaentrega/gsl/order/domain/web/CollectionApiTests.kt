@@ -10,8 +10,6 @@ import boaentrega.gsl.order.domain.collection.web.CollectorController
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
-import boaentrega.gsl.order.support.outbox.OutboxConnectorService
-import boaentrega.gsl.order.support.outbox.OutboxRepository
 import gsl.schemas.FreightEvent
 import gsl.schemas.FreightEventStatus
 import gsl.schemas.FreightMovePackageCommand
@@ -37,12 +35,6 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
     @Autowired
     private lateinit var service: PickupRequestService
 
-    @Autowired
-    private lateinit var outboxRepository: OutboxRepository
-
-    @Autowired
-    private lateinit var outboxConnectorService: OutboxConnectorService
-
     override fun createResource(): Any {
         return CollectorController(service)
     }
@@ -55,8 +47,6 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
     @AfterEach
     fun reset() {
         repository.deleteAll()
-        outboxRepository.deleteAll()
-        DummyProducerConnector.clearMessages()
     }
 
     @Test
@@ -78,7 +68,10 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
                 .andExpect(
                         jsonPath("\$.status").value(PickupRequestStatus.PICKUP_PROCESS.toString()))
 
-        checkEventSourcingEvents(FreightEventStatus.COLLECTION_PICKUP_OUT)
+        assertTotalMessagesAndReleaseThem()
+
+        val eventContent = DummyProducerConnector.getMessageContent(FreightEvent::class)
+        Assertions.assertEquals(FreightEventStatus.COLLECTION_PICKUP_OUT, eventContent?.status)
     }
 
     @Test
@@ -91,7 +84,10 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
                 .andExpect(
                         jsonPath("\$.status").value(PickupRequestStatus.TAKEN.toString()))
 
-        checkEventSourcingEvents(FreightEventStatus.COLLECTION_PICKUP_TAKEN)
+        assertTotalMessagesAndReleaseThem()
+
+        val eventContent = DummyProducerConnector.getMessageContent(FreightEvent::class)
+        Assertions.assertEquals(FreightEventStatus.COLLECTION_PICKUP_TAKEN, eventContent?.status)
     }
 
     @Test
@@ -106,7 +102,10 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
                 .andExpect(
                         jsonPath("\$.status").value(PickupRequestStatus.ON_PACKAGING.toString()))
 
-        checkEventSourcingEvents(FreightEventStatus.COLLECTION_PACKAGE_PREPARING)
+        assertTotalMessagesAndReleaseThem()
+
+        val eventContent = DummyProducerConnector.getMessageContent(FreightEvent::class)
+        Assertions.assertEquals(FreightEventStatus.COLLECTION_PACKAGE_PREPARING, eventContent?.status)
     }
 
     @Test
@@ -122,35 +121,19 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
                         jsonPath("\$.status").value(PickupRequestStatus.FINISHED.toString()))
                 .andReturn()
 
-        val response = result.response
+        val pickupRequest = result.response.contentAsString.toObject<PickupRequest>()
 
-        checkEventSourcingEvents(FreightEventStatus.COLLECTION_PACKAGE_READY_TO_MOVE)
-        checkEventSourcingCommands(response.contentAsString.toObject())
+        assertTotalMessagesAndReleaseThem(2)
+
+        val eventContent = DummyProducerConnector.getMessageContent(FreightEvent::class)
+        Assertions.assertEquals(FreightEventStatus.COLLECTION_PACKAGE_READY_TO_MOVE, eventContent?.status)
+
+        val commandContent = DummyProducerConnector.getMessageContent(FreightMovePackageCommand::class, 1)
+        Assertions.assertEquals(pickupRequest.trackId, commandContent?.trackId)
+        Assertions.assertEquals(pickupRequest.orderId, commandContent?.orderId)
+        Assertions.assertEquals(pickupRequest.freightId, commandContent?.freightId)
+        Assertions.assertEquals(pickupRequest.packageAddress, commandContent?.from)
+        Assertions.assertEquals(pickupRequest.destination, commandContent?.to)
     }
-
-    private fun checkEventSourcingEvents(freightStatus: FreightEventStatus) {
-        releaseMessages()
-        val message = DummyProducerConnector.findAll(FreightEvent::class.java).first()
-        val event = message.content.toObject<FreightEvent>()
-        Assertions.assertEquals(freightStatus, event.status)
-    }
-
-    private fun checkEventSourcingCommands(pickupRequest: PickupRequest) {
-        val message = DummyProducerConnector.findAll(FreightMovePackageCommand::class.java).first()
-        val command = message.content.toObject<FreightMovePackageCommand>()
-
-        Assertions.assertEquals(pickupRequest.trackId, command.trackId)
-        Assertions.assertEquals(pickupRequest.orderId, command.orderId)
-        Assertions.assertEquals(pickupRequest.freightId, command.freightId)
-        Assertions.assertEquals(pickupRequest.packageAddress, command.from)
-        Assertions.assertEquals(pickupRequest.destination, command.to)
-    }
-
-    private fun releaseMessages() {
-        Assertions.assertTrue(outboxRepository.getTop10ByIsPublishedFalse().isNotEmpty())
-        outboxConnectorService.releaseMessages()
-        Assertions.assertTrue(outboxRepository.getTop10ByIsPublishedFalse().isEmpty())
-    }
-
 
 }

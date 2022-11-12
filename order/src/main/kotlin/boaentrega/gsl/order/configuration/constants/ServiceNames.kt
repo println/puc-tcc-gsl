@@ -6,5 +6,6 @@ object ServiceNames {
     const val FREIGHT = "freight"
     const val CUSTOMER = "customer"
     const val PARTNERSHIP = "partnership"
+    const val TRANSPORT = "transport"
     const val DELIVERY = "delivery"
 }

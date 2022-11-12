@@ -1,6 +1,6 @@
 package boaentrega.gsl.order.domain.eventsourcing
 
-import boaentrega.gsl.order.AbstractIntegrationTest
+import boaentrega.gsl.order.AbstractEventSourcingTest
 import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.collection.PickupRequest
@@ -11,27 +11,19 @@ import boaentrega.gsl.order.domain.collection.web.CollectorController
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
-import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
-import boaentrega.gsl.order.support.outbox.OutboxConnectorService
-import boaentrega.gsl.order.support.outbox.OutboxRepository
-import boaentrega.gsl.order.support.web.ResponsePage
 import gsl.schemas.FreightEvent
 import gsl.schemas.FreightEventStatus
 import gsl.schemas.FreightPickupProductCommand
-import org.hamcrest.Matchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.http.MediaType
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import java.time.LocalDate
+import java.time.Instant
 import java.util.*
 
 
-class CollectionCommandTest : AbstractIntegrationTest() {
+class CollectionCommandTest : AbstractEventSourcingTest() {
 
     companion object {
         const val RESOURCE = ResourcePaths.COLLECTION
@@ -44,12 +36,6 @@ class CollectionCommandTest : AbstractIntegrationTest() {
     private lateinit var service: PickupRequestService
 
     @Autowired
-    private lateinit var outboxRepository: OutboxRepository
-
-    @Autowired
-    private lateinit var outboxConnectorService: OutboxConnectorService
-
-    @Autowired
     @Qualifier(EventSourcingBeanQualifiers.FREIGHT_COMMAND_CONSUMER)
     private lateinit var consumerConnector: DummyConsumerConnector
 
@@ -60,8 +46,6 @@ class CollectionCommandTest : AbstractIntegrationTest() {
     @AfterEach
     fun reset() {
         repository.deleteAll()
-        outboxRepository.deleteAll()
-        DummyProducerConnector.clearMessages()
     }
 
     @Test
@@ -71,7 +55,7 @@ class CollectionCommandTest : AbstractIntegrationTest() {
 
         consumerConnector.consume(message)
 
-        val pickupRequest = findAll()
+        val pickupRequest = checkAllFromApiAndGetFirst<PickupRequest>(RESOURCE)
 
         Assertions.assertEquals(command.trackId, pickupRequest.trackId)
         Assertions.assertEquals(command.orderId, pickupRequest.orderId)
@@ -83,22 +67,20 @@ class CollectionCommandTest : AbstractIntegrationTest() {
         Assertions.assertNull(pickupRequest.packerEmployee)
         Assertions.assertNull(pickupRequest.packageAddress)
 
-        releaseMessages()
-        checkEventSourcingEvents(FreightEventStatus.COLLECTION_STARTED)
+        assertTotalMessagesAndReleaseThem()
+        val eventContent = DummyProducerConnector.getMessageContent(FreightEvent::class)
+        Assertions.assertEquals(FreightEventStatus.COLLECTION_STARTED, eventContent?.status)
     }
 
     @Test
     fun commandDuplication() {
         val command = createCommand()
         val message = CommandMessage(command.trackId, command)
-
-        consumerConnector.consume(message)
-        consumerConnector.consume(message)
-
-        findAll()
-
-        Assertions.assertEquals(1, outboxRepository.getTop10ByIsPublishedFalse().size)
-        releaseMessages()
+        repeat(3) {
+            consumerConnector.consume(message)
+        }
+        checkAllFromApiAndGetFirst<PickupRequest>(RESOURCE)
+        assertTotalMessagesAndReleaseThem(1)
     }
 
     private fun createCommand(): FreightPickupProductCommand {
@@ -107,32 +89,9 @@ class CollectionCommandTest : AbstractIntegrationTest() {
         val freightId = UUID.randomUUID()
         val pickupAddress = "pickupAddress"
         val destination = "destination"
-        val date = LocalDate.now()
+        val date = Instant.now()
         return FreightPickupProductCommand(trackId, orderId, freightId, pickupAddress, destination, date)
     }
 
-    private fun findAll(): PickupRequest {
-        val result = restMockMvc.perform(MockMvcRequestBuilders.get(RESOURCE)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk)
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(MockMvcResultMatchers.jsonPath("\$.content", Matchers.hasSize<String>(1)))
-                .andReturn()
 
-        val response = result.response
-        val page = response.contentAsString.toObject<ResponsePage>()
-        return page.getObject<PickupRequest>()[0]
-    }
-
-    private fun checkEventSourcingEvents(freightStatus: FreightEventStatus) {
-        val message = DummyProducerConnector.findAll(FreightEvent::class.java).first()
-        val event = message.content.toObject<FreightEvent>()
-        Assertions.assertEquals(freightStatus, event.status)
-    }
-
-    private fun releaseMessages() {
-        Assertions.assertTrue(outboxRepository.getTop10ByIsPublishedFalse().isNotEmpty())
-        outboxConnectorService.releaseMessages()
-        Assertions.assertTrue(outboxRepository.getTop10ByIsPublishedFalse().isEmpty())
-    }
 }

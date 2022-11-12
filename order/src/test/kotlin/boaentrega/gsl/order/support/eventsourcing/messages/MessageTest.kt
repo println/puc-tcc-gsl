@@ -4,8 +4,9 @@ import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
 import gsl.schemas.FreightEvent
 import gsl.schemas.FreightEventStatus
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Instant
 import java.time.LocalDate
 import java.util.*
 
@@ -15,14 +16,16 @@ internal class MessageTest {
     fun serializeWithAvroData() {
         val avroEventData = FreightEvent(
                 UUID.randomUUID(),
+                UUID.randomUUID(),
                 FreightEventStatus.COLLECTION_PICKUP_OUT,
                 "teste",
                 "teste",
-                LocalDate.now())
+                Instant.now())
 
         val deserializedAvroEventData = testMessageSerialization(avroEventData)
 
         assertEquals(avroEventData.trackId, deserializedAvroEventData.trackId)
+        assertEquals(avroEventData.freightId, deserializedAvroEventData.freightId)
         assertEquals(avroEventData.status, deserializedAvroEventData.status)
         assertEquals(avroEventData.source, deserializedAvroEventData.source)
         assertEquals(avroEventData.message, deserializedAvroEventData.message)

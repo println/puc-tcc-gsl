@@ -2,6 +2,7 @@ package boaentrega.gsl.order.domain.web
 
 import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
+import boaentrega.gsl.order.domain.freight.Freight
 import boaentrega.gsl.order.domain.order.Order
 import boaentrega.gsl.order.domain.order.OrderRepository
 import boaentrega.gsl.order.domain.order.OrderService
@@ -11,8 +12,7 @@ import boaentrega.gsl.order.domain.order.web.OrderDto
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
-import boaentrega.gsl.order.support.outbox.OutboxConnectorService
-import boaentrega.gsl.order.support.outbox.OutboxRepository
+import gsl.schemas.DocumentReleased
 import gsl.schemas.OrderEvent
 import gsl.schemas.OrderEventStatus
 import org.junit.jupiter.api.AfterEach
@@ -37,11 +37,6 @@ class OrderApiTests : AbstractWebTest<Order>() {
     @Autowired
     private lateinit var service: OrderService
 
-    @Autowired
-    private lateinit var outboxConnectorService: OutboxConnectorService
-
-    @Autowired
-    private lateinit var outboxRepository: OutboxRepository
 
     override fun getRepository() = repository
     override fun getEntityType() = Order::class.java
@@ -55,7 +50,6 @@ class OrderApiTests : AbstractWebTest<Order>() {
     @AfterEach
     fun reset() {
         repository.deleteAll()
-        outboxRepository.deleteAll()
     }
 
     @Test
@@ -77,21 +71,14 @@ class OrderApiTests : AbstractWebTest<Order>() {
 
         val order: Order = result.response.contentAsString.toObject()
 
-        releaseMessages()
-        checkEventSourcingEvents(order.id!!, OrderEventStatus.WAITING_PAYMENT)
+        assertTotalMessagesAndReleaseThem(2)
+
+        val eventContent = DummyProducerConnector.getMessageContent(OrderEvent::class)
+        Assertions.assertEquals(OrderEventStatus.WAITING_PAYMENT, eventContent?.status)
+        Assertions.assertEquals(order.id, eventContent?.trackId)
+
+        assertDocumentReleased(order)
     }
 
-    private fun checkEventSourcingEvents(orderId: UUID, status: OrderEventStatus) {
-        val message = DummyProducerConnector.findAll(OrderEvent::class.java).first()
-        val event = message.content.toObject<OrderEvent>()
-        Assertions.assertEquals(status, event.status)
-        Assertions.assertEquals(orderId, event.trackId)
-    }
-
-    private fun releaseMessages() {
-        Assertions.assertTrue(outboxRepository.getTop10ByIsPublishedFalse().isNotEmpty())
-        outboxConnectorService.releaseMessages()
-        Assertions.assertTrue(outboxRepository.getTop10ByIsPublishedFalse().isEmpty())
-    }
 
 }

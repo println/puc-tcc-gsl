@@ -27,8 +27,8 @@
     {
       "name": "date",
       "type": {
-        "type": "int",
-        "logicalType": "date"
+        "type": "long",
+        "logicalType": "timestamp-millis"
       }
     }
   ]
