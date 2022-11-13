@@ -8,6 +8,7 @@ object TableNames {
         const val DELIVERY = "deliveries"
         const val CUSTOMER = "customers"
         const val PICKUP_REQUEST = "pickup_requests"
+        const val MOVEMENT = "movements"
     }
 
     object Replica {

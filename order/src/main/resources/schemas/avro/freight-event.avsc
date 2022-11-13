@@ -26,6 +26,10 @@
       "type": "string"
     },
     {
+      "name": "currentPosition",
+      "type": "string"
+    },
+    {
       "name": "message",
       "type": "string"
     },

@@ -15,8 +15,10 @@ data class Freight(
         val trackId: UUID,
         @Column(unique = true)
         val orderId: UUID,
-        val addressFrom: String,
-        val addressTo: String,
+        val senderAddress: String,
+        val deliveryAddress: String,
+        var currentPosition: String,
         var status: FreightStatus = FreightStatus.CREATED,
         var lastUpdated: Instant = Instant.now()
 ) : AuditableModel<Freight>()
+

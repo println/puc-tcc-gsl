@@ -1,8 +1,5 @@
 package boaentrega.gsl.order.domain.order
 
-import boaentrega.gsl.order.domain.order.eventsourcing.command.FreightCommandService
-import boaentrega.gsl.order.domain.order.eventsourcing.document.OrderDocumentBroadcastService
-import boaentrega.gsl.order.domain.order.eventsourcing.event.OrderEventService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
@@ -15,10 +12,8 @@ import java.util.*
 
 @Service
 class OrderService(
-        private val freightCommandService: FreightCommandService,
-        private val orderEventService: OrderEventService,
-        private val orderDocumentBroadcastService: OrderDocumentBroadcastService,
-        private val repository: OrderRepository) {
+        private val repository: OrderRepository,
+        private val messenger: OrderMessenger) {
 
     fun findAll(orderFilter: OrderFilter, pageable: Pageable): Page<Order> {
         val specification: Specification<Order> = Specification.where(null)
@@ -42,8 +37,7 @@ class OrderService(
     fun createOrder(customerId: UUID, pickupAddress: String, deliveryAddress: String): Order {
         val order = Order(customerId, pickupAddress, deliveryAddress)
         val entity = repository.save(order)
-        orderEventService.notifyOrderCreated(entity.id!!)
-        orderDocumentBroadcastService.release(entity)
+        messenger.create(entity)
         return entity
     }
 
@@ -58,10 +52,7 @@ class OrderService(
             it.status = OrderStatus.ACCEPTED
             it.value = value
             val updatedEntity = repository.save(it)
-            val orderId = updatedEntity.id!!
-            orderEventService.notifyOrderAccepted(orderId)
-            freightCommandService.create(orderId, orderId, updatedEntity.pickupAddress, updatedEntity.deliveryAddress)
-            orderDocumentBroadcastService.release(updatedEntity)
+            messenger.approvePayment(updatedEntity)
         }
     }
 
@@ -76,8 +67,7 @@ class OrderService(
             it.status = OrderStatus.REFUSED
             it.comment = reason
             val updatedEntity = repository.save(it)
-            orderEventService.notifyOrderRefused(updatedEntity.id!!)
-            orderDocumentBroadcastService.release(updatedEntity)
+            messenger.refusePayment(updatedEntity)
         }
     }
 

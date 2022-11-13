@@ -25,11 +25,11 @@
       }
     },
     {
-      "name": "from",
+      "name": "currentPosition",
       "type": "string"
     },
     {
-      "name": "to",
+      "name": "deliveryAddress",
       "type": "string"
     },
     {

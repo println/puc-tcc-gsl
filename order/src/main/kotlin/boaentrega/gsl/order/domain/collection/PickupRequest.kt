@@ -16,10 +16,10 @@ data class PickupRequest(
         val orderId: UUID,
         @Column(unique = true)
         val freightId: UUID,
-        val pickupAddress: String,
-        val destination: String,
+        val senderAddress: String,
+        val deliveryAddress: String,
         var status: PickupRequestStatus = PickupRequestStatus.WAITING,
         var collectorEmployee: String? = null,
         var packerEmployee: String? = null,
-        var packageAddress: String? = null
+        var collectorAddress: String? = null
 ) : AuditableModel<PickupRequest>()

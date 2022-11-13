@@ -26,4 +26,36 @@ class DeliveryController(private val service: DeliveryService) {
             @PathVariable("id") id: UUID): Delivery {
         return service.findById(id)
     }
+
+    @PutMapping("/{id}/time")
+    fun addPreferredTimeForDelivery(
+            @PathVariable("id") deliveryId: UUID,
+            @RequestBody data: PreferredTimeDto): Delivery {
+        return service.addPreferredTimeForDelivery(deliveryId, data.time)
+    }
+
+    @PutMapping("/{id}/package")
+    fun takePackageToDelivery(
+            @PathVariable("id") deliveryId: UUID,
+            @RequestBody data: PartnerDto): Delivery {
+        return service.takePackageToDelivery(deliveryId, data.partnerId)
+    }
+
+    @DeleteMapping("/{id}/package")
+    fun returnPackage(
+            @PathVariable("id") deliveryId: UUID): Delivery {
+        return service.giveBackPackageToRetryDelivery(deliveryId)
+    }
+
+    @PutMapping("/{id}/delivery")
+    fun markAsDeliverySuccessfully(
+            @PathVariable("id") deliveryId: UUID): Delivery {
+        return service.markAsSuccessfulDelivery(deliveryId)
+    }
+
+    @DeleteMapping("/{id}/delivery")
+    fun markAsDeliveryFailed(
+            @PathVariable("id") deliveryId: UUID): Delivery {
+        return service.markAsDeliveryFailed(deliveryId)
+    }
 }

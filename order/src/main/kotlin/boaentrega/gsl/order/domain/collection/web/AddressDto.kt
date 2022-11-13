@@ -1,5 +1,5 @@
 package boaentrega.gsl.order.domain.collection.web
 
-class WithdrawAddressDto(
+class AddressDto(
         var address: String
 )

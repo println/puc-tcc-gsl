@@ -77,12 +77,16 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
     @Test
     fun markAsTaken() {
         val id = entities.first().id
+        val contentMap = mapOf("address" to "some forest")
         restMockMvc.perform(put("$RESOURCE/{id}/taken", id)
                 .contentType(MediaType.APPLICATION_JSON)
+                .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andExpect(
                         jsonPath("\$.status").value(PickupRequestStatus.TAKEN.toString()))
+                .andExpect(
+                        jsonPath("\$.collectorAddress").value(contentMap["address"]))
 
         assertTotalMessagesAndReleaseThem()
 
@@ -111,7 +115,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
     @Test
     fun markAsReadyToStartDelivery() {
         val id = entities.first().id
-        val contentMap = mapOf("address" to "fulano de tal")
+        val contentMap = mapOf("address" to "some desert")
         val result = restMockMvc.perform(put("$RESOURCE/{id}/ready", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
@@ -119,6 +123,8 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
                 .andExpect(status().isOk)
                 .andExpect(
                         jsonPath("\$.status").value(PickupRequestStatus.FINISHED.toString()))
+                .andExpect(
+                        jsonPath("\$.collectorAddress").value(contentMap["address"]))
                 .andReturn()
 
         val pickupRequest = result.response.contentAsString.toObject<PickupRequest>()
@@ -132,8 +138,8 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
         Assertions.assertEquals(pickupRequest.trackId, commandContent?.trackId)
         Assertions.assertEquals(pickupRequest.orderId, commandContent?.orderId)
         Assertions.assertEquals(pickupRequest.freightId, commandContent?.freightId)
-        Assertions.assertEquals(pickupRequest.packageAddress, commandContent?.from)
-        Assertions.assertEquals(pickupRequest.destination, commandContent?.to)
+        Assertions.assertEquals(pickupRequest.collectorAddress, commandContent?.currentPosition)
+        Assertions.assertEquals(pickupRequest.deliveryAddress, commandContent?.deliveryAddress)
     }
 
 }

@@ -18,8 +18,9 @@ internal class MessageTest {
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 FreightEventStatus.COLLECTION_PICKUP_OUT,
-                "teste",
-                "teste",
+                "source",
+                "currentPosition",
+                "message",
                 Instant.now())
 
         val deserializedAvroEventData = testMessageSerialization(avroEventData)

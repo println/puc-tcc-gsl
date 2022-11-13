@@ -54,9 +54,9 @@ class FreightCommandTest : AbstractEventSourcingTest() {
 
     fun setupEntity(status: FreightStatus) {
         val orderId = UUID.randomUUID()
-        val from = "from"
-        val to = "to"
-        val data = Freight(orderId, orderId, from, to, status)
+        val senderAddress = "senderAddress"
+        val deliveryAddress = "deliveryAddress"
+        val data = Freight(orderId, orderId, senderAddress, deliveryAddress, senderAddress, status)
         entity = repository.saveAndFlush(data)
     }
 
@@ -71,8 +71,8 @@ class FreightCommandTest : AbstractEventSourcingTest() {
 
         Assertions.assertEquals(command.trackId, freight.trackId)
         Assertions.assertEquals(command.orderId, freight.orderId)
-        Assertions.assertEquals(command.pickupAddress, freight.addressFrom)
-        Assertions.assertEquals(command.deliveryAddress, freight.addressTo)
+        Assertions.assertEquals(command.senderAddress, freight.senderAddress)
+        Assertions.assertEquals(command.deliveryAddress, freight.deliveryAddress)
         Assertions.assertEquals(FreightStatus.CREATED, freight.status)
 
         assertTotalMessagesAndReleaseThem(3)
@@ -83,8 +83,8 @@ class FreightCommandTest : AbstractEventSourcingTest() {
         val commandContent = DummyProducerConnector.getMessageContent(FreightPickupProductCommand::class)
         Assertions.assertEquals(command.trackId, commandContent?.trackId)
         Assertions.assertEquals(command.orderId, commandContent?.orderId)
-        Assertions.assertEquals(command.pickupAddress, commandContent?.pickupAddress)
-        Assertions.assertEquals(command.deliveryAddress, commandContent?.destination)
+        Assertions.assertEquals(command.senderAddress, commandContent?.pickupAddress)
+        Assertions.assertEquals(command.deliveryAddress, commandContent?.deliveryAddress)
 
         assertDocumentReleased(freight)
     }
@@ -113,8 +113,9 @@ class FreightCommandTest : AbstractEventSourcingTest() {
 
         Assertions.assertEquals(entity.trackId, freight.trackId)
         Assertions.assertEquals(entity.orderId, freight.orderId)
-        Assertions.assertEquals(entity.addressFrom, freight.addressFrom)
-        Assertions.assertEquals(entity.addressTo, freight.addressTo)
+        Assertions.assertEquals(entity.senderAddress, freight.senderAddress)
+        Assertions.assertEquals(entity.deliveryAddress, freight.deliveryAddress)
+        Assertions.assertEquals(entity.currentPosition, freight.currentPosition)
         Assertions.assertEquals(FreightStatus.FINISHED, freight.status)
 
         assertTotalMessagesAndReleaseThem(2)

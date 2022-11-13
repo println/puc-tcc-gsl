@@ -17,6 +17,7 @@ import org.jeasy.random.EasyRandom
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -58,9 +59,9 @@ class FreightEventTest : AbstractEventSourcingTest() {
     @BeforeEach
     fun setupEntity() {
         val orderId = UUID.randomUUID()
-        val from = "from"
-        val to = "to"
-        val data = Freight(orderId, orderId, from, to)
+        val senderAddress = "senderAddress"
+        val deliveryAddress = "deliveryAddress"
+        val data = Freight(orderId, orderId, senderAddress, deliveryAddress, senderAddress)
         entity = repository.saveAndFlush(data)
     }
 
@@ -77,6 +78,7 @@ class FreightEventTest : AbstractEventSourcingTest() {
             "IN_TRANSIT_PACKAGE_MOVING_ON_TO_NEXT_STORAGE, TRANSPORT, IN_TRANSIT_PACKAGE_MOVING_ON_TO_NEXT_STORAGE",
             "IN_TRANSIT_PACKAGE_RECEIVED_BY_STORAGE, TRANSPORT, IN_TRANSIT_PACKAGE_RECEIVED_BY_STORAGE",
             "IN_TRANSIT_PACKAGE_REACHED_FINAL_STORAGE, TRANSPORT, IN_TRANSIT_PACKAGE_REACHED_FINAL_STORAGE",
+            "DELIVERY_STARTED, DELIVERY, DELIVERY_STARTED",
             "DELIVERY_OUT_FOR, DELIVERY, DELIVERY_OUT_FOR",
             "DELIVERY_FAILED, DELIVERY, DELIVERY_FAILED",
             "DELIVERY_PROCESS_RESTART, DELIVERY, DELIVERY_PROCESS_RESTART",
@@ -95,12 +97,26 @@ class FreightEventTest : AbstractEventSourcingTest() {
         Assertions.assertEquals(entity.trackId, freight.trackId)
         Assertions.assertEquals(entity.id, freight.id)
         Assertions.assertEquals(entity.orderId, freight.orderId)
-        Assertions.assertEquals(entity.addressFrom, freight.addressFrom)
-        Assertions.assertEquals(entity.addressTo, freight.addressTo)
+        Assertions.assertEquals(entity.senderAddress, freight.senderAddress)
+        Assertions.assertEquals(entity.deliveryAddress, freight.deliveryAddress)
         Assertions.assertEquals(expectedStatus, freight.status)
 
         assertTotalMessagesAndReleaseThem(1)
         assertDocumentReleased(freight)
+    }
+
+    @Test
+    fun deliverySuccessfully() {
+        val event = Factory.createEvent(entity, FreightEventStatus.DELIVERY_SUCCESS, ServiceNames.DELIVERY)
+        val message = CommandMessage(event.trackId, event)
+
+        repeat(3) {//check Duplication
+            consumerConnector.consume(message)
+        }
+
+        val freight = checkAllFromApiAndGetFirst<Freight>(FreightCommandTest.RESOURCE)
+
+        Assertions.assertEquals(freight.deliveryAddress, freight.currentPosition)
     }
 
 
@@ -115,6 +131,7 @@ class FreightEventTest : AbstractEventSourcingTest() {
     "IN_TRANSIT_PACKAGE_MOVING_ON_TO_NEXT_STORAGE", transport
     "IN_TRANSIT_PACKAGE_RECEIVED_BY_STORAGE", transport
     "IN_TRANSIT_PACKAGE_REACHED_FINAL_STORAGE", transport
+    "DELIVERY_STARTED", delivery
     "DELIVERY_OUT_FOR", delivery
     "DELIVERY_FAILED", delivery
     "DELIVERY_PROCESS_RESTART", delivery
@@ -126,7 +143,8 @@ class FreightEventTest : AbstractEventSourcingTest() {
 
     private object Factory {
         fun createEvent(entity: Freight, status: FreightEventStatus, source: String): FreightEvent {
-            return FreightEvent(entity.trackId, entity.id, status, source, "Message: ${status.name}", Instant.now())
+            return FreightEvent(entity.trackId, entity.id, status, source, entity.currentPosition,
+                    "Message: ${status.name}", Instant.now())
         }
     }
 

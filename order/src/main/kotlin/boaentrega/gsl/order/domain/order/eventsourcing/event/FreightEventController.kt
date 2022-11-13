@@ -38,11 +38,14 @@ class FreightEventController(
             IN_TRANSIT_PACKAGE_MOVING_ON_TO_NEXT_STORAGE,
             IN_TRANSIT_PACKAGE_RECEIVED_BY_STORAGE,
             IN_TRANSIT_PACKAGE_REACHED_FINAL_STORAGE,
+            DELIVERY_STARTED,
             DELIVERY_OUT_FOR,
             DELIVERY_FAILED,
-            DELIVERY_PROCESS_RESTART,
+            DELIVERY_PROCESS_RESTART -> {
+                service.updateStatus(event.trackId, event.freightId, status, event.currentPosition, event.date)
+            }
             DELIVERY_SUCCESS -> {
-                service.updateStatus(event.trackId, event.freightId, status, event.date)
+                service.deliverySuccessfully(event.freightId, event.date)
             }
         }
     }

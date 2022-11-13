@@ -38,8 +38,9 @@ class CollectorController(
 
     @PutMapping("/{id}/taken")
     fun markAsTaken(
-            @PathVariable("id") pickupRequestId: UUID): PickupRequest {
-        return service.markAsTaken(pickupRequestId)
+            @PathVariable("id") pickupRequestId: UUID,
+            @RequestBody data: AddressDto): PickupRequest {
+        return service.markAsTaken(pickupRequestId, data.address)
     }
 
     @PutMapping("/{id}/packaging")
@@ -52,7 +53,7 @@ class CollectorController(
     @PutMapping("/{id}/ready")
     fun markAsReadyToStartDelivery(
             @PathVariable("id") pickupRequestId: UUID,
-            @RequestBody data: WithdrawAddressDto): PickupRequest {
+            @RequestBody data: AddressDto): PickupRequest {
         return service.markAsReadyToStartDelivery(pickupRequestId, data.address)
     }
 }

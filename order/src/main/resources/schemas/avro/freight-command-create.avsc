@@ -18,7 +18,7 @@
       }
     },
     {
-      "name": "pickupAddress",
+      "name": "senderAddress",
       "type": "string"
     },
     {

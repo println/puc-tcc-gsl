@@ -25,6 +25,10 @@
       }
     },
     {
+      "name": "currentPosition",
+      "type": "string"
+    },
+    {
       "name": "deliveryAddress",
       "type": "string"
     },

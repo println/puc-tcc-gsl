@@ -4,16 +4,17 @@ import boaentrega.gsl.order.AbstractEventSourcingTest
 import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.collection.PickupRequest
-import boaentrega.gsl.order.domain.collection.PickupRequestRepository
-import boaentrega.gsl.order.domain.collection.PickupRequestService
-import boaentrega.gsl.order.domain.collection.PickupRequestStatus
-import boaentrega.gsl.order.domain.collection.web.CollectorController
+import boaentrega.gsl.order.domain.delivery.Delivery
+import boaentrega.gsl.order.domain.delivery.DeliveryRepository
+import boaentrega.gsl.order.domain.delivery.DeliveryService
+import boaentrega.gsl.order.domain.delivery.DeliveryStatus
+import boaentrega.gsl.order.domain.delivery.web.DeliveryController
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
+import gsl.schemas.FreightDeliverPackageCommand
 import gsl.schemas.FreightEvent
 import gsl.schemas.FreightEventStatus
-import gsl.schemas.FreightPickupProductCommand
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -23,24 +24,24 @@ import java.time.Instant
 import java.util.*
 
 
-class CollectionCommandTest : AbstractEventSourcingTest() {
+class DeliveryCommandTest : AbstractEventSourcingTest() {
 
     companion object {
-        const val RESOURCE = ResourcePaths.COLLECTION
+        const val RESOURCE = ResourcePaths.DELIVERY
     }
 
     @Autowired
-    private lateinit var repository: PickupRequestRepository
+    private lateinit var repository: DeliveryRepository
 
     @Autowired
-    private lateinit var service: PickupRequestService
+    private lateinit var service: DeliveryService
 
     @Autowired
     @Qualifier(EventSourcingBeanQualifiers.FREIGHT_COMMAND_CONSUMER)
     private lateinit var consumerConnector: DummyConsumerConnector
 
     override fun createResource(): Any {
-        return CollectorController(service)
+        return DeliveryController(service)
     }
 
     @AfterEach
@@ -55,21 +56,19 @@ class CollectionCommandTest : AbstractEventSourcingTest() {
 
         consumerConnector.consume(message)
 
-        val pickupRequest = checkAllFromApiAndGetFirst<PickupRequest>(RESOURCE)
+        val delivery = checkAllFromApiAndGetFirst<Delivery>(RESOURCE)
 
-        Assertions.assertEquals(command.trackId, pickupRequest.trackId)
-        Assertions.assertEquals(command.orderId, pickupRequest.orderId)
-        Assertions.assertEquals(command.freightId, pickupRequest.freightId)
-        Assertions.assertEquals(command.pickupAddress, pickupRequest.senderAddress)
-        Assertions.assertEquals(command.deliveryAddress, pickupRequest.deliveryAddress)
-        Assertions.assertEquals(PickupRequestStatus.WAITING, pickupRequest.status)
-        Assertions.assertNull(pickupRequest.collectorEmployee)
-        Assertions.assertNull(pickupRequest.packerEmployee)
-        Assertions.assertNull(pickupRequest.collectorAddress)
+        Assertions.assertEquals(command.trackId, delivery.trackId)
+        Assertions.assertEquals(command.orderId, delivery.orderId)
+        Assertions.assertEquals(command.freightId, delivery.freightId)
+        Assertions.assertEquals(command.currentPosition, delivery.currentPosition)
+        Assertions.assertEquals(command.deliveryAddress, delivery.deliveryAddress)
+        Assertions.assertEquals(DeliveryStatus.CREATED, delivery.status)
+        Assertions.assertNull(delivery.preferredDeliveryTime)
 
         assertTotalMessagesAndReleaseThem()
         val eventContent = DummyProducerConnector.getMessageContent(FreightEvent::class)
-        Assertions.assertEquals(FreightEventStatus.COLLECTION_STARTED, eventContent?.status)
+        Assertions.assertEquals(FreightEventStatus.DELIVERY_STARTED, eventContent?.status)
     }
 
     @Test
@@ -79,18 +78,18 @@ class CollectionCommandTest : AbstractEventSourcingTest() {
         repeat(3) {
             consumerConnector.consume(message)
         }
-        checkAllFromApiAndGetFirst<PickupRequest>(RESOURCE)
+        checkAllFromApiAndGetFirst<Delivery>(RESOURCE)
         assertTotalMessagesAndReleaseThem(1)
     }
 
-    private fun createCommand(): FreightPickupProductCommand {
+    private fun createCommand(): FreightDeliverPackageCommand {
         val trackId = UUID.randomUUID()
         val orderId = UUID.randomUUID()
         val freightId = UUID.randomUUID()
-        val pickupAddress = "pickupAddress"
-        val destination = "destination"
+        val currentPosition = "currentPosition"
+        val deliveryAddress = "deliveryAddress"
         val date = Instant.now()
-        return FreightPickupProductCommand(trackId, orderId, freightId, pickupAddress, destination, date)
+        return FreightDeliverPackageCommand(trackId, orderId, freightId, currentPosition, deliveryAddress, date)
     }
 
 

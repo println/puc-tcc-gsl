@@ -83,7 +83,7 @@ class OrderCommandTest : AbstractEventSourcingTest() {
         val commandMessage = DummyProducerConnector.getMessageContent(FreightCreateCommand::class)
         Assertions.assertEquals(order.id, commandMessage?.trackId)
         Assertions.assertEquals(order.id, commandMessage?.orderId)
-        Assertions.assertEquals(order.pickupAddress, commandMessage?.pickupAddress)
+        Assertions.assertEquals(order.pickupAddress, commandMessage?.senderAddress)
         Assertions.assertEquals(order.deliveryAddress, commandMessage?.deliveryAddress)
 
         assertDocumentReleased(order)

@@ -19,23 +19,29 @@ class FreightCommandService(
 
     private val logger = logger()
 
-    fun create(trackId: UUID, orderId: UUID, pickupAddress: String, deliveryAddress: String) {
-        val command = FreightCreateCommand(trackId, orderId, pickupAddress, deliveryAddress, Instant.now())
+    fun create(trackId: UUID, orderId: UUID, senderAddress: String, deliveryAddress: String) {
+        val command = FreightCreateCommand(trackId, orderId, senderAddress, deliveryAddress, Instant.now())
         send(trackId, command)
     }
 
-    fun pickupProduct(trackId: UUID, orderId: UUID, freightId: UUID, pickupAddress: String, destination: String) {
-        val command = FreightPickupProductCommand(trackId, orderId, freightId, pickupAddress, destination, Instant.now())
+    fun pickupProduct(trackId: UUID, orderId: UUID, freightId: UUID,
+                      pickupAddress: String, deliveryAddress: String) {
+        val command = FreightPickupProductCommand(trackId, orderId, freightId,
+                pickupAddress, deliveryAddress, Instant.now())
         send(trackId, command)
     }
 
-    fun movePackage(trackId: UUID, orderId: UUID, freightId: UUID, from: String, to: String) {
-        val command = FreightMovePackageCommand(trackId, orderId, freightId, from, to, Instant.now())
+    fun movePackage(trackId: UUID, orderId: UUID, freightId: UUID,
+                    currentPosition: String, deliveryAddress: String) {
+        val command = FreightMovePackageCommand(trackId, orderId, freightId,
+                currentPosition, deliveryAddress, Instant.now())
         send(trackId, command)
     }
 
-    fun deliverPackage(trackId: UUID, orderId: UUID, freightId: UUID, deliveryAddress: String) {
-        val command = FreightDeliverPackageCommand(trackId, orderId, freightId, deliveryAddress, Instant.now())
+    fun deliverPackage(trackId: UUID, orderId: UUID, freightId: UUID,
+                       currentPosition: String, deliveryAddress: String) {
+        val command = FreightDeliverPackageCommand(trackId, orderId, freightId,
+                currentPosition, deliveryAddress, Instant.now())
         send(trackId, command)
     }
 
