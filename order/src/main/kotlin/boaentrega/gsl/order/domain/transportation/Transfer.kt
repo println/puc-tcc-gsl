@@ -8,8 +8,8 @@ import javax.persistence.Entity
 import javax.persistence.Table
 
 @Entity
-@Table(name = TableNames.Domain.MOVEMENT)
-class Movement(
+@Table(name = TableNames.Domain.TRANSFER)
+class Transfer(
         @Column(unique = true)
         val trackId: UUID,
         @Column(unique = true)
@@ -21,5 +21,5 @@ class Movement(
         var nextStorage: String,
         var finalStorage: String,
         var partnerId: UUID? = null,
-        var status: MovementStatus = MovementStatus.CREATED,
-) : AuditableModel<Movement>()
+        var status: TransferStatus = TransferStatus.CREATED,
+) : AuditableModel<Transfer>()

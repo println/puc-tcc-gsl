@@ -1,6 +1,6 @@
 import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.replicas.freight.FreightDocService
-import boaentrega.gsl.order.replicas.freight.FreightDocument
+import boaentrega.gsl.order.replicas.freight.FreightDoc
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.order.support.eventsourcing.controller.annotations.ConsumptionHandler
@@ -19,7 +19,7 @@ class FreightDocumentController(
 
     @ConsumptionHandler(DocumentReleased::class)
     fun saveDocument(document: DocumentReleased) {
-        val data = document.document.toObject<FreightDocument>()
+        val data = document.document.toObject<FreightDoc>()
         service.save(document.documentId, data)
     }
 

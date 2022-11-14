@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class OrderDocumentService(private val repository: OrderDocumentRepository) {
+class OrderDocService(private val repository: OrderDocRepository) {
 
-    fun save(documentId: UUID, document: OrderDocument) {
+    fun save(documentId: UUID, document: OrderDoc) {
         val optionalDocument = findById(documentId)
         var entity = document
         if (optionalDocument.isPresent) {
@@ -20,7 +20,7 @@ class OrderDocumentService(private val repository: OrderDocumentRepository) {
         repository.deleteById(documentId)
     }
 
-    private fun findById(documentId: UUID): Optional<OrderDocument> {
+    private fun findById(documentId: UUID): Optional<OrderDoc> {
         return repository.findById(documentId)
     }
 }

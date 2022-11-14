@@ -6,8 +6,10 @@ import boaentrega.gsl.order.domain.order.OrderFilter
 import boaentrega.gsl.order.domain.order.OrderService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 import java.util.*
@@ -45,5 +47,26 @@ class OrderController(val service: OrderService) {
                 .buildAndExpand(entity.id).toUri()
 
         return ResponseEntity.created(location).body(entity)
+    }
+
+    @PutMapping("/{id}/approve")
+    fun tempApproveOrder(
+            @PathVariable("id") id: UUID,
+            @RequestBody data: PaymentDto): Order {
+        val optionalOrder = service.approvePayment(id, data.value)
+        if(optionalOrder.isEmpty){
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found")
+        }
+        return optionalOrder.get()
+    }
+
+    @PutMapping("/{id}/refuse")
+    fun tempRefuseOrder(
+            @PathVariable("id") id: UUID): Order {
+        val optionalOrder = service.refusePayment(id, "cant pay")
+        if(optionalOrder.isEmpty){
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found")
+        }
+        return optionalOrder.get()
     }
 }

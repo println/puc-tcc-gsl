@@ -45,33 +45,41 @@ class OrderService(
     }
 
     @Transactional
-    fun approvePayment(id: UUID, value: BigDecimal) {
+    fun approvePayment(id: UUID, value: BigDecimal): Optional<Order> {
         val entityOptional = repository.findById(id)
-        entityOptional.ifPresent {
-            if (it.status == OrderStatus.ACCEPTED) {
-                return@ifPresent
-            }
-
-            it.status = OrderStatus.ACCEPTED
-            it.value = value
-            val updatedEntity = repository.save(it)
-            messenger.approvePayment(updatedEntity)
+        if (entityOptional.isEmpty) {
+            return entityOptional
         }
+
+        val entity = entityOptional.get()
+        if (entity.status == OrderStatus.ACCEPTED) {
+            return entityOptional
+        }
+
+        entity.status = OrderStatus.ACCEPTED
+        entity.value = value
+        val updatedEntity = repository.save(entity)
+        messenger.approvePayment(updatedEntity)
+        return Optional.of(updatedEntity)
     }
 
     @Transactional
-    fun refusePayment(id: UUID, reason: String) {
+    fun refusePayment(id: UUID, reason: String): Optional<Order> {
         val entityOptional = repository.findById(id)
-        entityOptional.ifPresent {
-            if (it.status == OrderStatus.REFUSED) {
-                return@ifPresent
-            }
-
-            it.status = OrderStatus.REFUSED
-            it.comment = reason
-            val updatedEntity = repository.save(it)
-            messenger.refusePayment(updatedEntity)
+        if (entityOptional.isEmpty) {
+            return entityOptional
         }
+
+        val entity = entityOptional.get()
+        if (entity.status == OrderStatus.REFUSED) {
+            return entityOptional
+        }
+
+        entity.status = OrderStatus.REFUSED
+        entity.comment = reason
+        val updatedEntity = repository.save(entity)
+        messenger.refusePayment(updatedEntity)
+        return Optional.of(updatedEntity)
     }
 
 }

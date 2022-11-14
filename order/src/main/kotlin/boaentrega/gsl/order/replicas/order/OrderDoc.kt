@@ -9,8 +9,8 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = TableNames.Replica.ORDER)
-data class OrderDocument(
+data class OrderDoc(
         @Id
         val id: UUID,
         var name: String
-) : Auditable<OrderDocument>()
+) : Auditable<OrderDoc>()

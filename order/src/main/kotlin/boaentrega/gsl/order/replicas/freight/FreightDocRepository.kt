@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface FreightDocumentRepository : JpaRepository<FreightDocument, UUID> {
+interface FreightDocRepository : JpaRepository<FreightDoc, UUID> {
 }

@@ -3,11 +3,11 @@ package boaentrega.gsl.order.domain.eventsourcing
 import boaentrega.gsl.order.AbstractEventSourcingTest
 import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
-import boaentrega.gsl.order.domain.transportation.Movement
-import boaentrega.gsl.order.domain.transportation.MovementRepository
-import boaentrega.gsl.order.domain.transportation.MovementService
-import boaentrega.gsl.order.domain.transportation.MovementStatus
-import boaentrega.gsl.order.domain.transportation.web.MovementController
+import boaentrega.gsl.order.domain.transportation.Transfer
+import boaentrega.gsl.order.domain.transportation.TransferRepository
+import boaentrega.gsl.order.domain.transportation.TransferService
+import boaentrega.gsl.order.domain.transportation.TransferStatus
+import boaentrega.gsl.order.domain.transportation.web.TransferController
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
@@ -23,24 +23,24 @@ import java.time.Instant
 import java.util.*
 
 
-class MovementCommandTest : AbstractEventSourcingTest() {
+class TransferCommandTest : AbstractEventSourcingTest() {
 
     companion object {
         const val RESOURCE = ResourcePaths.TRANSPORT
     }
 
     @Autowired
-    private lateinit var repository: MovementRepository
+    private lateinit var repository: TransferRepository
 
     @Autowired
-    private lateinit var service: MovementService
+    private lateinit var service: TransferService
 
     @Autowired
     @Qualifier(EventSourcingBeanQualifiers.FREIGHT_COMMAND_CONSUMER)
     private lateinit var consumerConnector: DummyConsumerConnector
 
     override fun createResource(): Any {
-        return MovementController(service)
+        return TransferController(service)
     }
 
     @AfterEach
@@ -55,16 +55,16 @@ class MovementCommandTest : AbstractEventSourcingTest() {
 
         consumerConnector.consume(message)
 
-        val movement = checkAllFromApiAndGetFirst<Movement>(RESOURCE)
+        val transfer = checkAllFromApiAndGetFirst<Transfer>(RESOURCE)
 
-        Assertions.assertEquals(command.trackId, movement.trackId)
-        Assertions.assertEquals(command.orderId, movement.orderId)
-        Assertions.assertEquals(command.freightId, movement.freightId)
-        Assertions.assertEquals(command.currentPosition, movement.currentPosition)
-        Assertions.assertEquals(command.deliveryAddress, movement.deliveryAddress)
-        Assertions.assertEquals(MovementStatus.CREATED, movement.status)
-        Assertions.assertNotNull(movement.nextStorage)
-        Assertions.assertNotNull(movement.finalStorage)
+        Assertions.assertEquals(command.trackId, transfer.trackId)
+        Assertions.assertEquals(command.orderId, transfer.orderId)
+        Assertions.assertEquals(command.freightId, transfer.freightId)
+        Assertions.assertEquals(command.currentPosition, transfer.currentPosition)
+        Assertions.assertEquals(command.deliveryAddress, transfer.deliveryAddress)
+        Assertions.assertEquals(TransferStatus.CREATED, transfer.status)
+        Assertions.assertNotNull(transfer.nextStorage)
+        Assertions.assertNotNull(transfer.finalStorage)
 
         assertTotalMessagesAndReleaseThem()
         val eventContent = DummyProducerConnector.getMessageContent(FreightEvent::class)
@@ -78,7 +78,7 @@ class MovementCommandTest : AbstractEventSourcingTest() {
         repeat(3) {
             consumerConnector.consume(message)
         }
-        checkAllFromApiAndGetFirst<Movement>(RESOURCE)
+        checkAllFromApiAndGetFirst<Transfer>(RESOURCE)
         assertTotalMessagesAndReleaseThem(1)
     }
 

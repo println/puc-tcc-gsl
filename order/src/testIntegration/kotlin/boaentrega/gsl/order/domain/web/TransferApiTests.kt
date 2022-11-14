@@ -2,11 +2,11 @@ package boaentrega.gsl.order.domain.web
 
 import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
-import boaentrega.gsl.order.domain.transportation.Movement
-import boaentrega.gsl.order.domain.transportation.MovementRepository
-import boaentrega.gsl.order.domain.transportation.MovementService
-import boaentrega.gsl.order.domain.transportation.MovementStatus
-import boaentrega.gsl.order.domain.transportation.web.MovementController
+import boaentrega.gsl.order.domain.transportation.Transfer
+import boaentrega.gsl.order.domain.transportation.TransferRepository
+import boaentrega.gsl.order.domain.transportation.TransferService
+import boaentrega.gsl.order.domain.transportation.TransferStatus
+import boaentrega.gsl.order.domain.transportation.web.TransferController
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
@@ -24,25 +24,25 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.*
 
-internal class MovementApiTests : AbstractWebTest<Movement>() {
+internal class TransferApiTests : AbstractWebTest<Transfer>() {
 
     companion object {
         const val RESOURCE = ResourcePaths.TRANSPORT
     }
 
     @Autowired
-    private lateinit var repository: MovementRepository
+    private lateinit var repository: TransferRepository
 
     @Autowired
-    private lateinit var service: MovementService
+    private lateinit var service: TransferService
 
     override fun createResource(): Any {
-        return MovementController(service)
+        return TransferController(service)
     }
 
     override fun getRepository() = repository
-    override fun getEntityType() = Movement::class.java
-    override fun preProcessing(data: List<Movement>) = data.forEach { it.status = MovementStatus.CREATED }
+    override fun getEntityType() = Transfer::class.java
+    override fun preProcessing(data: List<Transfer>) = data.forEach { it.status = TransferStatus.CREATED }
     override fun getResource() = RESOURCE
 
     @AfterEach
@@ -54,7 +54,7 @@ internal class MovementApiTests : AbstractWebTest<Movement>() {
     fun checkStatusById() {
         val id = entities.first().id
         restMockMvc.perform(get("$RESOURCE/{id}", id))
-                .andExpect(jsonPath("\$.status").value(MovementStatus.CREATED.toString()))
+                .andExpect(jsonPath("\$.status").value(TransferStatus.CREATED.toString()))
     }
 
     @Test
@@ -67,7 +67,7 @@ internal class MovementApiTests : AbstractWebTest<Movement>() {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andExpect(
-                        jsonPath("\$.status").value(MovementStatus.MOVING.toString()))
+                        jsonPath("\$.status").value(TransferStatus.MOVING.toString()))
                 .andExpect(
                         jsonPath("\$.partnerId").value(contentMap["partnerId"]))
 
@@ -87,7 +87,7 @@ internal class MovementApiTests : AbstractWebTest<Movement>() {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andExpect(
-                        jsonPath("\$.status").value(MovementStatus.IN_STORAGE.toString()))
+                        jsonPath("\$.status").value(TransferStatus.IN_STORAGE.toString()))
                 .andExpect(
                         jsonPath("\$.partnerId").value(contentMap["partnerId"]))
 
@@ -113,12 +113,12 @@ internal class MovementApiTests : AbstractWebTest<Movement>() {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andExpect(
-                        jsonPath("\$.status").value(MovementStatus.END_OF_ROUTE.toString()))
+                        jsonPath("\$.status").value(TransferStatus.END_OF_ROUTE.toString()))
                 .andExpect(
                         jsonPath("\$.partnerId").value(contentMap["partnerId"]))
                 .andReturn()
 
-        val movement = result.response.contentAsString.toObject<Movement>()
+        val transfer = result.response.contentAsString.toObject<Transfer>()
 
         assertTotalMessagesAndReleaseThem(2)
 
@@ -126,11 +126,11 @@ internal class MovementApiTests : AbstractWebTest<Movement>() {
         Assertions.assertEquals(FreightEventStatus.IN_TRANSIT_PACKAGE_REACHED_FINAL_STORAGE, eventContent?.status)
 
         val commandContent = DummyProducerConnector.getMessageContent(FreightDeliverPackageCommand::class, 1)
-        Assertions.assertEquals(movement.trackId, commandContent?.trackId)
-        Assertions.assertEquals(movement.orderId, commandContent?.orderId)
-        Assertions.assertEquals(movement.freightId, commandContent?.freightId)
-        Assertions.assertEquals(movement.finalStorage, commandContent?.currentPosition)
-        Assertions.assertEquals(movement.deliveryAddress, commandContent?.deliveryAddress)
+        Assertions.assertEquals(transfer.trackId, commandContent?.trackId)
+        Assertions.assertEquals(transfer.orderId, commandContent?.orderId)
+        Assertions.assertEquals(transfer.freightId, commandContent?.freightId)
+        Assertions.assertEquals(transfer.finalStorage, commandContent?.currentPosition)
+        Assertions.assertEquals(transfer.deliveryAddress, commandContent?.deliveryAddress)
     }
 
 }

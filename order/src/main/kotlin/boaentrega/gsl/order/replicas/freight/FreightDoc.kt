@@ -1,4 +1,4 @@
-package boaentrega.gsl.order.replicas.customer
+package boaentrega.gsl.order.replicas.freight
 
 import boaentrega.gsl.order.configuration.constants.TableNames
 import boaentrega.gsl.order.support.jpa.Auditable
@@ -8,9 +8,9 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@Table(name = TableNames.Replica.CUSTOMER)
-data class CustomerDocument(
+@Table(name = TableNames.Replica.FREIGHT)
+data class FreightDoc(
         @Id
         val id: UUID,
         var name: String
-) : Auditable<CustomerDocument>()
+) : Auditable<FreightDoc>()
