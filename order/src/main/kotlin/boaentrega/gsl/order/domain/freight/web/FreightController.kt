@@ -15,9 +15,9 @@ class FreightController(val service: FreightService) {
 
     @GetMapping
     fun getAll(
-            @RequestParam(required = false) coordinates: String?,
+            @RequestParam(value = "order", required = false) orderId: UUID?,
             pageable: Pageable): Page<Freight> {
-        val filter = FreightFilter()
+        val filter = FreightFilter(orderId)
         return service.findAll(filter, pageable)
     }
 

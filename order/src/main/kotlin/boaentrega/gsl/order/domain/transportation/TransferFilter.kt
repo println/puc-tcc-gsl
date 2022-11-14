@@ -1,5 +1,5 @@
 package boaentrega.gsl.order.domain.transportation
 
-class TransferFilter {
+import java.util.*
 
-}
+data class TransferFilter(val freightId: UUID?)

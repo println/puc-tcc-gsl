@@ -16,9 +16,9 @@ class TransferController(private val service: TransferService) {
 
     @GetMapping
     fun getAll(
-            @RequestParam(required = false) coordinates: String?,
+            @RequestParam(value = "freight", required = false) freightId: UUID?,
             pageable: Pageable): Page<Transfer> {
-        val filter = TransferFilter()
+        val filter = TransferFilter(freightId)
         return service.findAll(filter, pageable)
     }
 

@@ -1,0 +1,1352 @@
+{
+	"info": {
+		"_postman_id": "527df76b-2d92-49ba-be0f-135b1addd3fa",
+		"name": "TCC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1081067"
+	},
+	"item": [
+		{
+			"name": "ORDER",
+			"item": [
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {",
+									"  pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('Check app data', () => {  ",
+									"    var response = pm.response.json()",
+									"    pm.expect(response.content).to.exist",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-order}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-order}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE ORDER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [201, location]', () => {\r",
+									"  pm.response.to.have.status(201)\r",
+									"  pm.response.to.have.header(\"Location\")  \r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response.id).to.exist\r",
+									"    pm.expect(response.customerId).to.eql(environment.customerId)\r",
+									"    pm.expect(response.deliveryAddress).to.eql(environment.deliveryAddress)\r",
+									"    pm.expect(response.pickupAddress).to.eql(environment.senderAddress)\r",
+									"    pm.expect(response.status).to.eql('WAITING_PAYMENT')\r",
+									"    pm.environment.set(\"orderId\", response.id);\r",
+									"})\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"customerId\": \"{{customerId}}\",\r\n     \"pickupAddress\": \"{{senderAddress}}\",\r\n     \"deliveryAddress\": \"{{deliveryAddress}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-order}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-order}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ORDER by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.status).to.eql('WAITING_PAYMENT')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-order}}/{{orderId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-order}}",
+								"{{orderId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "APPROVE ORDER by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.status).to.eql('ACCEPTED')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"value\": \"25.6\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-order}}/{{orderId}}/approve",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-order}}",
+								"{{orderId}}",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FREIGHT",
+			"item": [
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {",
+									"  pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('Check app data', () => {  ",
+									"    var response = pm.response.json()",
+									"    pm.expect(response.content).to.exist",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL filtered by ORDER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {",
+									"  pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('Check app data', () => {  ",
+									"    var response = pm.response.json()",
+									"    pm.expect(response.content).to.exist",
+									"    pm.expect(response.content.length).to.equal(1)",
+									"     pm.expect(response.content[0].id).to.exist",
+									"    pm.environment.set(\"freightId\", response.content[0].id)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}?{{param-orderId}}={{orderId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}"
+							],
+							"query": [
+								{
+									"key": "{{param-orderId}}",
+									"value": "{{orderId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET FREIGHT by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.orderId).to.eql(environment.orderId)\r",
+									"    pm.expect(response.deliveryAddress).to.eql(environment.deliveryAddress)\r",
+									"    pm.expect(response.senderAddress).to.eql(environment.senderAddress)\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.senderAddress)\r",
+									"    pm.expect(response.status).to.be.oneOf(['CREATED','COLLECTION_STARTED'])\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "COLLECTION",
+			"item": [
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {",
+									"  pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('Check app data', () => {  ",
+									"    var response = pm.response.json()",
+									"    pm.expect(response.content).to.exist",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-colector}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-colector}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL filtered by FREIGHT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {",
+									"  pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('Check app data', () => {  ",
+									"    var response = pm.response.json()",
+									"    pm.expect(response.content).to.exist",
+									"    pm.expect(response.content.length).to.equal(1)",
+									"    pm.expect(response.content[0].id).to.exist",
+									"    pm.environment.set(\"pickupId\", response.content[0].id)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-colector}}?{{param-freightId}}={{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-colector}}"
+							],
+							"query": [
+								{
+									"key": "{{param-freightId}}",
+									"value": "{{freightId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET COLLECTION by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.orderId).to.eql(environment.orderId)\r",
+									"    pm.expect(response.freightId).to.eql(environment.freightId)\r",
+									"    pm.expect(response.deliveryAddress).to.eql(environment.deliveryAddress)\r",
+									"    pm.expect(response.senderAddress).to.eql(environment.senderAddress)\r",
+									"    pm.expect(response.currentPosition).to.eql(null)\r",
+									"    pm.expect(response.status).to.eql('WAITING')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-colector}}/{{pickupId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-colector}}",
+								"{{pickupId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "<check> freight [WAITING]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.senderAddress)\r",
+									"    pm.expect(response.status).to.eql('COLLECTION_STARTED')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PICKUP PRODUCT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.collectorEmployee).to.eql(environment.employeeCollector)\r",
+									"    pm.expect(response.status).to.eql('PICKUP_PROCESS')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"employee\": \"{{employeeCollector}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-colector}}/{{pickupId}}/pickup",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-colector}}",
+								"{{pickupId}}",
+								"pickup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "<check> freight [PICKUP]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.senderAddress)\r",
+									"    pm.expect(response.status).to.eql('COLLECTION_PICKUP_OUT')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MARK PRODUCT AS TAKEN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.collectorEmployee).to.eql(environment.employeeCollector)\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.collectionCenterAddress)\r",
+									"    pm.expect(response.status).to.eql('TAKEN')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"address\": \"{{collectionCenterAddress}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-colector}}/{{pickupId}}/taken",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-colector}}",
+								"{{pickupId}}",
+								"taken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "<check> freight [TAKEN]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.collectionCenterAddress)\r",
+									"    pm.expect(response.status).to.eql('COLLECTION_PICKUP_TAKEN')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PRODUCT IN PACKAGING",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.packerEmployee).to.eql(environment.employeePreparer)\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.collectionCenterAddress)\r",
+									"    pm.expect(response.status).to.eql('ON_PACKAGING')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"employee\": \"{{employeePreparer}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-colector}}/{{pickupId}}/packaging",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-colector}}",
+								"{{pickupId}}",
+								"packaging"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "<check> freight [PACKAGING]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.collectionCenterAddress)\r",
+									"    pm.expect(response.status).to.eql('COLLECTION_PACKAGE_PREPARING')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MARK AS READY TO TRANSPORT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.packageCenterAddress)\r",
+									"    pm.expect(response.status).to.eql('FINISHED')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"address\": \"{{packageCenterAddress}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-colector}}/{{pickupId}}/ready",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-colector}}",
+								"{{pickupId}}",
+								"ready"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "<check> freight [READY]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.packageCenterAddress)\r",
+									"    pm.expect(response.status).to.be.oneOf(['COLLECTION_PACKAGE_READY_TO_MOVE', 'IN_TRANSIT_PACKAGE_STARTED'])\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TRANSPORTATION",
+			"item": [
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {",
+									"  pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('Check app data', () => {  ",
+									"    var response = pm.response.json()",
+									"    pm.expect(response.content).to.exist",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-transport}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-transport}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL filtered by FREIGHT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {",
+									"  pm.response.to.have.status(200)",
+									"})",
+									"",
+									"pm.test('Check app data', () => {  ",
+									"    var response = pm.response.json()",
+									"    pm.expect(response.content).to.exist",
+									"    pm.expect(response.content.length).to.equal(1)",
+									"    pm.expect(response.content[0].id).to.exist",
+									"    pm.environment.set(\"transferId\", response.content[0].id)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-transport}}?{{param-freightId}}={{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-transport}}"
+							],
+							"query": [
+								{
+									"key": "{{param-freightId}}",
+									"value": "{{freightId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TRANSFER by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.orderId).to.eql(environment.orderId)\r",
+									"    pm.expect(response.freightId).to.eql(environment.freightId)\r",
+									"    pm.expect(response.deliveryAddress).to.eql(environment.deliveryAddress)\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.packageCenterAddress)\r",
+									"    pm.expect(response.nextStorage).to.eql(\"storage A\")\r",
+									"    pm.expect(response.finalStorage).to.eql(\"storage D\")\r",
+									"    pm.expect(response.partnerId).to.eql(null)\r",
+									"    pm.expect(response.status).to.eql('CREATED')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-transport}}/{{transferId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-transport}}",
+								"{{transferId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "<check> freight [CREATED]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.packageCenterAddress)\r",
+									"    pm.expect(response.status).to.eql('IN_TRANSIT_PACKAGE_STARTED')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TRANSFER PACKAGE TO A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist      \r",
+									"    pm.expect(response.currentPosition).to.eql(environment.packageCenterAddress+'-storage A')\r",
+									"    pm.expect(response.nextStorage).to.eql(\"storage A\")\r",
+									"    pm.expect(response.finalStorage).to.eql(\"storage D\")\r",
+									"    pm.expect(response.partnerId).to.eql(environment.courier1)\r",
+									"    pm.expect(response.status).to.eql('MOVING')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"partnerId\": \"{{courier1}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-transport}}/{{transferId}}/transfer",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-transport}}",
+								"{{transferId}}",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "<check> freight [IN TRANSIT TO A]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.packageCenterAddress+'-storage A')\r",
+									"    pm.expect(response.status).to.eql('IN_TRANSIT_PACKAGE_MOVING_ON_TO_NEXT_STORAGE')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RECEIVE PACKAGE IN A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist      \r",
+									"    pm.expect(response.currentPosition).to.eql('storage A')\r",
+									"    pm.expect(response.nextStorage).to.eql(\"storage B\")\r",
+									"    pm.expect(response.finalStorage).to.eql(\"storage D\")\r",
+									"    pm.expect(response.partnerId).to.eql(environment.storageA)\r",
+									"    pm.expect(response.status).to.eql('IN_STORAGE')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"partnerId\": \"{{storageA}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-transport}}/{{transferId}}/receive",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-transport}}",
+								"{{transferId}}",
+								"receive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "<check> freight [RECEIVED IN A]",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.packageCenterAddress+'-storage A')\r",
+									"    pm.expect(response.status).to.eql('IN_TRANSIT_PACKAGE_MOVING_ON_TO_NEXT_STORAGE')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-freight}}/{{freightId}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-freight}}",
+								"{{freightId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TRANSFER PACKAGE TO B",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Check HTTP Response [200]', () => {\r",
+									"  pm.response.to.have.status(200)\r",
+									"})\r",
+									"\r",
+									"pm.test('Check app data', () => {  \r",
+									"    var response = pm.response.json()\r",
+									"    pm.expect(response).to.exist      \r",
+									"    pm.expect(response.currentPosition).to.eql(environment.packageCenterAddress+'-storage B')\r",
+									"    pm.expect(response.nextStorage).to.eql(\"storage B\")\r",
+									"    pm.expect(response.finalStorage).to.eql(\"storage D\")\r",
+									"    pm.expect(response.partnerId).to.eql(environment.courier2)\r",
+									"    pm.expect(response.status).to.eql('MOVING')\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"partnerId\": \"{{courier2}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ip}}:{{port}}/{{api-transport}}/{{transferId}}/transfer",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{api-transport}}",
+								"{{transferId}}",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -16,7 +16,8 @@ class DeliveryService(
         private val messenger: DeliveryMessenger) {
 
     fun findAll(filter: DeliveryFilter, pageable: Pageable): Page<Delivery> {
-        val specification: Specification<Delivery> = Specification.where(null)
+        var specification: Specification<Delivery> = Specification.where(null)
+        filter.freightId?.let { specification = specification.and(DeliverySpecification.freight(it)) }
         return repository.findAll(specification, pageable)
     }
 

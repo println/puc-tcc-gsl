@@ -14,8 +14,9 @@ class PickupRequestService(
         private val repository: PickupRequestRepository,
         private val messenger: PickupRequestMessenger) {
 
-    fun findAll(collectorRequestFilter: PickupRequestFilter, pageable: Pageable): Page<PickupRequest> {
-        val specification: Specification<PickupRequest> = Specification.where(null)
+    fun findAll(filter: PickupRequestFilter, pageable: Pageable): Page<PickupRequest> {
+        var specification: Specification<PickupRequest> = Specification.where(null)
+        filter.freightId?.let { specification = specification.and(PickupRequestSpecification.freight(it)) }
         return repository.findAll(specification, pageable)
     }
 

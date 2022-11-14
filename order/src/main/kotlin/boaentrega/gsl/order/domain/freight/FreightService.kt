@@ -25,7 +25,8 @@ class FreightService(
     }
 
     fun findAll(filter: FreightFilter, pageable: Pageable): Page<Freight> {
-        val specification: Specification<Freight> = Specification.where(null)
+        var specification: Specification<Freight> = Specification.where(null)
+        filter.orderId?.let { specification = specification.and(FreightSpecification.order(it)) }
         return repository.findAll(specification, pageable)
     }
 

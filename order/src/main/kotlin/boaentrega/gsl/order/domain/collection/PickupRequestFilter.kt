@@ -1,4 +1,5 @@
 package boaentrega.gsl.order.domain.collection
 
-data class PickupRequestFilter(
-        val coordinates: String?)
+import java.util.*
+
+data class PickupRequestFilter(val freightId: UUID?)

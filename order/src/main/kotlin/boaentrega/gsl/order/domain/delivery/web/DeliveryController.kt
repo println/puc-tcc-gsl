@@ -15,9 +15,9 @@ class DeliveryController(private val service: DeliveryService) {
 
     @GetMapping
     fun getAll(
-            @RequestParam(required = false) coordinates: String?,
+            @RequestParam(value = "freight", required = false) freightId: UUID?,
             pageable: Pageable): Page<Delivery> {
-        val filter = DeliveryFilter()
+        val filter = DeliveryFilter(freightId)
         return service.findAll(filter, pageable)
     }
 

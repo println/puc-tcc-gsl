@@ -17,7 +17,8 @@ class TransferService(
         private val messenger: TransferMessenger) {
 
     fun findAll(filter: TransferFilter, pageable: Pageable): Page<Transfer> {
-        val specification: Specification<Transfer> = Specification.where(null)
+        var specification: Specification<Transfer> = Specification.where(null)
+        filter.freightId?.let { specification = specification.and(TransferSpecification.freight(it)) }
         return repository.findAll(specification, pageable)
     }
 
@@ -54,9 +55,10 @@ class TransferService(
     @Transactional
     fun movingToNextStorage(transferId: UUID, partnerId: UUID): Transfer {
         val entity = findById(transferId)
+        if(entity.status == TransferStatus.MOVING) return entity
         entity.partnerId = partnerId
         entity.status = TransferStatus.MOVING
-        entity.currentPosition = "${entity.currentPosition}-${entity.nextStorage}"
+        entity.currentPosition = "${entity.currentPosition.replace("-"+entity.nextStorage,"")}-${entity.nextStorage}"
         val updatedEntity = repository.save(entity)
         messenger.movingToNextStorage(updatedEntity)
         return updatedEntity
@@ -65,6 +67,7 @@ class TransferService(
     @Transactional
     fun receiveOnStorage(transferId: UUID, partnerId: UUID): Transfer {
         val entity = findById(transferId)
+        if(entity.status == TransferStatus.IN_STORAGE) return entity
         return when {
             entity.status == TransferStatus.END_OF_ROUTE -> entity
             hasNextStorage(entity) -> receiveOnStorage(entity, partnerId)

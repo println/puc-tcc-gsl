@@ -17,9 +17,9 @@ class CollectorController(
 ) {
     @GetMapping
     fun getAll(
-            @RequestParam(required = false) coordinates: String?,
+            @RequestParam(value = "freight", required = false) freightId: UUID?,
             pageable: Pageable): Page<PickupRequest> {
-        val filter = PickupRequestFilter(coordinates)
+        val filter = PickupRequestFilter(freightId)
         return service.findAll(filter, pageable)
     }
 
