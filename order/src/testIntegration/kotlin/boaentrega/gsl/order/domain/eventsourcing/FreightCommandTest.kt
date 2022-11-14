@@ -142,10 +142,10 @@ class FreightCommandTest : AbstractEventSourcingTest() {
         fun createCreateCommand(entity: Order): FreightCreateCommand {
             val trackId = entity.id
             val orderId = entity.id
-            val from = "address from"
-            val to = "address to"
+            val senderAddress = "address from"
+            val deliveryAddress = "address to"
             val date = Instant.now()
-            return FreightCreateCommand(trackId, orderId, from, to, date)
+            return FreightCreateCommand(trackId, orderId, senderAddress, deliveryAddress, date)
         }
 
         fun createFinishCommand(entity: Freight): FreightFinishCommand {

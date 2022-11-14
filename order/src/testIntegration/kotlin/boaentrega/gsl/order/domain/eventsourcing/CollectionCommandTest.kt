@@ -65,7 +65,7 @@ class CollectionCommandTest : AbstractEventSourcingTest() {
         Assertions.assertEquals(PickupRequestStatus.WAITING, pickupRequest.status)
         Assertions.assertNull(pickupRequest.collectorEmployee)
         Assertions.assertNull(pickupRequest.packerEmployee)
-        Assertions.assertNull(pickupRequest.collectorAddress)
+        Assertions.assertNull(pickupRequest.currentPosition)
 
         assertTotalMessagesAndReleaseThem()
         val eventContent = DummyProducerConnector.getMessageContent(FreightEvent::class)
@@ -88,9 +88,9 @@ class CollectionCommandTest : AbstractEventSourcingTest() {
         val orderId = UUID.randomUUID()
         val freightId = UUID.randomUUID()
         val pickupAddress = "pickupAddress"
-        val destination = "destination"
+        val deliveryAddress = "deliveryAddress"
         val date = Instant.now()
-        return FreightPickupProductCommand(trackId, orderId, freightId, pickupAddress, destination, date)
+        return FreightPickupProductCommand(trackId, orderId, freightId, pickupAddress, deliveryAddress, date)
     }
 
 

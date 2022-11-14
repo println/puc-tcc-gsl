@@ -138,7 +138,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
         Assertions.assertEquals(pickupRequest.trackId, commandContent?.trackId)
         Assertions.assertEquals(pickupRequest.orderId, commandContent?.orderId)
         Assertions.assertEquals(pickupRequest.freightId, commandContent?.freightId)
-        Assertions.assertEquals(pickupRequest.collectorAddress, commandContent?.currentPosition)
+        Assertions.assertEquals(pickupRequest.currentPosition, commandContent?.currentPosition)
         Assertions.assertEquals(pickupRequest.deliveryAddress, commandContent?.deliveryAddress)
     }
 

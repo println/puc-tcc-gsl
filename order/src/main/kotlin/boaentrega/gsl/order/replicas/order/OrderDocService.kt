@@ -1,6 +1,7 @@
 package boaentrega.gsl.order.replicas.order
 
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 import java.util.*
 
 @Service
@@ -11,7 +12,9 @@ class OrderDocService(private val repository: OrderDocRepository) {
         var entity = document
         if (optionalDocument.isPresent) {
             entity = optionalDocument.get()
-            entity.name = document.name
+            entity.value = document.value
+            entity.comment = document.comment
+            entity.status = document.status
         }
         repository.save(entity)
     }

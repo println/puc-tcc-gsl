@@ -56,7 +56,7 @@ class PickupRequestService(
     fun markAsTaken(pickupRequestId: UUID, packageAddress: String): PickupRequest {
         val entity = findById(pickupRequestId)
         entity.status = PickupRequestStatus.TAKEN
-        entity.collectorAddress = packageAddress
+        entity.currentPosition = packageAddress
         val updatedEntity = repository.save(entity)
         messenger.markAsTaken(updatedEntity)
         return updatedEntity
@@ -76,7 +76,7 @@ class PickupRequestService(
     fun markAsReadyToStartDelivery(pickupRequestId: UUID, packageAddress: String): PickupRequest {
         val entity = findById(pickupRequestId)
         entity.status = PickupRequestStatus.FINISHED
-        entity.collectorAddress = packageAddress
+        entity.currentPosition = packageAddress
         val updatedEntity = repository.save(entity)
         messenger.markAsReadyToStartDelivery(updatedEntity)
         return updatedEntity

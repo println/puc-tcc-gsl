@@ -20,18 +20,18 @@ class PickupRequestMessenger(private val eventService: FreightEventService,
 
     fun markAsTaken(entity: PickupRequest) {
         eventService.notifyCollectionPickupTaken(entity.trackId, entity.freightId,
-                ServiceNames.COLLECTION, entity.collectorAddress!!, " The product is already with us ")
+                ServiceNames.COLLECTION, entity.currentPosition!!, " The product is already with us ")
     }
 
     fun markAsOnPackaging(entity: PickupRequest) {
         eventService.notifyCollectionPackagePreparing(entity.trackId, entity.freightId,
-                ServiceNames.COLLECTION, entity.collectorAddress!!, "We are making the transfer package")
+                ServiceNames.COLLECTION, entity.currentPosition!!, "We are making the transfer package")
     }
 
     fun markAsReadyToStartDelivery(entity: PickupRequest) {
         eventService.notifyCollectionPackageReadyToMove(entity.trackId, entity.freightId,
-                ServiceNames.COLLECTION, entity.collectorAddress!!, "All ready to start shipping")
+                ServiceNames.COLLECTION, entity.currentPosition!!, "All ready to start shipping")
         commandService.movePackage(entity.trackId, entity.orderId, entity.freightId,
-                entity.collectorAddress!!, entity.deliveryAddress)
+                entity.currentPosition!!, entity.deliveryAddress)
     }
 }

@@ -21,5 +21,5 @@ data class PickupRequest(
         var status: PickupRequestStatus = PickupRequestStatus.WAITING,
         var collectorEmployee: String? = null,
         var packerEmployee: String? = null,
-        var collectorAddress: String? = null
+        var currentPosition: String? = null
 ) : AuditableModel<PickupRequest>()

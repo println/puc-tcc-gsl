@@ -1,7 +1,9 @@
 package boaentrega.gsl.order.replicas.order
 
 import boaentrega.gsl.order.configuration.constants.TableNames
+import boaentrega.gsl.order.domain.order.OrderStatus
 import boaentrega.gsl.order.support.jpa.Auditable
+import java.math.BigDecimal
 import java.util.*
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -12,5 +14,10 @@ import javax.persistence.Table
 data class OrderDoc(
         @Id
         val id: UUID,
-        var name: String
+        val customerId: UUID,
+        val pickupAddress: String,
+        val deliveryAddress: String,
+        var value: BigDecimal? = null,
+        var comment: String? = null,
+        var status: String
 ) : Auditable<OrderDoc>()
