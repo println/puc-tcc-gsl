@@ -2,30 +2,16 @@ package boaentrega.gsl.order.domain.web
 
 import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
-import boaentrega.gsl.order.domain.collection.PickupRequestStatus
 import boaentrega.gsl.order.domain.freight.Freight
 import boaentrega.gsl.order.domain.freight.FreightRepository
 import boaentrega.gsl.order.domain.freight.FreightService
 import boaentrega.gsl.order.domain.freight.FreightStatus
 import boaentrega.gsl.order.domain.freight.web.FreightController
-import boaentrega.gsl.order.domain.order.Order
-import boaentrega.gsl.order.domain.order.web.OrderDto
-import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
-import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
-import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
-import gsl.schemas.OrderEvent
-import gsl.schemas.OrderEventStatus
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.util.*
 
 class FreightApiTests : AbstractWebTest<Freight>() {
 

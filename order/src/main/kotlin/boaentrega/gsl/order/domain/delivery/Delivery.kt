@@ -18,8 +18,8 @@ data class Delivery(
         val orderId: UUID,
         @Column(unique = true)
         val freightId: UUID,
-        val currentPosition: String,
         val deliveryAddress: String,
+        var currentPosition: String,
         var partnerId: UUID? = null,
         var status: DeliveryStatus = DeliveryStatus.CREATED,
         @Column(columnDefinition = "TIME")

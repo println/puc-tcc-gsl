@@ -32,7 +32,7 @@ class DeliveryMessenger(
 
     fun markAsSuccessfulDelivery(entity: Delivery) {
         eventService.notifyPackageDelivered(entity.trackId, entity.freightId, ServiceNames.DELIVERY,
-                entity.deliveryAddress, "Delivery process has been successfully")
+                entity.currentPosition, "Delivery process has been successfully")
         commandService.finish(entity.trackId, entity.orderId, entity.freightId)
     }
 }

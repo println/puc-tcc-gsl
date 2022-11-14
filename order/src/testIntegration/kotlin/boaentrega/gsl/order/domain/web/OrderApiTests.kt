@@ -2,7 +2,6 @@ package boaentrega.gsl.order.domain.web
 
 import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
-import boaentrega.gsl.order.domain.freight.Freight
 import boaentrega.gsl.order.domain.order.Order
 import boaentrega.gsl.order.domain.order.OrderRepository
 import boaentrega.gsl.order.domain.order.OrderService
@@ -12,7 +11,6 @@ import boaentrega.gsl.order.domain.order.web.OrderDto
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
-import gsl.schemas.DocumentReleased
 import gsl.schemas.OrderEvent
 import gsl.schemas.OrderEventStatus
 import org.junit.jupiter.api.AfterEach

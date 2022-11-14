@@ -1,6 +1,7 @@
 package boaentrega.gsl.order.domain.transportation.web
 
 import boaentrega.gsl.order.configuration.constants.ServiceNames
+import boaentrega.gsl.order.domain.delivery.web.PartnerDto
 import boaentrega.gsl.order.domain.transportation.Movement
 import boaentrega.gsl.order.domain.transportation.MovementFilter
 import boaentrega.gsl.order.domain.transportation.MovementService
@@ -25,5 +26,17 @@ class MovementController(private val service: MovementService) {
     fun getById(
             @PathVariable("id") id: UUID): Movement {
         return service.findById(id)
+    }
+
+    @PutMapping("/{id}/transfer")
+    fun movingPackageToNextStorage(@PathVariable("id") id: UUID,
+                                   @RequestBody data: PartnerDto): Movement {
+        return service.movingToNextStorage(id, data.partnerId)
+    }
+
+    @PutMapping("/{id}/receive")
+    fun receivePackageOnStorage(@PathVariable("id") id: UUID,
+                                @RequestBody data: PartnerDto): Movement {
+        return service.receiveOnStorage(id, data.partnerId)
     }
 }

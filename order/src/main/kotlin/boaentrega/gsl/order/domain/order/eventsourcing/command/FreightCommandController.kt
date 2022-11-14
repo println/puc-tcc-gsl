@@ -4,6 +4,7 @@ import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.domain.collection.PickupRequestService
 import boaentrega.gsl.order.domain.delivery.DeliveryService
 import boaentrega.gsl.order.domain.freight.FreightService
+import boaentrega.gsl.order.domain.transportation.MovementService
 import boaentrega.gsl.order.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.order.support.eventsourcing.controller.annotations.ConsumptionHandler
@@ -17,7 +18,8 @@ class FreightCommandController(
         consumerConnector: ConsumerConnector,
         private val freightService: FreightService,
         private val pickupRequestService: PickupRequestService,
-        private val deliveryService: DeliveryService) : AbstractConsumerController(consumerConnector) {
+        private val deliveryService: DeliveryService,
+        private val movementService: MovementService) : AbstractConsumerController(consumerConnector) {
 
     @ConsumptionHandler(FreightCreateCommand::class)
     fun create(command: FreightCreateCommand) {
@@ -33,7 +35,8 @@ class FreightCommandController(
 
     @ConsumptionHandler(FreightMovePackageCommand::class)
     fun movePackage(command: FreightMovePackageCommand) {
-
+        movementService.create(command.trackId, command.orderId, command.freightId,
+                command.currentPosition, command.deliveryAddress)
     }
 
     @ConsumptionHandler(FreightDeliverPackageCommand::class)

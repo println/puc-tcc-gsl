@@ -44,7 +44,12 @@ class FreightService(
             return Optional.empty()
         }
 
-        val freight = Freight(trackId, orderId, senderAddress, deliveryAddress, senderAddress)
+        val freight = Freight(
+                trackId = trackId,
+                orderId = orderId,
+                senderAddress = senderAddress,
+                deliveryAddress = deliveryAddress,
+                currentPosition = senderAddress)
         val entity = repository.save(freight)
         messenger.createFreight(entity)
         return Optional.of(entity)

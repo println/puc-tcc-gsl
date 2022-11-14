@@ -37,7 +37,12 @@ class DeliveryService(
             return Optional.empty()
         }
 
-        val delivery = Delivery(trackId, orderId, freightId, pickupAddress, deliveryAddress)
+        val delivery = Delivery(
+                trackId = trackId,
+                orderId = orderId,
+                freightId = freightId,
+                deliveryAddress = deliveryAddress,
+                currentPosition = pickupAddress)
         val entity = repository.save(delivery)
         messenger.create(entity)
         return Optional.of(entity)
@@ -73,6 +78,7 @@ class DeliveryService(
     fun markAsSuccessfulDelivery(deliveryId: UUID): Delivery {
         val entity = findById(deliveryId)
         entity.status = DeliveryStatus.SUCCESSFULLY_DELIVERED
+        entity.currentPosition = entity.deliveryAddress
         val updatedEntity = repository.save(entity)
         messenger.markAsSuccessfulDelivery(updatedEntity)
         return updatedEntity

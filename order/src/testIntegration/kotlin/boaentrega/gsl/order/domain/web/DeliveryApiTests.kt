@@ -13,7 +13,6 @@ import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
 import gsl.schemas.FreightEvent
 import gsl.schemas.FreightEventStatus
 import gsl.schemas.FreightFinishCommand
-import gsl.schemas.FreightMovePackageCommand
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

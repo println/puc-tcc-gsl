@@ -35,7 +35,10 @@ class OrderService(
 
     @Transactional
     fun createOrder(customerId: UUID, pickupAddress: String, deliveryAddress: String): Order {
-        val order = Order(customerId, pickupAddress, deliveryAddress)
+        val order = Order(
+                customerId = customerId,
+                pickupAddress = pickupAddress,
+                deliveryAddress = deliveryAddress)
         val entity = repository.save(order)
         messenger.create(entity)
         return entity
