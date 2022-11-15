@@ -53,9 +53,10 @@ class TransferService(
     }
 
     @Transactional
-    fun movingToNextStorage(transferId: UUID, partnerId: UUID): Transfer {
+    fun movingToNextStorage(transferId: UUID, partnerId: UUID, storage: String): Transfer {
         val entity = findById(transferId)
         if(entity.status == TransferStatus.MOVING) return entity
+        if(entity.nextStorage != storage) return entity
         entity.partnerId = partnerId
         entity.status = TransferStatus.MOVING
         entity.currentPosition = "${entity.currentPosition.replace("-"+entity.nextStorage,"")}-${entity.nextStorage}"
@@ -65,9 +66,10 @@ class TransferService(
     }
 
     @Transactional
-    fun receiveOnStorage(transferId: UUID, partnerId: UUID): Transfer {
+    fun receiveOnStorage(transferId: UUID, partnerId: UUID, storage: String): Transfer {
         val entity = findById(transferId)
         if(entity.status == TransferStatus.IN_STORAGE) return entity
+        if(entity.nextStorage != storage) return entity
         return when {
             entity.status == TransferStatus.END_OF_ROUTE -> entity
             hasNextStorage(entity) -> receiveOnStorage(entity, partnerId)

@@ -1,7 +1,6 @@
 package boaentrega.gsl.order.domain.transportation.web
 
 import boaentrega.gsl.order.configuration.constants.ServiceNames
-import boaentrega.gsl.order.domain.delivery.web.PartnerDto
 import boaentrega.gsl.order.domain.transportation.Transfer
 import boaentrega.gsl.order.domain.transportation.TransferFilter
 import boaentrega.gsl.order.domain.transportation.TransferService
@@ -31,12 +30,12 @@ class TransferController(private val service: TransferService) {
     @PutMapping("/{id}/transfer")
     fun movingPackageToNextStorage(@PathVariable("id") id: UUID,
                                    @RequestBody data: PartnerDto): Transfer {
-        return service.movingToNextStorage(id, data.partnerId)
+        return service.movingToNextStorage(id, data.partnerId, data.storage)
     }
 
     @PutMapping("/{id}/receive")
     fun receivePackageOnStorage(@PathVariable("id") id: UUID,
                                 @RequestBody data: PartnerDto): Transfer {
-        return service.receiveOnStorage(id, data.partnerId)
+        return service.receiveOnStorage(id, data.partnerId, data.storage)
     }
 }

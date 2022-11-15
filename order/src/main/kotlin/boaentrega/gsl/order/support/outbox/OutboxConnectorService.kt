@@ -23,7 +23,7 @@ class OutboxConnectorService(
     @Transactional
     fun releaseMessages() {
         log.debug("Polling outbox for messages to publish")
-        val outboxMessages: List<OutboxMessage> = repository.getTop10ByIsPublishedFalse()
+        val outboxMessages: List<OutboxMessage> = repository.getTop10ByIsPublishedFalseOrderByCreatedAtDesc()
         val successfullyPublishedIds: MutableList<UUID> = ArrayList()
         for (outboxMessage in outboxMessages) {
             producerConnector.publish(outboxMessage.payload, outboxMessage.destination)

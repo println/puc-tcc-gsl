@@ -59,8 +59,12 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
 
     @Test
     fun transfer() {
-        val id = entities.first().id
-        val contentMap = mapOf("partnerId" to UUID.randomUUID().toString())
+        val entity = entities.first() as Transfer
+        val id = entity.id
+        val contentMap = mapOf(
+                "partnerId" to UUID.randomUUID().toString(),
+                "storage" to entity.nextStorage)
+
         restMockMvc.perform(put("$RESOURCE/{id}/transfer", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
@@ -79,8 +83,12 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
 
     @Test
     fun receive() {
-        val id = entities.first().id
-        val contentMap = mapOf("partnerId" to UUID.randomUUID().toString())
+        val entity = entities.first() as Transfer
+        val id = entity.id
+        val contentMap = mapOf(
+                "partnerId" to UUID.randomUUID().toString(),
+                "storage" to entity.nextStorage)
+
         restMockMvc.perform(put("$RESOURCE/{id}/receive", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
@@ -106,7 +114,10 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
         entity.currentPosition = entity.finalStorage
         repository.saveAndFlush(entity)
 
-        val contentMap = mapOf("partnerId" to UUID.randomUUID().toString())
+        val contentMap = mapOf(
+                "partnerId" to UUID.randomUUID().toString(),
+                "storage" to entity.finalStorage)
+
         val result = restMockMvc.perform(put("$RESOURCE/{id}/receive", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())

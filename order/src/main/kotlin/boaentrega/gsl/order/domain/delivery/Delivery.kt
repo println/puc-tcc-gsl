@@ -18,6 +18,7 @@ data class Delivery(
         val orderId: UUID,
         @Column(unique = true)
         val freightId: UUID,
+        val storageAddress: String,
         val deliveryAddress: String,
         var currentPosition: String,
         var partnerId: UUID? = null,

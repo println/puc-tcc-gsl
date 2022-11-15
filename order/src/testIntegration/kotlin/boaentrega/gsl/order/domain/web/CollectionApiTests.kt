@@ -86,7 +86,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
                 .andExpect(
                         jsonPath("\$.status").value(PickupRequestStatus.TAKEN.toString()))
                 .andExpect(
-                        jsonPath("\$.collectorAddress").value(contentMap["address"]))
+                        jsonPath("\$.currentPosition").value(contentMap["address"]))
 
         assertTotalMessagesAndReleaseThem()
 
@@ -124,7 +124,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
                 .andExpect(
                         jsonPath("\$.status").value(PickupRequestStatus.FINISHED.toString()))
                 .andExpect(
-                        jsonPath("\$.collectorAddress").value(contentMap["address"]))
+                        jsonPath("\$.currentPosition").value(contentMap["address"]))
                 .andReturn()
 
         val pickupRequest = result.response.contentAsString.toObject<PickupRequest>()

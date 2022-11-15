@@ -28,6 +28,7 @@ class KafkaConnectorFactoryConfig {
         props["enable.auto.commit"] = "true"
         props["auto.commit.interval.ms"] = "1000"
         props["session.timeout.ms"] = "30000"
+        props["max.in.flight.requests.per.connection"]="1"
         props["key.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
         props["value.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
         props["key.deserializer"] = "org.apache.kafka.common.serialization.StringDeserializer"

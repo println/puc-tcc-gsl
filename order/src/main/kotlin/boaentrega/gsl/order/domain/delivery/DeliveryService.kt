@@ -42,6 +42,7 @@ class DeliveryService(
                 trackId = trackId,
                 orderId = orderId,
                 freightId = freightId,
+                storageAddress = pickupAddress,
                 deliveryAddress = deliveryAddress,
                 currentPosition = pickupAddress)
         val entity = repository.save(delivery)
@@ -61,6 +62,7 @@ class DeliveryService(
         val entity = findById(deliveryId)
         entity.partnerId = partnerId
         entity.status = DeliveryStatus.OUT_FOR_DELIVERY
+        entity.currentPosition = "${entity.storageAddress}-${entity.deliveryAddress}"
         val updatedEntity = repository.save(entity)
         messenger.takePackageToDelivery(updatedEntity)
         return updatedEntity
@@ -70,6 +72,7 @@ class DeliveryService(
     fun giveBackPackageToRetryDelivery(deliveryId: UUID): Delivery {
         val entity = findById(deliveryId)
         entity.status = DeliveryStatus.RETRY_DELIVERY
+        entity.currentPosition = entity.storageAddress
         val updatedEntity = repository.save(entity)
         messenger.giveBackPackageToRetryDelivery(updatedEntity)
         return updatedEntity
@@ -89,6 +92,7 @@ class DeliveryService(
     fun markAsDeliveryFailed(deliveryId: UUID): Delivery {
         val entity = findById(deliveryId)
         entity.status = DeliveryStatus.FAILED_DELIVERY_ATTEMPT
+        entity.currentPosition = entity.deliveryAddress
         val updatedEntity = repository.save(entity)
         messenger.markAsDeliveryFailed(updatedEntity)
         return updatedEntity
