@@ -28,7 +28,10 @@ class FreightApiTests : AbstractWebTest<Freight>() {
 
     override fun getRepository() = repository
     override fun getEntityType() = Freight::class.java
-    override fun preProcessing(data: List<Freight>) = data.forEach { it.status = FreightStatus.CREATED }
+    override fun preProcessing(data: Freight) {
+        data.status = FreightStatus.CREATED
+    }
+
     override fun getResource() = RESOURCE
 
     override fun createResource(): Any {

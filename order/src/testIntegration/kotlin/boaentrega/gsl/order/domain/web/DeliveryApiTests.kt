@@ -4,9 +4,10 @@ import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.delivery.Delivery
 import boaentrega.gsl.order.domain.delivery.DeliveryRepository
-import boaentrega.gsl.order.domain.delivery.DeliveryService
 import boaentrega.gsl.order.domain.delivery.DeliveryStatus
 import boaentrega.gsl.order.domain.delivery.web.DeliveryController
+import boaentrega.gsl.order.domain.delivery.web.DeliveryWebService
+import boaentrega.gsl.order.domain.transportation.TransferStatus
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
@@ -33,7 +34,7 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
     private lateinit var repository: DeliveryRepository
 
     @Autowired
-    private lateinit var service: DeliveryService
+    private lateinit var service: DeliveryWebService
 
     override fun createResource(): Any {
         return DeliveryController(service)
@@ -41,7 +42,10 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
 
     override fun getRepository() = repository
     override fun getEntityType() = Delivery::class.java
-    override fun preProcessing(data: List<Delivery>) = data.forEach { it.status = DeliveryStatus.CREATED }
+    override fun preProcessing(data: Delivery) {
+        data.status = DeliveryStatus.CREATED
+    }
+
     override fun getResource() = RESOURCE
 
     @AfterEach
@@ -73,6 +77,10 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
 
     @Test
     fun takePackageToDelivery() {
+        reloadData {
+            it.status = DeliveryStatus.CREATED
+            it.currentPosition = it.storageAddress
+        }
         val id = entities.first().id
         val contentMap = mapOf("partnerId" to UUID.randomUUID().toString())
         restMockMvc.perform(put("$RESOURCE/{id}/package", id)
@@ -93,6 +101,10 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
 
     @Test
     fun returnPackage() {
+        reloadData {
+            it.status = DeliveryStatus.FAILED_DELIVERY_ATTEMPT
+            it.currentPosition = it.deliveryAddress+'-'+it.storageAddress
+        }
         val id = entities.first().id
         restMockMvc.perform(delete("$RESOURCE/{id}/package", id)
                 .accept(MediaType.APPLICATION_JSON))
@@ -107,6 +119,10 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
 
     @Test
     fun markAsDeliverySuccessfully() {
+        reloadData {
+            it.status = DeliveryStatus.OUT_FOR_DELIVERY
+            it.currentPosition = it.storageAddress+'-'+it.deliveryAddress
+        }
         val id = entities.first().id
         val result = restMockMvc.perform(put("$RESOURCE/{id}/delivery", id)
                 .accept(MediaType.APPLICATION_JSON))
@@ -130,6 +146,10 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
 
     @Test
     fun markAsDeliveryFailed() {
+        reloadData {
+            it.status = DeliveryStatus.OUT_FOR_DELIVERY
+            it.currentPosition = it.storageAddress+'-'+it.deliveryAddress
+        }
         val id = entities.first().id
         restMockMvc.perform(delete("$RESOURCE/{id}/delivery", id)
                 .accept(MediaType.APPLICATION_JSON))

@@ -4,10 +4,10 @@ import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.order.Order
 import boaentrega.gsl.order.domain.order.OrderRepository
-import boaentrega.gsl.order.domain.order.OrderService
 import boaentrega.gsl.order.domain.order.OrderStatus
 import boaentrega.gsl.order.domain.order.web.OrderController
 import boaentrega.gsl.order.domain.order.web.OrderDto
+import boaentrega.gsl.order.domain.order.web.OrderWebService
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
@@ -33,12 +33,15 @@ class OrderApiTests : AbstractWebTest<Order>() {
     private lateinit var repository: OrderRepository
 
     @Autowired
-    private lateinit var service: OrderService
+    private lateinit var service: OrderWebService
 
 
     override fun getRepository() = repository
     override fun getEntityType() = Order::class.java
-    override fun preProcessing(data: List<Order>) = data.forEach { it.status = OrderStatus.WAITING_PAYMENT }
+    override fun preProcessing(data: Order) {
+        data.status = OrderStatus.WAITING_PAYMENT
+    }
+
     override fun getResource() = RESOURCE
 
     override fun createResource(): Any {

@@ -5,9 +5,9 @@ import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.collection.PickupRequest
 import boaentrega.gsl.order.domain.collection.PickupRequestRepository
-import boaentrega.gsl.order.domain.collection.PickupRequestService
 import boaentrega.gsl.order.domain.collection.PickupRequestStatus
 import boaentrega.gsl.order.domain.collection.web.CollectorController
+import boaentrega.gsl.order.domain.collection.web.PickupRequestWebService
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
@@ -33,7 +33,7 @@ class CollectionCommandTest : AbstractEventSourcingTest() {
     private lateinit var repository: PickupRequestRepository
 
     @Autowired
-    private lateinit var service: PickupRequestService
+    private lateinit var service: PickupRequestWebService
 
     @Autowired
     @Qualifier(EventSourcingBeanQualifiers.FREIGHT_COMMAND_CONSUMER)

@@ -3,10 +3,8 @@ package boaentrega.gsl.order.domain.order
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.server.ResponseStatusException
 import java.math.BigDecimal
 import java.util.*
 
@@ -25,16 +23,12 @@ class OrderService(
         return repository.findAllByCustomerId(customerId, specification, pageable)
     }
 
-    fun findById(id: UUID): Order {
-        val entityOptional = repository.findById(id)
-        if (entityOptional.isEmpty) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found")
-        }
-        return entityOptional.get()
+    fun findById(id: UUID): Order? {
+       return repository.findById(id).orElse(null)
     }
 
     @Transactional
-    fun createOrder(customerId: UUID, pickupAddress: String, deliveryAddress: String): Order {
+    fun createOrder(customerId: UUID, pickupAddress: String, deliveryAddress: String): Order? {
         val order = Order(
                 customerId = customerId,
                 pickupAddress = pickupAddress,
@@ -45,41 +39,33 @@ class OrderService(
     }
 
     @Transactional
-    fun approvePayment(id: UUID, value: BigDecimal): Optional<Order> {
-        val entityOptional = repository.findById(id)
-        if (entityOptional.isEmpty) {
-            return entityOptional
+    fun approvePayment(id: UUID, value: BigDecimal): Order? {
+        val entity = findById(id)
+
+        if (!OrderValidations.canApprove(value, entity)) {
+            return null
         }
 
-        val entity = entityOptional.get()
-        if (entity.status == OrderStatus.ACCEPTED) {
-            return entityOptional
-        }
-
-        entity.status = OrderStatus.ACCEPTED
+        entity!!.status = OrderStatus.ACCEPTED
         entity.value = value
         val updatedEntity = repository.save(entity)
         messenger.approvePayment(updatedEntity)
-        return Optional.of(updatedEntity)
+        return updatedEntity
     }
 
     @Transactional
-    fun refusePayment(id: UUID, reason: String): Optional<Order> {
-        val entityOptional = repository.findById(id)
-        if (entityOptional.isEmpty) {
-            return entityOptional
+    fun refusePayment(id: UUID, reason: String): Order? {
+        val entity = findById(id)
+
+        if (!OrderValidations.canRefuse(reason, entity)) {
+            return null
         }
 
-        val entity = entityOptional.get()
-        if (entity.status == OrderStatus.REFUSED) {
-            return entityOptional
-        }
-
-        entity.status = OrderStatus.REFUSED
+        entity!!.status = OrderStatus.REFUSED
         entity.comment = reason
         val updatedEntity = repository.save(entity)
         messenger.refusePayment(updatedEntity)
-        return Optional.of(updatedEntity)
+        return updatedEntity
     }
 
 }

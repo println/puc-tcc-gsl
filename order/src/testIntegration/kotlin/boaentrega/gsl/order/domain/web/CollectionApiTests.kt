@@ -4,9 +4,9 @@ import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.collection.PickupRequest
 import boaentrega.gsl.order.domain.collection.PickupRequestRepository
-import boaentrega.gsl.order.domain.collection.PickupRequestService
 import boaentrega.gsl.order.domain.collection.PickupRequestStatus
 import boaentrega.gsl.order.domain.collection.web.CollectorController
+import boaentrega.gsl.order.domain.collection.web.PickupRequestWebService
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
@@ -33,7 +33,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
     private lateinit var repository: PickupRequestRepository
 
     @Autowired
-    private lateinit var service: PickupRequestService
+    private lateinit var service: PickupRequestWebService
 
     override fun createResource(): Any {
         return CollectorController(service)
@@ -41,7 +41,10 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
 
     override fun getRepository() = repository
     override fun getEntityType() = PickupRequest::class.java
-    override fun preProcessing(data: List<PickupRequest>) = data.forEach { it.status = PickupRequestStatus.WAITING }
+    override fun preProcessing(data: PickupRequest) {
+        data.status = PickupRequestStatus.WAITING
+    }
+
     override fun getResource() = RESOURCE
 
     @AfterEach
@@ -76,6 +79,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
 
     @Test
     fun markAsTaken() {
+        reloadData { it.status = PickupRequestStatus.PICKUP_PROCESS }
         val id = entities.first().id
         val contentMap = mapOf("address" to "some forest")
         restMockMvc.perform(put("$RESOURCE/{id}/taken", id)
@@ -96,6 +100,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
 
     @Test
     fun markAsOnPackaging() {
+        reloadData { it.status = PickupRequestStatus.TAKEN }
         val id = entities.first().id
         val contentMap = mapOf("employee" to "fulano de tal")
         restMockMvc.perform(put("$RESOURCE/{id}/packaging", id)
@@ -114,6 +119,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
 
     @Test
     fun markAsReadyToStartDelivery() {
+        reloadData { it.status = PickupRequestStatus.ON_PACKAGING }
         val id = entities.first().id
         val contentMap = mapOf("address" to "some desert")
         val result = restMockMvc.perform(put("$RESOURCE/{id}/ready", id)

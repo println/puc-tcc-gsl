@@ -5,9 +5,9 @@ import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.transportation.Transfer
 import boaentrega.gsl.order.domain.transportation.TransferRepository
-import boaentrega.gsl.order.domain.transportation.TransferService
 import boaentrega.gsl.order.domain.transportation.TransferStatus
 import boaentrega.gsl.order.domain.transportation.web.TransferController
+import boaentrega.gsl.order.domain.transportation.web.TransferWebService
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
@@ -33,7 +33,7 @@ class TransferCommandTest : AbstractEventSourcingTest() {
     private lateinit var repository: TransferRepository
 
     @Autowired
-    private lateinit var service: TransferService
+    private lateinit var service: TransferWebService
 
     @Autowired
     @Qualifier(EventSourcingBeanQualifiers.FREIGHT_COMMAND_CONSUMER)

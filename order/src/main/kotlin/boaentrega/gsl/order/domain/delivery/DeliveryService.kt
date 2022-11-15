@@ -3,10 +3,8 @@ package boaentrega.gsl.order.domain.delivery
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.server.ResponseStatusException
 import java.time.LocalTime
 import java.util.*
 
@@ -21,21 +19,17 @@ class DeliveryService(
         return repository.findAll(specification, pageable)
     }
 
-    fun findById(id: UUID): Delivery {
-        val entityOptional = repository.findById(id)
-        if (entityOptional.isEmpty) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found")
-        }
-        return entityOptional.get()
+    fun findById(id: UUID): Delivery? {
+        return repository.findById(id).orElse(null)
     }
 
     @Transactional
     fun create(
             trackId: UUID, orderId: UUID, freightId: UUID,
-            pickupAddress: String, deliveryAddress: String): Optional<Delivery> {
+            pickupAddress: String, deliveryAddress: String): Delivery? {
 
         if (repository.existsByTrackIdOrOrderIdOrFreightId(trackId, orderId, freightId)) {
-            return Optional.empty()
+            return null
         }
 
         val delivery = Delivery(
@@ -47,20 +41,26 @@ class DeliveryService(
                 currentPosition = pickupAddress)
         val entity = repository.save(delivery)
         messenger.create(entity)
-        return Optional.of(entity)
+        return entity
     }
 
     @Transactional
-    fun addPreferredTimeForDelivery(deliveryId: UUID, preferredTime: LocalTime): Delivery {
+    fun addPreferredTimeForDelivery(deliveryId: UUID, preferredTime: LocalTime): Delivery? {
         val entity = findById(deliveryId)
-        entity.preferredDeliveryTime = preferredTime
+        if (!DeliveryValidations.canSchedule(entity, preferredTime)) {
+            return null
+        }
+        entity!!.preferredDeliveryTime = preferredTime
         return repository.save(entity)
     }
 
     @Transactional
-    fun takePackageToDelivery(deliveryId: UUID, partnerId: UUID): Delivery {
+    fun takePackageToDelivery(deliveryId: UUID, partnerId: UUID): Delivery? {
         val entity = findById(deliveryId)
-        entity.partnerId = partnerId
+        if (!DeliveryValidations.canDelivery(entity)) {
+            return null
+        }
+        entity!!.partnerId = partnerId
         entity.status = DeliveryStatus.OUT_FOR_DELIVERY
         entity.currentPosition = "${entity.storageAddress}-${entity.deliveryAddress}"
         val updatedEntity = repository.save(entity)
@@ -69,9 +69,12 @@ class DeliveryService(
     }
 
     @Transactional
-    fun giveBackPackageToRetryDelivery(deliveryId: UUID): Delivery {
+    fun giveBackPackageToRetryDelivery(deliveryId: UUID): Delivery? {
         val entity = findById(deliveryId)
-        entity.status = DeliveryStatus.RETRY_DELIVERY
+        if (!DeliveryValidations.canReturnPackageToRetry(entity)) {
+            return null
+        }
+        entity!!.status = DeliveryStatus.RETRY_DELIVERY
         entity.currentPosition = entity.storageAddress
         val updatedEntity = repository.save(entity)
         messenger.giveBackPackageToRetryDelivery(updatedEntity)
@@ -79,9 +82,12 @@ class DeliveryService(
     }
 
     @Transactional
-    fun markAsSuccessfulDelivery(deliveryId: UUID): Delivery {
+    fun markAsSuccessfulDelivery(deliveryId: UUID): Delivery? {
         val entity = findById(deliveryId)
-        entity.status = DeliveryStatus.SUCCESSFULLY_DELIVERED
+        if (!DeliveryValidations.isSuccessful(entity)) {
+            return null
+        }
+        entity!!.status = DeliveryStatus.SUCCESSFULLY_DELIVERED
         entity.currentPosition = entity.deliveryAddress
         val updatedEntity = repository.save(entity)
         messenger.markAsSuccessfulDelivery(updatedEntity)
@@ -89,10 +95,13 @@ class DeliveryService(
     }
 
     @Transactional
-    fun markAsDeliveryFailed(deliveryId: UUID): Delivery {
+    fun markAsDeliveryFailed(deliveryId: UUID): Delivery? {
         val entity = findById(deliveryId)
-        entity.status = DeliveryStatus.FAILED_DELIVERY_ATTEMPT
-        entity.currentPosition = entity.deliveryAddress
+        if (!DeliveryValidations.canFailed(entity)) {
+            return null
+        }
+        entity!!.status = DeliveryStatus.FAILED_DELIVERY_ATTEMPT
+        entity.currentPosition = "${entity.deliveryAddress}-${entity.storageAddress}"
         val updatedEntity = repository.save(entity)
         messenger.markAsDeliveryFailed(updatedEntity)
         return updatedEntity

@@ -10,7 +10,7 @@
 			"name": "ORDER",
 			"item": [
 				{
-					"name": "GET ALL",
+					"name": "GET ALL ORDERS",
 					"event": [
 						{
 							"listen": "test",
@@ -46,7 +46,7 @@
 					"response": []
 				},
 				{
-					"name": "CREATE ORDER",
+					"name": "PURCHASE FREIGHT BY ORDER",
 					"event": [
 						{
 							"listen": "test",
@@ -99,7 +99,7 @@
 					"response": []
 				},
 				{
-					"name": "GET ORDER by ID",
+					"name": "CHECK THE NEW ORDER",
 					"event": [
 						{
 							"listen": "test",
@@ -149,7 +149,7 @@
 					"response": []
 				},
 				{
-					"name": "APPROVE ORDER by ID",
+					"name": "ORDER APPROVAL",
 					"event": [
 						{
 							"listen": "test",
@@ -529,7 +529,7 @@
 					"response": []
 				},
 				{
-					"name": "PICKUP PRODUCT",
+					"name": "OUT TO PICKUP PRODUCT IN CLIENT",
 					"event": [
 						{
 							"listen": "test",
@@ -629,7 +629,7 @@
 					"response": []
 				},
 				{
-					"name": "MARK PRODUCT AS TAKEN",
+					"name": "PRODUCT HAS BEEN TAKEN",
 					"event": [
 						{
 							"listen": "test",
@@ -831,7 +831,7 @@
 					"response": []
 				},
 				{
-					"name": "MARK AS READY TO TRANSPORT",
+					"name": "PRODUCT IS READY TO TRANSPORT",
 					"event": [
 						{
 							"listen": "test",
@@ -2046,7 +2046,7 @@
 									"pm.test('Check app data', () => {  \r",
 									"    var response = pm.response.json()\r",
 									"    pm.expect(response).to.exist\r",
-									"    pm.expect(response.preferredDeliveryTime).to.eql(\"22:22\")\r",
+									"    pm.expect(response.preferredDeliveryTime).to.eql(environment.deliveryTime)\r",
 									"})"
 								],
 								"type": "text/javascript"
@@ -2058,7 +2058,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"time\": \"22:22\"\r\n}",
+							"raw": "{\r\n     \"time\": \"{{deliveryTime}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2095,7 +2095,7 @@
 									"    var response = pm.response.json()\r",
 									"    pm.expect(response).to.exist\r",
 									"    pm.expect(response.currentPosition).to.eql(\"storage D-\"+environment.deliveryAddress)\r",
-									"    pm.expect(response.partnerId).to.eql(environment.deliveryManId)\r",
+									"    pm.expect(response.partnerId).to.eql(environment.deliveryMan)\r",
 									"    pm.expect(response.status).to.eql('OUT_FOR_DELIVERY')\r",
 									"})"
 								],
@@ -2108,7 +2108,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"partnerId\": \"{{deliveryManId}}\"\r\n}",
+							"raw": "{\r\n     \"partnerId\": \"{{deliveryMan}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2195,7 +2195,7 @@
 									"pm.test('Check app data', () => {  \r",
 									"    var response = pm.response.json()\r",
 									"    pm.expect(response).to.exist\r",
-									"    pm.expect(response.currentPosition).to.eql(environment.deliveryAddress)\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.deliveryAddress+\"-storage D\")\r",
 									"    pm.expect(response.status).to.eql('FAILED_DELIVERY_ATTEMPT')\r",
 									"})"
 								],
@@ -2235,7 +2235,7 @@
 									"pm.test('Check app data', () => {  \r",
 									"    var response = pm.response.json()\r",
 									"    pm.expect(response).to.exist\r",
-									"    pm.expect(response.currentPosition).to.eql(environment.deliveryAddress)\r",
+									"    pm.expect(response.currentPosition).to.eql(environment.deliveryAddress+\"-storage D\")\r",
 									"    pm.expect(response.status).to.eql('DELIVERY_FAILED')\r",
 									"})"
 								],
@@ -2378,7 +2378,7 @@
 									"    var response = pm.response.json()\r",
 									"    pm.expect(response).to.exist\r",
 									"    pm.expect(response.currentPosition).to.eql(\"storage D-\"+environment.deliveryAddress)\r",
-									"    pm.expect(response.partnerId).to.eql(environment.deliveryManId)\r",
+									"    pm.expect(response.partnerId).to.eql(environment.deliveryMan)\r",
 									"    pm.expect(response.status).to.eql('OUT_FOR_DELIVERY')\r",
 									"})"
 								],
@@ -2391,7 +2391,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"partnerId\": \"{{deliveryManId}}\"\r\n}",
+							"raw": "{\r\n     \"partnerId\": \"{{deliveryMan}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2479,7 +2479,7 @@
 									"    var response = pm.response.json()\r",
 									"    pm.expect(response).to.exist\r",
 									"    pm.expect(response.currentPosition).to.eql(environment.deliveryAddress)\r",
-									"    pm.expect(response.partnerId).to.eql(environment.deliveryManId)\r",
+									"    pm.expect(response.partnerId).to.eql(environment.deliveryMan)\r",
 									"    pm.expect(response.status).to.eql('SUCCESSFULLY_DELIVERED')\r",
 									"})"
 								],
@@ -2492,7 +2492,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n     \"partnerId\": \"{{deliveryManId}}\"\r\n}",
+							"raw": "{\r\n     \"partnerId\": \"{{deliveryMan}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

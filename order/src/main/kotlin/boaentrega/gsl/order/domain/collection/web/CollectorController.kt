@@ -3,7 +3,6 @@ package boaentrega.gsl.order.domain.collection.web
 import boaentrega.gsl.order.configuration.constants.ServiceNames
 import boaentrega.gsl.order.domain.collection.PickupRequest
 import boaentrega.gsl.order.domain.collection.PickupRequestFilter
-import boaentrega.gsl.order.domain.collection.PickupRequestService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
@@ -13,7 +12,7 @@ import java.util.*
 @RequestMapping(ServiceNames.COLLECTION)
 @RestController
 class CollectorController(
-        private val service: PickupRequestService
+        private val service: PickupRequestWebService
 ) {
     @GetMapping
     fun getAll(

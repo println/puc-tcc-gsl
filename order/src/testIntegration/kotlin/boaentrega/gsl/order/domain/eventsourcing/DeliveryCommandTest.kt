@@ -5,9 +5,9 @@ import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.delivery.Delivery
 import boaentrega.gsl.order.domain.delivery.DeliveryRepository
-import boaentrega.gsl.order.domain.delivery.DeliveryService
 import boaentrega.gsl.order.domain.delivery.DeliveryStatus
 import boaentrega.gsl.order.domain.delivery.web.DeliveryController
+import boaentrega.gsl.order.domain.delivery.web.DeliveryWebService
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
@@ -33,7 +33,7 @@ class DeliveryCommandTest : AbstractEventSourcingTest() {
     private lateinit var repository: DeliveryRepository
 
     @Autowired
-    private lateinit var service: DeliveryService
+    private lateinit var service: DeliveryWebService
 
     @Autowired
     @Qualifier(EventSourcingBeanQualifiers.FREIGHT_COMMAND_CONSUMER)

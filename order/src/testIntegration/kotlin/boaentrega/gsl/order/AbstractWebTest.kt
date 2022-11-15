@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import java.util.*
 import kotlin.streams.toList
 
 abstract class AbstractWebTest<T : AuditableModel<T>> : AbstractEventSourcingTest() {
@@ -19,13 +20,18 @@ abstract class AbstractWebTest<T : AuditableModel<T>> : AbstractEventSourcingTes
 
     abstract fun getRepository(): JpaRepository<T, *>
     abstract fun getEntityType(): Class<T>
-    abstract fun preProcessing(data: List<T>): Unit
+    abstract fun preProcessing(model: T): Unit
     abstract fun getResource(): String
 
     @BeforeEach
     fun setupWeb() {
+        reloadData { preProcessing(it) }
+    }
+
+    fun reloadData(adjustment: (T) -> Unit) {
         val data = easyRandom.objects(getEntityType(), 200).toList()
-        preProcessing(data)
+        data.forEach { adjustment(it) }
+        getRepository().deleteAll()
         entities = getRepository().saveAllAndFlush(data)
     }
 
@@ -57,5 +63,13 @@ abstract class AbstractWebTest<T : AuditableModel<T>> : AbstractEventSourcingTes
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$").isNotEmpty)
+    }
+
+    @Test
+    fun getByWrongIdNotFound() {
+        val id = UUID.randomUUID()
+        restMockMvc.perform(MockMvcRequestBuilders.get("${getResource()}/{id}", id)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound)
     }
 }

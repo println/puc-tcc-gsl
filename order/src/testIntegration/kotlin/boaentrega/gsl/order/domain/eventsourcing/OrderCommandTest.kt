@@ -5,9 +5,9 @@ import boaentrega.gsl.order.configuration.constants.EventSourcingBeanQualifiers
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.order.Order
 import boaentrega.gsl.order.domain.order.OrderRepository
-import boaentrega.gsl.order.domain.order.OrderService
 import boaentrega.gsl.order.domain.order.OrderStatus
 import boaentrega.gsl.order.domain.order.web.OrderController
+import boaentrega.gsl.order.domain.order.web.OrderWebService
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.eventsourcing.messages.CommandMessage
@@ -33,7 +33,7 @@ class OrderCommandTest : AbstractEventSourcingTest() {
     private lateinit var repository: OrderRepository
 
     @Autowired
-    private lateinit var service: OrderService
+    private lateinit var service: OrderWebService
 
     @Autowired
     @Qualifier(EventSourcingBeanQualifiers.ORDER_COMMAND_CONSUMER)

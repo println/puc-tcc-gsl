@@ -24,6 +24,6 @@ data class Delivery(
         var partnerId: UUID? = null,
         var status: DeliveryStatus = DeliveryStatus.CREATED,
         @Column(columnDefinition = "TIME")
-        @JsonFormat(pattern="HH:mm")
+        @JsonFormat(pattern = "HH:mm")
         var preferredDeliveryTime: LocalTime? = null
 ) : AuditableModel<Delivery>()

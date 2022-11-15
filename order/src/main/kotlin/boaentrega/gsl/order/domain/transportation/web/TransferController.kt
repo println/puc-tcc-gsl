@@ -3,7 +3,6 @@ package boaentrega.gsl.order.domain.transportation.web
 import boaentrega.gsl.order.configuration.constants.ServiceNames
 import boaentrega.gsl.order.domain.transportation.Transfer
 import boaentrega.gsl.order.domain.transportation.TransferFilter
-import boaentrega.gsl.order.domain.transportation.TransferService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
@@ -11,7 +10,7 @@ import java.util.*
 
 @RequestMapping(ServiceNames.TRANSPORT)
 @RestController
-class TransferController(private val service: TransferService) {
+class TransferController(private val service: TransferWebService) {
 
     @GetMapping
     fun getAll(

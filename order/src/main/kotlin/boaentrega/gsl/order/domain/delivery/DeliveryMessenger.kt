@@ -20,7 +20,7 @@ class DeliveryMessenger(
                 entity.currentPosition, "Out for delivery")
     }
 
-    fun markAsDeliveryFailed(entity: Delivery){
+    fun markAsDeliveryFailed(entity: Delivery) {
         eventService.notifyPackageDeliveryFailed(entity.trackId, entity.freightId, ServiceNames.DELIVERY,
                 entity.currentPosition, "Unable to deliver")
     }

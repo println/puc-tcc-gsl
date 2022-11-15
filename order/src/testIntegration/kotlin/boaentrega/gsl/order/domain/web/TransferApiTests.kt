@@ -4,9 +4,9 @@ import boaentrega.gsl.order.AbstractWebTest
 import boaentrega.gsl.order.configuration.constants.ResourcePaths
 import boaentrega.gsl.order.domain.transportation.Transfer
 import boaentrega.gsl.order.domain.transportation.TransferRepository
-import boaentrega.gsl.order.domain.transportation.TransferService
 import boaentrega.gsl.order.domain.transportation.TransferStatus
 import boaentrega.gsl.order.domain.transportation.web.TransferController
+import boaentrega.gsl.order.domain.transportation.web.TransferWebService
 import boaentrega.gsl.order.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
@@ -34,7 +34,7 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
     private lateinit var repository: TransferRepository
 
     @Autowired
-    private lateinit var service: TransferService
+    private lateinit var service: TransferWebService
 
     override fun createResource(): Any {
         return TransferController(service)
@@ -42,7 +42,10 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
 
     override fun getRepository() = repository
     override fun getEntityType() = Transfer::class.java
-    override fun preProcessing(data: List<Transfer>) = data.forEach { it.status = TransferStatus.CREATED }
+    override fun preProcessing(data: Transfer) {
+        data.status = TransferStatus.CREATED
+    }
+
     override fun getResource() = RESOURCE
 
     @AfterEach
@@ -83,6 +86,8 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
 
     @Test
     fun receive() {
+        reloadData { it.status = TransferStatus.MOVING }
+
         val entity = entities.first() as Transfer
         val id = entity.id
         val contentMap = mapOf(
@@ -107,12 +112,14 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
 
     @Test
     fun receiveInFinalStorage() {
-        val id = entities.first().id
+        reloadData {
+            it.status = TransferStatus.MOVING
+            it.nextStorage = it.finalStorage
+            it.currentPosition = it.finalStorage
+        }
 
-        val entity = repository.findById(id!!).get()
-        entity.nextStorage = entity.finalStorage
-        entity.currentPosition = entity.finalStorage
-        repository.saveAndFlush(entity)
+        val entity = entities.first() as Transfer
+        val id = entity.id
 
         val contentMap = mapOf(
                 "partnerId" to UUID.randomUUID().toString(),
