@@ -20,7 +20,7 @@ abstract class AbstractWebTest<T : AuditableModel<T>> : AbstractEventSourcingTes
 
     abstract fun getRepository(): JpaRepository<T, *>
     abstract fun getEntityType(): Class<T>
-    abstract fun preProcessing(model: T): Unit
+    abstract fun preProcessing(data: T): Unit
     abstract fun getResource(): String
 
     @BeforeEach

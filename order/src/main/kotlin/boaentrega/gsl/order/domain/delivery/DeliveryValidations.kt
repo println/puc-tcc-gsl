@@ -15,12 +15,12 @@ object DeliveryValidations {
     fun canDelivery(entity: Delivery?) =
             (entity != null)
                     .and(entity!!.let { it.currentPosition == it.storageAddress })
-                    .and(entity!!.status.canChangeTo(OUT_FOR_DELIVERY))
+                    .and(entity.status.canChangeTo(OUT_FOR_DELIVERY))
 
     fun canReturnPackageToRetry(entity: Delivery?) =
             (entity != null)
                     .and(entity!!.let { it.currentPosition == "${it.deliveryAddress}-${it.storageAddress}" })
-                    .and(entity!!.status.canChangeTo(RETRY_DELIVERY))
+                    .and(entity.status.canChangeTo(RETRY_DELIVERY))
 
     fun isSuccessful(entity: Delivery?) =
             (entity != null)
@@ -30,7 +30,7 @@ object DeliveryValidations {
     fun canFailed(entity: Delivery?) =
             (entity != null)
                     .and(entity!!.let { it.currentPosition == "${it.storageAddress}-${it.deliveryAddress}" })
-                    .and(entity!!.status.canChangeTo(FAILED_DELIVERY_ATTEMPT))
+                    .and(entity.status.canChangeTo(FAILED_DELIVERY_ATTEMPT))
 
     private fun isValidTime(time: LocalTime): Boolean {
         val start = LocalTime.parse("10:00:00")

@@ -32,13 +32,14 @@ val testIntegrationImplementation: Configuration by configurations.getting {
 configurations["testIntegrationImplementation"].extendsFrom(configurations.runtimeOnly.get())
 
 dependencies {
-    implementation(project(":shared:support"))
+//    implementation(project(":shared:support"))
 
     implementation("org.apache.avro:avro:1.11.1")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.14.0")
@@ -46,6 +47,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
     implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
+
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.13")
+    implementation("io.springfox:springfox-swagger-ui:3.0.0")
 
     runtimeOnly("com.h2database:h2")
 

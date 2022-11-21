@@ -42,6 +42,13 @@ spring:
         qualifier-delimiter: _
         max-page-size: 2000
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
+      base-path: "/"
+
 outbox:
   storage:
     polling:
@@ -62,21 +69,3 @@ eventsourcing:
       event: ${EVENTSOURCING_CUSTOMER_EVENT:gsl.event.customer}
       command: ${EVENTSOURCING_CUSTOMER_COMMAND:gsl.command.customer}
       document: ${EVENTSOURCING_CUSTOMER_DOCUMENT:gsl.document.customer}
-    delivery:
-      event: ${EVENTSOURCING_DELIVERY_EVENT:gsl.event.delivery}
-      command: ${EVENTSOURCING_DELIVERY_COMMAND:gsl.command.delivery}
-    collector:
-      event: ${EVENTSOURCING_COLLECTOR_EVENT:gsl.event.collector}
-      command: ${EVENTSOURCING_COLLECTOR_COMMAND:gsl.command.collector}
-    partners:
-      event: ${EVENTSOURCING_PARTNERS_EVENT:gsl.event.partners}
-      command: ${EVENTSOURCING_PARTNERS_COMMAND:gsl.command.partners}
-    routing:
-      event: ${EVENTSOURCING_ROUTING_EVENT:gsl.event.routing}
-      command: ${EVENTSOURCING_ROUTING_COMMAND:gsl.command.routing}
-
-
-
-
-
-
