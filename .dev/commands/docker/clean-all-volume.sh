@@ -1,1 +1,1 @@
-docker volume prune
+docker volume prune -f
