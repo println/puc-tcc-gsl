@@ -1,36 +1,33 @@
 server:
-  port: ${PORT:8081}
+  port: \${PORT:8081}
 
 spring:
   kafka:
     consumer:
       auto-offset-reset: earliest
-      group-id: ${spring.application.name}
+      group-id: \${spring.application.name}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       client-id: configure-me_client-id
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:192.168.0.2:9092}
+    bootstrap-servers: \${KAFKA_BOOTSTRAP_SERVERS:192.168.0.2:9092}
   rabbitmq:
-    port: ${RABBITMQ_PORT:5672}
-    host: ${RABBITMQ_HOST:192.168.0.2}
-    username: ${RABBITMQ_USER:rabbitmq}
-    password: ${RABBITMQ_PASS:rabbitmq}
+    port: \${RABBITMQ_PORT:5672}
+    host: \${RABBITMQ_HOST:192.168.0.2}
+    username: \${RABBITMQ_USER:rabbitmq}
+    password: \${RABBITMQ_PASS:rabbitmq}
   application:
-    name: order
-  h2:
-    console:
-      settings:
-        web-allow-others: 'false'
-        trace: 'false'
-      path: /h2-console
+    name: ${rootProject.name}
   datasource:
-    url: jdbc:h2:mem:order-db;Mode=Oracle;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:postgresql://192.168.0.2:5432/\${spring.application.name}db?createDatabaseIfNotExist=true
+    username: postgres
+    password: postgres
   jpa:
-    database-platform: org.hibernate.dialect.Oracle10gDialect
-  sql:
-    init:
-      platform: h2
-      continue-on-error: 'true'
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    jdbc:
+      lob:
+        non_contextual_creation: true
+    hibernate:
+      ddl-auto: create
   data:
     web:
       pageable:
@@ -58,14 +55,14 @@ eventsourcing:
   platform: kafka
   messaging:
     freight:
-      command: ${EVENTSOURCING_FREIGHT_COMMAND:gsl.command.freight}
-      event: ${EVENTSOURCING_FREIGHT_EVENT:gsl.event.freight}
-      document: ${EVENTSOURCING_FREIGHT_DOCUMENT:gsl.document.freight}
+      command: \${EVENTSOURCING_FREIGHT_COMMAND:gsl.command.freight}
+      event: \${EVENTSOURCING_FREIGHT_EVENT:gsl.event.freight}
+      document: \${EVENTSOURCING_FREIGHT_DOCUMENT:gsl.document.freight}
     order:
-      event: ${EVENTSOURCING_ORDER_EVENT:gsl.event.order}
-      command: ${EVENTSOURCING_ORDER_COMMAND:gsl.command.order}
-      document: ${EVENTSOURCING_ORDER_DOCUMENT:gsl.document.order}
+      event: \${EVENTSOURCING_ORDER_EVENT:gsl.event.order}
+      command: \${EVENTSOURCING_ORDER_COMMAND:gsl.command.order}
+      document: \${EVENTSOURCING_ORDER_DOCUMENT:gsl.document.order}
     customer:
-      event: ${EVENTSOURCING_CUSTOMER_EVENT:gsl.event.customer}
-      command: ${EVENTSOURCING_CUSTOMER_COMMAND:gsl.command.customer}
-      document: ${EVENTSOURCING_CUSTOMER_DOCUMENT:gsl.document.customer}
+      event: \${EVENTSOURCING_CUSTOMER_EVENT:gsl.event.customer}
+      command: \${EVENTSOURCING_CUSTOMER_COMMAND:gsl.command.customer}
+      document: \${EVENTSOURCING_CUSTOMER_DOCUMENT:gsl.document.customer}

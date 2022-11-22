@@ -5,6 +5,8 @@ import boaentrega.gsl.order.support.jpa.AuditableModel
 import java.math.BigDecimal
 import java.util.*
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.Table
 
 @Entity
@@ -15,5 +17,6 @@ data class Order(
         val deliveryAddress: String,
         var value: BigDecimal? = null,
         var comment: String = "",
+        @Enumerated(EnumType.STRING)
         var status: OrderStatus = OrderStatus.WAITING_PAYMENT
 ) : AuditableModel<Order>()

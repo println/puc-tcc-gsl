@@ -5,9 +5,7 @@ import boaentrega.gsl.order.support.jpa.AuditableModel
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalTime
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = TableNames.Domain.DELIVERY)
@@ -22,6 +20,7 @@ data class Delivery(
         val deliveryAddress: String,
         var currentPosition: String,
         var partnerId: UUID? = null,
+        @Enumerated(EnumType.STRING)
         var status: DeliveryStatus = DeliveryStatus.CREATED,
         @Column(columnDefinition = "TIME")
         @JsonFormat(pattern = "HH:mm")

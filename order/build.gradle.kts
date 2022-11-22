@@ -29,7 +29,12 @@ val testIntegrationImplementation: Configuration by configurations.getting {
     extendsFrom(configurations.implementation.get())
 }
 
+val testIntegrationRuntimeOnly: Configuration by configurations.getting {
+    extendsFrom(configurations.testRuntimeOnly.get())
+}
+
 configurations["testIntegrationImplementation"].extendsFrom(configurations.runtimeOnly.get())
+configurations["testIntegrationRuntimeOnly"].extendsFrom(configurations.testRuntimeOnly.get())
 
 dependencies {
 //    implementation(project(":shared:support"))
@@ -51,7 +56,8 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.6.13")
     implementation("io.springfox:springfox-swagger-ui:3.0.0")
 
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql:42.5.0")
+    testIntegrationRuntimeOnly("com.h2database:h2")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testIntegrationImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -65,6 +71,12 @@ val integrationTest = task<Test>("integrationTest") {
     testClassesDirs = sourceSets["testIntegration"].output.classesDirs
     classpath = sourceSets["testIntegration"].runtimeClasspath
     shouldRunAfter("test")
+}
+
+tasks.withType<ProcessResources> {
+    filesMatching("application.yml") {
+        expand(project.properties)
+    }
 }
 
 tasks.withType<KotlinCompile> {
