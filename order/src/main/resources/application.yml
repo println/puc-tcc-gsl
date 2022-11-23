@@ -18,9 +18,9 @@ spring:
   application:
     name: ${rootProject.name}
   datasource:
-    url: jdbc:postgresql://192.168.0.2:5432/\${spring.application.name}db?createDatabaseIfNotExist=true
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://192.168.0.2:5432/\${spring.application.name}db
+    username: gsl
+    password: gsl
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     jdbc:
