@@ -12,7 +12,7 @@ import java.util.*
 @Repository
 interface OutboxRepository : JpaRepository<OutboxMessage, UUID> {
 
-    fun getTop10ByIsPublishedFalseOrderByCreatedAtDesc(): List<OutboxMessage>
+    fun getTop10ByIsPublishedFalse(): List<OutboxMessage>
 
     fun countByIsPublishedFalse(): Long
 

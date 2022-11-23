@@ -52,7 +52,7 @@ outbox:
       frequencyInMillis: 1000
 
 eventsourcing:
-  platform: kafka
+  platform:  \${EVENTSOURCING_PLATFORM:kafka}
   messaging:
     freight:
       command: \${EVENTSOURCING_FREIGHT_COMMAND:gsl.command.freight}

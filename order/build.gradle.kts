@@ -50,6 +50,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.14.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
     implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
 

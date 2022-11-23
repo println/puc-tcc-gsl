@@ -4,8 +4,13 @@ import boaentrega.gsl.order.support.eventsourcing.connectors.AbstractProducerCon
 import boaentrega.gsl.order.support.eventsourcing.messages.Message
 import boaentrega.gsl.order.support.eventsourcing.messages.MessageType
 import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
+import boaentrega.gsl.order.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.order.support.extensions.ClassExtensions.toObject
 import boaentrega.gsl.order.support.functions.Functions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 
@@ -64,7 +69,15 @@ class DummyProducerConnector() : AbstractProducerConnector() {
         }
 
         if (enableConsumption) {
-            consumers.first { consumer -> consumer.target == target }.consume(message)
+            GlobalScope.launch(Dispatchers.Default) {
+                var consumer = consumers.first { consumer -> consumer.target == target }
+                if(consumer != null) {
+                    logger.info("Dispatching ${message.type}: ${message.toJsonString()}")
+                    consumer.consume(message)
+                } else {
+                    logger.error("LOST [${message.type}]: ${message.toJsonString()}")
+                }
+            }
         }
     }
 

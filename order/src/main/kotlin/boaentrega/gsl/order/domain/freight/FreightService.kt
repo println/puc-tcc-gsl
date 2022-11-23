@@ -1,5 +1,6 @@
 package boaentrega.gsl.order.domain.freight
 
+import boaentrega.gsl.order.support.extensions.ClassExtensions.logger
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 import java.util.*
+import kotlin.math.log
 
 @Service
 class FreightService(
@@ -63,11 +65,14 @@ class FreightService(
         }
 
         val entityOptional = repository.findById(id)
+
         entityOptional.ifPresent {
-            if (!it.lastUpdated.isBefore(lastUpdated)) {
+            if(it.status == status){
                 return@ifPresent
             }
-
+            if(it.status == FreightStatus.FINISHED){
+                return@ifPresent
+            }
             it.currentPosition = currentPosition
             it.status = status
             it.lastUpdated = lastUpdated
@@ -80,7 +85,10 @@ class FreightService(
     fun deliverySuccessfully(id: UUID, lastUpdated: Instant) {
         val entityOptional = repository.findById(id)
         entityOptional.ifPresent {
-            if (!it.lastUpdated.isBefore(lastUpdated)) {
+            if(it.status == FreightStatus.DELIVERY_SUCCESS){
+                return@ifPresent
+            }
+            if(it.status == FreightStatus.FINISHED){
                 return@ifPresent
             }
             it.status = FreightStatus.DELIVERY_SUCCESS
@@ -95,15 +103,11 @@ class FreightService(
     fun finishFreight(id: UUID) {
         val entityOptional = repository.findById(id)
         entityOptional.ifPresent {
-            if (it.status != FreightStatus.DELIVERY_SUCCESS) {
+            if(it.status == FreightStatus.FINISHED){
                 return@ifPresent
             }
-
-            if (it.status == FreightStatus.FINISHED) {
-                return@ifPresent
-            }
-
             it.status = FreightStatus.FINISHED
+            it.currentPosition = it.deliveryAddress
             it.lastUpdated = Instant.now()
             val updatedEntity = repository.save(it)
             messenger.finishFreight(updatedEntity)

@@ -115,7 +115,7 @@ class FreightCommandTest : AbstractEventSourcingTest() {
         Assertions.assertEquals(entity.orderId, freight.orderId)
         Assertions.assertEquals(entity.senderAddress, freight.senderAddress)
         Assertions.assertEquals(entity.deliveryAddress, freight.deliveryAddress)
-        Assertions.assertEquals(entity.currentPosition, freight.currentPosition)
+        Assertions.assertEquals(entity.deliveryAddress, freight.currentPosition)
         Assertions.assertEquals(FreightStatus.FINISHED, freight.status)
 
         assertTotalMessagesAndReleaseThem(2)
