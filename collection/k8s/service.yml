@@ -8,6 +8,6 @@ spec:
     app: gsl-collection
   ports:
     - protocol: "TCP"
-      port: 8080
+      port: 8763
       targetPort: 8080
   type: LoadBalancer
