@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: gsl-delivery-unit
-          image: gsl/delivery:v1
+          image: gsl/delivery-service:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

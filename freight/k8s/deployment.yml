@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: gsl-freight-unit
-          image: gsl/freight:v1
+          image: gsl/freight-service:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: gsl-collection-unit
-          image: gsl/collection:v1
+          image: gsl/collection-service:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
