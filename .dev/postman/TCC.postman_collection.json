@@ -238,7 +238,7 @@
 					"response": []
 				},
 				{
-					"name": "GET ALL filtered by ORDER",
+					"name": "SET Freight ID by ORDER ID",
 					"event": [
 						{
 							"listen": "test",
@@ -378,7 +378,7 @@
 					"response": []
 				},
 				{
-					"name": "GET ALL filtered by FREIGHT",
+					"name": "SET Pickup ID by FREIGHT ID",
 					"event": [
 						{
 							"listen": "test",
@@ -972,7 +972,7 @@
 					"response": []
 				},
 				{
-					"name": "GET ALL filtered by FREIGHT",
+					"name": "SET TransferID by FREIGHT ID",
 					"event": [
 						{
 							"listen": "test",
@@ -1882,7 +1882,7 @@
 					"response": []
 				},
 				{
-					"name": "GET ALL filtered by FREIGHT",
+					"name": "SET DeliveryID by FREIGHT ID",
 					"event": [
 						{
 							"listen": "test",
