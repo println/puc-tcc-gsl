@@ -55,7 +55,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
     @Test
     fun checkStatusById() {
         val id = entities.first().id
-        restMockMvc.perform(get("$RESOURCE/{id}", id))
+        restMockMvc.perform(get("$RESOURCE{id}", id))
                 .andExpect(jsonPath("\$.status").value(PickupRequestStatus.WAITING.toString()))
     }
 
@@ -63,7 +63,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
     fun markAsOutToPickupTheProduct() {
         val id = entities.first().id
         val contentMap = mapOf("employee" to "fulano de tal")
-        restMockMvc.perform(put("$RESOURCE/{id}/pickup", id)
+        restMockMvc.perform(put("$RESOURCE{id}/pickup", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))
@@ -82,7 +82,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
         reloadData { it.status = PickupRequestStatus.PICKUP_PROCESS }
         val id = entities.first().id
         val contentMap = mapOf("address" to "some forest")
-        restMockMvc.perform(put("$RESOURCE/{id}/taken", id)
+        restMockMvc.perform(put("$RESOURCE{id}/taken", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))
@@ -103,7 +103,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
         reloadData { it.status = PickupRequestStatus.TAKEN }
         val id = entities.first().id
         val contentMap = mapOf("employee" to "fulano de tal")
-        restMockMvc.perform(put("$RESOURCE/{id}/packaging", id)
+        restMockMvc.perform(put("$RESOURCE{id}/packaging", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))
@@ -122,7 +122,7 @@ internal class CollectionApiTests : AbstractWebTest<PickupRequest>() {
         reloadData { it.status = PickupRequestStatus.ON_PACKAGING }
         val id = entities.first().id
         val contentMap = mapOf("address" to "some desert")
-        val result = restMockMvc.perform(put("$RESOURCE/{id}/ready", id)
+        val result = restMockMvc.perform(put("$RESOURCE{id}/ready", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))

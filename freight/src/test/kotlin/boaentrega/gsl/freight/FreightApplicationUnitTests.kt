@@ -1,9 +1,9 @@
-package boaentrega.gsl.collection
+package boaentrega.gsl.freight
 
 import org.junit.jupiter.api.Test
 
 
-class OrderApplicationUnitTests {
+class FreightApplicationUnitTests {
 
     @Test
     fun contextLoads() {

@@ -1,4 +1,4 @@
-package boaentrega.gsl.delivery.replicas.order
+package boaentrega.gsl.transportation.replicas.order
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

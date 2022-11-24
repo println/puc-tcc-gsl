@@ -56,7 +56,7 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
     @Test
     fun checkStatusById() {
         val id = entities.first().id
-        restMockMvc.perform(get("$RESOURCE/{id}", id))
+        restMockMvc.perform(get("$RESOURCE{id}", id))
                 .andExpect(jsonPath("\$.status").value(TransferStatus.CREATED.toString()))
     }
 
@@ -68,7 +68,7 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
                 "partnerId" to UUID.randomUUID().toString(),
                 "storage" to entity.nextStorage)
 
-        restMockMvc.perform(put("$RESOURCE/{id}/transfer", id)
+        restMockMvc.perform(put("$RESOURCE{id}/transfer", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))
@@ -94,7 +94,7 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
                 "partnerId" to UUID.randomUUID().toString(),
                 "storage" to entity.nextStorage)
 
-        restMockMvc.perform(put("$RESOURCE/{id}/receive", id)
+        restMockMvc.perform(put("$RESOURCE{id}/receive", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))
@@ -125,7 +125,7 @@ internal class TransferApiTests : AbstractWebTest<Transfer>() {
                 "partnerId" to UUID.randomUUID().toString(),
                 "storage" to entity.finalStorage)
 
-        val result = restMockMvc.perform(put("$RESOURCE/{id}/receive", id)
+        val result = restMockMvc.perform(put("$RESOURCE{id}/receive", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))

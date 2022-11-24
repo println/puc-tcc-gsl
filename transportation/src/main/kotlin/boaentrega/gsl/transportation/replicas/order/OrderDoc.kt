@@ -1,7 +1,7 @@
-package boaentrega.gsl.delivery.replicas.order
+package boaentrega.gsl.transportation.replicas.order
 
-import boaentrega.gsl.delivery.configuration.constants.TableNames
-import boaentrega.gsl.delivery.support.jpa.Auditable
+import boaentrega.gsl.transportation.configuration.constants.TableNames
+import boaentrega.gsl.transportation.support.jpa.Auditable
 import java.math.BigDecimal
 import java.util.*
 import javax.persistence.Entity

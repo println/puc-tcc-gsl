@@ -59,7 +59,7 @@ abstract class AbstractWebTest<T : AuditableModel<T>> : AbstractEventSourcingTes
     @Test
     fun getById() {
         val id = entities.first().id
-        restMockMvc.perform(MockMvcRequestBuilders.get("${getResource()}/{id}", id)
+        restMockMvc.perform(MockMvcRequestBuilders.get("${getResource()}{id}", id)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("\$").isNotEmpty)
@@ -68,7 +68,7 @@ abstract class AbstractWebTest<T : AuditableModel<T>> : AbstractEventSourcingTes
     @Test
     fun getByWrongIdNotFound() {
         val id = UUID.randomUUID()
-        restMockMvc.perform(MockMvcRequestBuilders.get("${getResource()}/{id}", id)
+        restMockMvc.perform(MockMvcRequestBuilders.get("${getResource()}{id}", id)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound)
     }

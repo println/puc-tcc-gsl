@@ -55,7 +55,7 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
     @Test
     fun checkStatusById() {
         val id = entities.first().id
-        restMockMvc.perform(get("$RESOURCE/{id}", id))
+        restMockMvc.perform(get("$RESOURCE{id}", id))
                 .andExpect(jsonPath("\$.status").value(DeliveryStatus.CREATED.toString()))
     }
 
@@ -63,7 +63,7 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
     fun addPreferredTimeForDelivery() {
         val id = entities.first().id
         val contentMap = mapOf("time" to "11:11")
-        restMockMvc.perform(put("$RESOURCE/{id}/time", id)
+        restMockMvc.perform(put("$RESOURCE{id}/time", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))
@@ -82,7 +82,7 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
         }
         val id = entities.first().id
         val contentMap = mapOf("partnerId" to UUID.randomUUID().toString())
-        restMockMvc.perform(put("$RESOURCE/{id}/package", id)
+        restMockMvc.perform(put("$RESOURCE{id}/package", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(contentMap.toJsonString())
                 .accept(MediaType.APPLICATION_JSON))
@@ -105,7 +105,7 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
             it.currentPosition = it.deliveryAddress+'-'+it.storageAddress
         }
         val id = entities.first().id
-        restMockMvc.perform(delete("$RESOURCE/{id}/package", id)
+        restMockMvc.perform(delete("$RESOURCE{id}/package", id)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("\$.status").value(DeliveryStatus.RETRY_DELIVERY.toString()))
@@ -123,7 +123,7 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
             it.currentPosition = it.storageAddress+'-'+it.deliveryAddress
         }
         val id = entities.first().id
-        val result = restMockMvc.perform(put("$RESOURCE/{id}/delivery", id)
+        val result = restMockMvc.perform(put("$RESOURCE{id}/delivery", id)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andExpect(
@@ -150,7 +150,7 @@ internal class DeliveryApiTests : AbstractWebTest<Delivery>() {
             it.currentPosition = it.storageAddress+'-'+it.deliveryAddress
         }
         val id = entities.first().id
-        restMockMvc.perform(delete("$RESOURCE/{id}/delivery", id)
+        restMockMvc.perform(delete("$RESOURCE{id}/delivery", id)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("\$.status").value(DeliveryStatus.FAILED_DELIVERY_ATTEMPT.toString()))

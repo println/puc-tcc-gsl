@@ -1,6 +1,5 @@
 package boaentrega.gsl.transportation.domain.transfer.web
 
-import boaentrega.gsl.transportation.configuration.constants.ServiceNames
 import boaentrega.gsl.transportation.domain.transfer.Transfer
 import boaentrega.gsl.transportation.domain.transfer.TransferFilter
 import org.springframework.data.domain.Page
@@ -8,7 +7,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-@RequestMapping(ServiceNames.TRANSPORT)
+@RequestMapping
 @RestController
 class TransferController(private val service: TransferWebService) {
 

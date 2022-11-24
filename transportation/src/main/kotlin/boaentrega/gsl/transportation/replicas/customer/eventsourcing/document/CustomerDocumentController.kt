@@ -1,13 +1,13 @@
-package boaentrega.gsl.delivery.replicas.customer.eventsourcing.document
+package boaentrega.gsl.transportation.replicas.customer.eventsourcing.document
 
 
-import boaentrega.gsl.delivery.configuration.constants.EventSourcingBeanQualifiers
-import boaentrega.gsl.delivery.replicas.customer.CustomerDoc
-import boaentrega.gsl.delivery.replicas.customer.CustomerDocService
-import boaentrega.gsl.delivery.support.eventsourcing.connectors.ConsumerConnector
-import boaentrega.gsl.delivery.support.eventsourcing.controller.AbstractConsumerController
-import boaentrega.gsl.delivery.support.eventsourcing.controller.annotations.ConsumptionHandler
-import boaentrega.gsl.delivery.support.extensions.ClassExtensions.toObject
+import boaentrega.gsl.transportation.configuration.constants.EventSourcingBeanQualifiers
+import boaentrega.gsl.transportation.replicas.customer.CustomerDoc
+import boaentrega.gsl.transportation.replicas.customer.CustomerDocService
+import boaentrega.gsl.transportation.support.eventsourcing.connectors.ConsumerConnector
+import boaentrega.gsl.transportation.support.eventsourcing.controller.AbstractConsumerController
+import boaentrega.gsl.transportation.support.eventsourcing.controller.annotations.ConsumptionHandler
+import boaentrega.gsl.transportation.support.extensions.ClassExtensions.toObject
 import gsl.schemas.DocumentExpired
 import gsl.schemas.DocumentReleased
 import org.springframework.beans.factory.annotation.Qualifier

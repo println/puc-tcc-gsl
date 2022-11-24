@@ -1,6 +1,5 @@
 package boaentrega.gsl.freight.domain.freight.web
 
-import boaentrega.gsl.freight.configuration.constants.ServiceNames
 import boaentrega.gsl.freight.domain.freight.Freight
 import boaentrega.gsl.freight.domain.freight.FreightFilter
 import boaentrega.gsl.freight.domain.freight.FreightService
@@ -9,7 +8,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-@RequestMapping(ServiceNames.FREIGHT)
+@RequestMapping
 @RestController
 class FreightController(val service: FreightService) {
 

@@ -46,7 +46,7 @@ class FreightApiTests : AbstractWebTest<Freight>() {
     @Test
     fun checkStatusById() {
         val id = entities.first().id
-        restMockMvc.perform(MockMvcRequestBuilders.get("${RESOURCE}/{id}", id))
+        restMockMvc.perform(MockMvcRequestBuilders.get("${RESOURCE}{id}", id))
                 .andExpect(MockMvcResultMatchers.jsonPath("\$.status").value(FreightStatus.CREATED.toString()))
     }
 

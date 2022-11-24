@@ -1,6 +1,5 @@
 package boaentrega.gsl.delivery.domain.delivery.web
 
-import boaentrega.gsl.delivery.configuration.constants.ServiceNames
 import boaentrega.gsl.delivery.domain.delivery.Delivery
 import boaentrega.gsl.delivery.domain.delivery.DeliveryFilter
 import org.springframework.data.domain.Page
@@ -8,7 +7,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-@RequestMapping(ServiceNames.DELIVERY)
+@RequestMapping
 @RestController
 class DeliveryController(private val service: DeliveryWebService) {
 

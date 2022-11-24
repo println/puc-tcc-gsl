@@ -15,7 +15,7 @@ class FreightCommandController(
         consumerConnector: ConsumerConnector,
         private val transferService: TransferService) : AbstractConsumerController(consumerConnector) {
 
- @ConsumptionHandler(FreightMovePackageCommand::class)
+    @ConsumptionHandler(FreightMovePackageCommand::class)
     fun movePackage(command: FreightMovePackageCommand) {
         transferService.create(command.trackId, command.orderId, command.freightId,
                 command.currentPosition, command.deliveryAddress)

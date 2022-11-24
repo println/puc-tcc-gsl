@@ -6,6 +6,7 @@ import boaentrega.gsl.transportation.replicas.freight.FreightDocService
 import boaentrega.gsl.transportation.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.transportation.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.transportation.support.eventsourcing.controller.annotations.ConsumptionHandler
+import boaentrega.gsl.transportation.support.extensions.ClassExtensions.toObject
 import gsl.schemas.DocumentExpired
 import gsl.schemas.DocumentReleased
 import org.springframework.beans.factory.annotation.Qualifier

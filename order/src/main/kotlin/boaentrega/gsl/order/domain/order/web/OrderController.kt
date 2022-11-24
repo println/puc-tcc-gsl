@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 import java.util.*
 
-@RequestMapping(ServiceNames.ORDER)
+@RequestMapping
 @RestController
 class OrderController(val service: OrderWebService) {
     @GetMapping("test")

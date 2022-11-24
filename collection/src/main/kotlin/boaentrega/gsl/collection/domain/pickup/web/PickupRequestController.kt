@@ -1,6 +1,5 @@
 package boaentrega.gsl.collection.domain.pickup.web
 
-import boaentrega.gsl.collection.configuration.constants.ServiceNames
 import boaentrega.gsl.collection.domain.pickup.PickupRequest
 import boaentrega.gsl.collection.domain.pickup.PickupRequestFilter
 import org.springframework.data.domain.Page
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 
-@RequestMapping(ServiceNames.COLLECTION)
+@RequestMapping
 @RestController
 class PickupRequestController(
         private val service: PickupRequestWebService
