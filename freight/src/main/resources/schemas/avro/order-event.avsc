@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "namespace": "gsl.schemas",
+  "name": "OrderEvent",
+  "fields": [
+    {
+      "name": "trackId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "status",
+      "type": "OrderEventStatus"
+    },
+    {
+      "name": "source",
+      "type": "string"
+    },
+    {
+      "name": "message",
+      "type": "string"
+    },
+    {
+      "name": "date",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    }
+  ]
+}

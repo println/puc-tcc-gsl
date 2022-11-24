@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gsl-transportation
+  namespace: gsl
+spec:
+  selector:
+    matchLabels:
+      app: gsl-transportation
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: gsl-transportation
+    spec:
+      containers:
+        - name: gsl-order-unit
+          image: gsl/transportation:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080

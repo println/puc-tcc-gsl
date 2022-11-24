@@ -1,0 +1,39 @@
+{
+  "type": "record",
+  "namespace": "gsl.schemas",
+  "name": "FreightCancelCommand",
+  "fields": [
+    {
+      "name": "trackId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "orderId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "freightId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "reason",
+      "type": "string"
+    },
+    {
+      "name": "date",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    }
+  ]
+}

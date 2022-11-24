@@ -1,0 +1,22 @@
+{
+  "type": "record",
+  "namespace": "gsl.schemas",
+  "name": "DocumentExpired",
+  "fields": [
+    {
+      "name": "documentId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "date",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    }
+  ]
+}
+

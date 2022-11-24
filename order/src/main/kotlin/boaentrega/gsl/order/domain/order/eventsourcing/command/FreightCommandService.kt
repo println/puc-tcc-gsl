@@ -24,37 +24,6 @@ class FreightCommandService(
         send(trackId, command)
     }
 
-    fun pickupProduct(trackId: UUID, orderId: UUID, freightId: UUID,
-                      pickupAddress: String, deliveryAddress: String) {
-        val command = FreightPickupProductCommand(trackId, orderId, freightId,
-                pickupAddress, deliveryAddress, Instant.now())
-        send(trackId, command)
-    }
-
-    fun movePackage(trackId: UUID, orderId: UUID, freightId: UUID,
-                    currentPosition: String, deliveryAddress: String) {
-        val command = FreightMovePackageCommand(trackId, orderId, freightId,
-                currentPosition, deliveryAddress, Instant.now())
-        send(trackId, command)
-    }
-
-    fun deliverPackage(trackId: UUID, orderId: UUID, freightId: UUID,
-                       currentPosition: String, deliveryAddress: String) {
-        val command = FreightDeliverPackageCommand(trackId, orderId, freightId,
-                currentPosition, deliveryAddress, Instant.now())
-        send(trackId, command)
-    }
-
-    fun finish(trackId: UUID, orderId: UUID, freightId: UUID) {
-        val command = FreightFinishCommand(trackId, orderId, freightId, Instant.now())
-        send(trackId, command)
-    }
-
-    fun cancel(trackId: UUID, orderId: UUID, freightId: UUID, reason: String) {
-        val command = FreightCancelCommand(trackId, orderId, freightId, reason, Instant.now())
-        send(trackId, command)
-    }
-
     private fun send(trackId: UUID, command: Any) {
         val message = CommandMessage(trackId, command)
         dedicatedProducerConnector.publish(message)

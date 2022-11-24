@@ -1,0 +1,32 @@
+{
+  "type": "record",
+  "namespace": "gsl.schemas",
+  "name": "OrderRefuseCommand",
+  "fields": [
+    {
+      "name": "trackId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "orderId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "reason",
+      "type": "string"
+    },
+    {
+      "name": "date",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    }
+  ]
+}

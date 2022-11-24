@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "namespace": "gsl.schemas",
+  "name": "DocumentReleased",
+  "fields": [
+    {
+      "name": "documentId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "document",
+      "type": "string"
+    },
+    {
+      "name": "date",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    }
+  ]
+}

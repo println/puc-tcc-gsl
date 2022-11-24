@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gsl-freight
+  namespace: gsl
+spec:
+  selector:
+    matchLabels:
+      app: gsl-freight
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: gsl-freight
+    spec:
+      containers:
+        - name: gsl-freight-unit
+          image: gsl/freight:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080

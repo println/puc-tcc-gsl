@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gsl-collection
+  namespace: gsl
+spec:
+  selector:
+    matchLabels:
+      app: gsl-collection
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: gsl-collection
+    spec:
+      containers:
+        - name: gsl-collection-unit
+          image: gsl/collection:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
