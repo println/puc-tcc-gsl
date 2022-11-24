@@ -18,7 +18,7 @@ spring:
   application:
     name: ${rootProject.name}
   datasource:
-    url: jdbc:postgresql://\${DATABASE_HOST:192.168.0.2}:\${DATABASE_PORT:5432}/\${spring.application.name}db
+    url: jdbc:\${DATABASE_JDBC_URI:postgresql://192.168.0.2:5432/\${spring.application.name}db}
     username: \${DATABASE_USER:gsl}
     password: \${DATABASE_PASS:gsl}
   jpa:
