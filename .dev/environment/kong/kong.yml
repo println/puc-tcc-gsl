@@ -1,0 +1,34 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+  - name: order
+    url: http://192.168.0.2:8761
+    routes:
+      - name: order-route
+        paths:
+        - /order
+  - name: freight
+    url: http://192.168.0.2:8762
+    routes:
+      - name: freight-route
+        paths:
+        - /freight
+  - name: collection
+    url: http://192.168.0.2:8763
+    routes:
+      - name: collection-route
+        paths:
+        - /collection
+  - name: transportation
+    url: http://192.168.0.2:8764
+    routes:
+      - name: transportation-route
+        paths:
+        - /transport
+  - name: delivery
+    url: http://192.168.0.2:8765
+    routes:
+      - name: delivery-route
+        paths:
+        - /delivery
