@@ -6,7 +6,9 @@ set -u
 services=(order freight collection transportation delivery)
 version=v1
 
-kubectl create namespace gsl --dry-run
+if (( !$(kubectl get namespace | grep -i -c gsl) )); then
+	kubectl create namespace gsl
+fi
 
 for i in "${!services[@]}"; do
   echo APLLYING TO "${services[$i]}" 
