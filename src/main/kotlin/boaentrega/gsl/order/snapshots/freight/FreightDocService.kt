@@ -1,12 +1,12 @@
-package boaentrega.gsl.order.replicas.customer
+package boaentrega.gsl.order.snapshots.freight
 
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class CustomerDocService(private val repository: CustomerDocRepository) {
+class FreightDocService(private val repository: FreightDocRepository) {
 
-    fun save(documentId: UUID, document: CustomerDoc) {
+    fun save(documentId: UUID, document: FreightDoc) {
         val optionalDocument = findById(documentId)
         var entity = document
         if (optionalDocument.isPresent) {
@@ -20,7 +20,7 @@ class CustomerDocService(private val repository: CustomerDocRepository) {
         repository.deleteById(documentId)
     }
 
-    private fun findById(documentId: UUID): Optional<CustomerDoc> {
+    private fun findById(documentId: UUID): Optional<FreightDoc> {
         return repository.findById(documentId)
     }
 }

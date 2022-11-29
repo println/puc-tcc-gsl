@@ -1,20 +1,17 @@
-package boaentrega.gsl.order.replicas.order
+package boaentrega.gsl.order.snapshots.customer
 
 import org.springframework.stereotype.Service
-import java.math.BigDecimal
 import java.util.*
 
 @Service
-class OrderDocService(private val repository: OrderDocRepository) {
+class CustomerDocService(private val repository: CustomerDocRepository) {
 
-    fun save(documentId: UUID, document: OrderDoc) {
+    fun save(documentId: UUID, document: CustomerDoc) {
         val optionalDocument = findById(documentId)
         var entity = document
         if (optionalDocument.isPresent) {
             entity = optionalDocument.get()
-            entity.value = document.value
-            entity.comment = document.comment
-            entity.status = document.status
+            entity.name = document.name
         }
         repository.save(entity)
     }
@@ -23,7 +20,7 @@ class OrderDocService(private val repository: OrderDocRepository) {
         repository.deleteById(documentId)
     }
 
-    private fun findById(documentId: UUID): Optional<OrderDoc> {
+    private fun findById(documentId: UUID): Optional<CustomerDoc> {
         return repository.findById(documentId)
     }
 }

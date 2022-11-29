@@ -1,17 +1,19 @@
-package boaentrega.gsl.order.replicas.freight
+package boaentrega.gsl.order.snapshots.order
 
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class FreightDocService(private val repository: FreightDocRepository) {
+class OrderDocService(private val repository: OrderDocRepository) {
 
-    fun save(documentId: UUID, document: FreightDoc) {
+    fun save(documentId: UUID, document: OrderDoc) {
         val optionalDocument = findById(documentId)
         var entity = document
         if (optionalDocument.isPresent) {
             entity = optionalDocument.get()
-            entity.name = document.name
+            entity.value = document.value
+            entity.comment = document.comment
+            entity.status = document.status
         }
         repository.save(entity)
     }
@@ -20,7 +22,7 @@ class FreightDocService(private val repository: FreightDocRepository) {
         repository.deleteById(documentId)
     }
 
-    private fun findById(documentId: UUID): Optional<FreightDoc> {
+    private fun findById(documentId: UUID): Optional<OrderDoc> {
         return repository.findById(documentId)
     }
 }

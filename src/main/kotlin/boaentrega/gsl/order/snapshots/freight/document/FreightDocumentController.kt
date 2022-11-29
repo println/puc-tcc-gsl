@@ -1,4 +1,4 @@
-package boaentrega.gsl.order.replicas.freight.document
+package boaentrega.gsl.order.snapshots.freight.document
 
 
 //@Component

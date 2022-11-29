@@ -1,7 +1,6 @@
-package boaentrega.gsl.order.replicas.order
+package boaentrega.gsl.order.snapshots.order
 
 import boaentrega.gsl.order.configuration.constants.TableNames
-import boaentrega.gsl.order.domain.order.OrderStatus
 import boaentrega.gsl.order.support.jpa.Auditable
 import java.math.BigDecimal
 import java.util.*
