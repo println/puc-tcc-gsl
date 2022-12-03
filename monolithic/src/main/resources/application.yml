@@ -1,0 +1,68 @@
+server:
+  port: ${PORT:8081}
+
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      client-id: configure-me_client-id
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:192.168.0.2:9092}
+  rabbitmq:
+    port: ${RABBITMQ_PORT:5672}
+    host: ${RABBITMQ_HOST:192.168.0.2}
+    username: ${RABBITMQ_USER:rabbitmq}
+    password: ${RABBITMQ_PASS:rabbitmq}
+  application:
+    name: @project.name@
+  datasource:
+    url: jdbc:${DATABASE_JDBC_URI:postgresql://192.168.0.2:5432/orderdb}
+    username: ${DATABASE_USER:gsl}
+    password: ${DATABASE_PASS:gsl}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    jdbc:
+      lob:
+        non_contextual_creation: true
+    hibernate:
+      ddl-auto: update
+  data:
+    web:
+      pageable:
+        size-parameter: size
+        prefix: ''
+        one-indexed-parameters: true
+        page-parameter: page
+        default-page-size: 20
+        qualifier-delimiter: _
+        max-page-size: 2000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
+      base-path: "/"
+
+outbox:
+  storage:
+    polling:
+      frequencyInMillis: 1000
+
+eventsourcing:
+  platform:  ${EVENTSOURCING_PLATFORM:kafka}
+  messaging:
+    freight:
+      command: ${EVENTSOURCING_FREIGHT_COMMAND:gsl.command.freight}
+      event: ${EVENTSOURCING_FREIGHT_EVENT:gsl.event.freight}
+      document: ${EVENTSOURCING_FREIGHT_DOCUMENT:gsl.document.freight}
+    order:
+      event: ${EVENTSOURCING_ORDER_EVENT:gsl.event.order}
+      command: ${EVENTSOURCING_ORDER_COMMAND:gsl.command.order}
+      document: ${EVENTSOURCING_ORDER_DOCUMENT:gsl.document.order}
+    customer:
+      event: ${EVENTSOURCING_CUSTOMER_EVENT:gsl.event.customer}
+      command: ${EVENTSOURCING_CUSTOMER_COMMAND:gsl.command.customer}
+      document: ${EVENTSOURCING_CUSTOMER_DOCUMENT:gsl.document.customer}
