@@ -1,6 +1,6 @@
 {
   "type": "enum",
-  "namespace": "gsl.schemas",
+  "namespace": "boaentrega.gsl.schemas",
   "name": "FreightEventStatus",
   "symbols": [
     "CREATED",

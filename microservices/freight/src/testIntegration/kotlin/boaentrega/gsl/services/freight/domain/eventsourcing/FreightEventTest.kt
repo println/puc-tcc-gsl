@@ -11,8 +11,8 @@ import boaentrega.gsl.services.freight.domain.freight.FreightStatus
 import boaentrega.gsl.services.freight.domain.freight.web.FreightController
 import boaentrega.gsl.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.support.eventsourcing.messages.CommandMessage
-import gsl.schemas.FreightEvent
-import gsl.schemas.FreightEventStatus
+import boaentrega.gsl.schemas.FreightEvent
+import boaentrega.gsl.schemas.FreightEventStatus
 import org.jeasy.random.EasyRandom
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions

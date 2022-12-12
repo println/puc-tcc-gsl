@@ -12,7 +12,7 @@ import boaentrega.gsl.services.freight.replicas.order.OrderDoc
 import boaentrega.gsl.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.support.eventsourcing.messages.CommandMessage
-import gsl.schemas.*
+import boaentrega.gsl.schemas.*
 import org.jeasy.random.EasyRandom
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions

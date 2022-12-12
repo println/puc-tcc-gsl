@@ -8,8 +8,8 @@ import boaentrega.gsl.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.support.eventsourcing.controller.annotations.ConsumptionHandler
 import boaentrega.gsl.support.extensions.ClassExtensions.toObject
-import gsl.schemas.DocumentExpired
-import gsl.schemas.DocumentReleased
+import boaentrega.gsl.schemas.DocumentExpired
+import boaentrega.gsl.schemas.DocumentReleased
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component

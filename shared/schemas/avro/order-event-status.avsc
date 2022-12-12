@@ -1,6 +1,6 @@
 {
   "type": "enum",
-  "namespace": "gsl.schemas",
+  "namespace": "boaentrega.gsl.schemas",
   "name": "OrderEventStatus",
   "symbols": [
     "WAITING_PAYMENT",

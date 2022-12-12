@@ -2,8 +2,8 @@ package boaentrega.gsl.support.eventsourcing.messages
 
 import boaentrega.gsl.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.support.extensions.ClassExtensions.toObject
-import gsl.schemas.FreightEvent
-import gsl.schemas.FreightEventStatus
+import boaentrega.gsl.schemas.FreightEvent
+import boaentrega.gsl.schemas.FreightEventStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Instant

@@ -6,8 +6,8 @@ import boaentrega.gsl.support.eventsourcing.connectors.DedicatedProducerConnecto
 import boaentrega.gsl.support.eventsourcing.messages.EventMessage
 import boaentrega.gsl.support.extensions.ClassExtensions.logger
 import boaentrega.gsl.support.extensions.ClassExtensions.toJsonString
-import gsl.schemas.FreightEvent
-import gsl.schemas.FreightEventStatus
+import boaentrega.gsl.schemas.FreightEvent
+import boaentrega.gsl.schemas.FreightEventStatus
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import java.time.Instant

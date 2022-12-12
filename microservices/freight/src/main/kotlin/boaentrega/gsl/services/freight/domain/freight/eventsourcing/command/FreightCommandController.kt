@@ -6,7 +6,7 @@ import boaentrega.gsl.services.freight.domain.freight.FreightService
 import boaentrega.gsl.support.eventsourcing.connectors.ConsumerConnector
 import boaentrega.gsl.support.eventsourcing.controller.AbstractConsumerController
 import boaentrega.gsl.support.eventsourcing.controller.annotations.ConsumptionHandler
-import gsl.schemas.*
+import boaentrega.gsl.schemas.*
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 

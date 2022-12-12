@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "namespace": "gsl.schemas",
+  "namespace": "boaentrega.gsl.schemas",
   "name": "DocumentExpired",
   "fields": [
     {

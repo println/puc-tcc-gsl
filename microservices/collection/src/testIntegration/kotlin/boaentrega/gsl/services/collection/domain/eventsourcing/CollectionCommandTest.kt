@@ -11,9 +11,9 @@ import boaentrega.gsl.services.collection.domain.pickup.web.PickupRequestWebServ
 import boaentrega.gsl.support.eventsourcing.connectors.dummy.DummyConsumerConnector
 import boaentrega.gsl.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.support.eventsourcing.messages.CommandMessage
-import gsl.schemas.FreightEvent
-import gsl.schemas.FreightEventStatus
-import gsl.schemas.FreightPickupProductCommand
+import boaentrega.gsl.schemas.FreightEvent
+import boaentrega.gsl.schemas.FreightEventStatus
+import boaentrega.gsl.schemas.FreightPickupProductCommand
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

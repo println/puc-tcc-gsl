@@ -6,7 +6,7 @@ import boaentrega.gsl.support.jpa.AuditableModel
 import boaentrega.gsl.support.outbox.OutboxConnectorService
 import boaentrega.gsl.support.outbox.OutboxRepository
 import boaentrega.gsl.services.freight.support.web.ResponsePage
-import gsl.schemas.DocumentReleased
+import boaentrega.gsl.schemas.DocumentReleased
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions

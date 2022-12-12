@@ -10,9 +10,9 @@ import boaentrega.gsl.services.delivery.domain.delivery.web.DeliveryWebService
 import boaentrega.gsl.support.eventsourcing.connectors.dummy.DummyProducerConnector
 import boaentrega.gsl.support.extensions.ClassExtensions.toJsonString
 import boaentrega.gsl.support.extensions.ClassExtensions.toObject
-import gsl.schemas.FreightEvent
-import gsl.schemas.FreightEventStatus
-import gsl.schemas.FreightFinishCommand
+import boaentrega.gsl.schemas.FreightEvent
+import boaentrega.gsl.schemas.FreightEventStatus
+import boaentrega.gsl.schemas.FreightFinishCommand
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

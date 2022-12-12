@@ -4,8 +4,8 @@ import boaentrega.gsl.support.eventsourcing.connectors.DedicatedProducerConnecto
 import boaentrega.gsl.support.eventsourcing.messages.DocumentMessage
 import boaentrega.gsl.support.extensions.ClassExtensions.logger
 import boaentrega.gsl.support.extensions.ClassExtensions.toJsonString
-import gsl.schemas.DocumentExpired
-import gsl.schemas.DocumentReleased
+import boaentrega.gsl.schemas.DocumentExpired
+import boaentrega.gsl.schemas.DocumentReleased
 import java.time.Instant
 import java.util.*
 
