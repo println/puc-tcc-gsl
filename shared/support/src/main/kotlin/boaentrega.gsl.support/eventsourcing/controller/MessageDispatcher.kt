@@ -13,25 +13,29 @@ class MessageDispatcher(
         private val instance: Any,
         private val sourceId: String
 ) {
+    companion object {
+        private var dispatchTable: MutableMap<String, Triple<Class<*>, Method, Any>> = mutableMapOf()
+        fun clear() = dispatchTable.clear()
+    }
+
+
     private val logger = logger()
     private val errorHandler = MessageErrorDispatcher(instance)
-    private val dispatchTable: Map<String, Pair<Class<*>, Method>>
-
 
     init {
-        dispatchTable = extractDispatchTable()
+        dispatchTable.putAll(extractDispatchTable())
         if (!canRun()) {
             logger.error("[$sourceId] Dispatcher not has handle methods")
         }
     }
 
-    private fun extractDispatchTable(): Map<String, Pair<Class<*>, Method>> {
+    private fun extractDispatchTable(): Map<String, Triple<Class<*>, Method, Any>> {
         val methods = ReflectionUtils.getAllDeclaredMethods(instance::class.java)
         return methods.filter { it.isAnnotationPresent(ConsumptionHandler::class.java) }
                 .filter { it.parameterCount == 1 }
                 .associateBy(
                         { Functions.Message.extractIdentifier(it.getAnnotation(ConsumptionHandler::class.java)) },
-                        { Pair(it.parameterTypes[0], it) })
+                        { Triple(it.parameterTypes[0], it, instance) })
     }
 
     fun dispatch(message: Message): Boolean {
@@ -51,7 +55,7 @@ class MessageDispatcher(
             return errorHandler.dispatchError(ErrorType.PARSE_FAILED, message.identifier, message.content)
         }
 
-        val (type, handler) = dispatchTable.getValue(message.identifier)
+        val (type, handler, instance) = dispatchTable.getValue(message.identifier)
         val typedMessage = message.content.toObject(type)
 
         return when (handler.invoke(instance, typedMessage)) {

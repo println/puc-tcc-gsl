@@ -12,6 +12,7 @@
     <modules>
         <module>schemas</module>
         <module>support</module>
+        <module>snapshots</module>
     </modules>
 
     <build>

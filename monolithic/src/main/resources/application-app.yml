@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: order #@project.name@
+
+boaentrega:
+  gsl:
+    api:
+      path:
+        order: order
+        freight: freight
+        collection: collection
+        transportation: transport
+        delivery: delivery

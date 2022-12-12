@@ -5,28 +5,57 @@
 
     <parent>
         <groupId>boaentrega.gsl</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>root</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>boaentrega.gsl</groupId>
-    <artifactId>services</artifactId>
+    <groupId>boaentrega.gsl.services</groupId>
+    <artifactId>monolith</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>services</name>
+    <name>monolith</name>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
         <dependency>
             <groupId>boaentrega.gsl</groupId>
             <artifactId>schemas</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>boaentrega.gsl</groupId>
+            <artifactId>configuration</artifactId>
         </dependency>
         <dependency>
             <groupId>boaentrega.gsl</groupId>
             <artifactId>support</artifactId>
+        </dependency>
+        <!--services-->
+        <dependency>
+            <groupId>boaentrega.gsl.services</groupId>
+            <artifactId>order</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>boaentrega.gsl.services</groupId>
+            <artifactId>freight</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>boaentrega.gsl.services</groupId>
+            <artifactId>collection</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>boaentrega.gsl.services</groupId>
+            <artifactId>transportation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>boaentrega.gsl.services</groupId>
+            <artifactId>delivery</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -58,7 +87,6 @@
         <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>
-            <version>1.11.1</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -75,19 +103,15 @@
         <dependency>
             <groupId>io.github.microutils</groupId>
             <artifactId>kotlin-logging-jvm</artifactId>
-            <version>2.0.11</version>
         </dependency>
         <dependency>
             <groupId>com.fleshgrinder.kotlin</groupId>
             <artifactId>case-format</artifactId>
-            <version>0.2.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -106,10 +130,8 @@
         <dependency>
             <groupId>org.jeasy</groupId>
             <artifactId>easy-random-core</artifactId>
-            <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>

@@ -1,0 +1,15 @@
+spring:
+  h2:
+    console:
+      settings:
+        web-allow-others: 'false'
+        trace: 'false'
+      path: /h2-console
+  datasource:
+    url: jdbc:h2:mem:order-db;Mode=Oracle;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      platform: h2
+      continue-on-error: 'true'

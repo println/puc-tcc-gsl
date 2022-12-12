@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gsl-order
+  namespace: gsl
+spec:
+  selector:
+    matchLabels:
+      app: gsl-order
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: gsl-order
+    spec:
+      containers:
+        - name: gsl-order-unit
+          image: gsl/order-service:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT 
+              value: "8080"
+            - name: KAFKA_BOOTSTRAP_SERVERS 
+              value: "192.168.0.2:9092"
+            - name: DATABASE_JDBC_URI 
+              value: "postgresql://192.168.0.2:5432/orderdb"
+            - name: DATABASE_USER 
+              value: "gsl"
+            - name: DATABASE_PASS 
+              value: "gsl"
+            - name: EVENTSOURCING_PLATFORM 
+              value: "kafka"
+            - name: EVENTSOURCING_FREIGHT_COMMAND 
+              value: "gsl.command.freight"
+            - name: EVENTSOURCING_FREIGHT_EVENT 
+              value: "gsl.event.freight"
+            - name: EVENTSOURCING_FREIGHT_DOCUMENT 
+              value: "gsl.document.freight"
+            - name: EVENTSOURCING_ORDER_EVENT 
+              value: "gsl.event.order"
+            - name: EVENTSOURCING_ORDER_COMMAND 
+              value: "gsl.command.order"
+            - name: EVENTSOURCING_ORDER_DOCUMENT 
+              value: "gsl.document.order"
+            - name: EVENTSOURCING_CUSTOMER_EVENT 
+              value: "gsl.event.customer"
+            - name: EVENTSOURCING_CUSTOMER_COMMAND 
+              value: "gsl.command.customer"
+            - name: EVENTSOURCING_CUSTOMER_DOCUMENT 
+              value: "gsl.document.customer"

@@ -59,6 +59,7 @@ internal class MessageDispatcherTest {
 
     @Test
     fun dispatchErrorEmptyHandlers() {
+        MessageDispatcher.clear()
         dispatcher = MessageDispatcher(Controllers.WithoutController(), "test")
         dispatcher.dispatch(EventMessage(id, Constants.HANDLE_ID_ANY, Constants.EMPTY_MESSAGE))
         assertNotNull(errorType)
