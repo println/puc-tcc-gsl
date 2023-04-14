@@ -1,16 +1,15 @@
 # Prova de conceito: GESTÃO DE SERVIÇOS DE LOGÍSTICA (GSL)
 
-
-## Visão geral
-Este código é uma prova de conceito para o TCC do curso Arquitetura de Software Distribuído - PUC Minas.
+Esta é a prova de conceito para o trabalho de conclusão do curso (TCC) de Arquitetura de Software Distribuído, da PUC Minas. A ideia é, a partir de um problema, apresentar uma solução arquitetural, implementar a prova de conceito e gerar resultados que demonstram a eficácia da solução.
+O TCC completo pode ser obtido aqui: [Download do TCC](https://github.com/println/puc-tcc-gsl/raw/microservices/.dev/doc/boa-entrega.pdf).
 
 ## O Problema
 A empresa de logística Boa Entrega está passando por mudanças e deseja se manter relevante no mercado, que, atualmente, contém diversos novos concorrentes e desafios. A empresa contém uma stack tecnológica que necessita de atualização e da inclusão de novas ferramentas. Neste trabalho, apresentamos a proposta arquitetural GSL, que é escalável, distribuída, fácil de modificar e evoluir. Ela é baseada em microsserviços, interoperável, via API, com mobile e Web, e conta com ferramentas de BI e Big Data. Os serviços são autônomos e se comunicam via mensagens pelo Kafka. Adicionalmente, são pequenos, tolerantes a falha e simples de manter. A proposta arquitetural GSL busca resolver os problemas do negócio da Boa Entrega, mas deixa uma série de decisões em aberto, para o futuro, com o objetivo comportar a evolução do negócio.
 
-## Proposta arquitetural
-![Arquitetura](https://raw.githubusercontent.com/println/puc-tcc-gsl/microservices/.dev/doc/arquitetura.png)
+## Visão Geral da Solução
+Esta é a arquitetura proposta. Ela contém os componentes novos e os legados, em nuvens pública e privada, se comunicando via mensagens.
 
-[Download do TCC](https://github.com/println/puc-tcc-gsl/raw/microservices/.dev/doc/boa-entrega.pdf)
+![Arquitetura](https://raw.githubusercontent.com/println/puc-tcc-gsl/microservices/.dev/doc/arquitetura.png)
 
 ## Tecnologias
 1. Java / Kotlin
@@ -53,7 +52,8 @@ A empresa de logística Boa Entrega está passando por mudanças e deseja se man
    1. SonarQube
    1. JMeter
    1. Kafka UI
-1. Padrões arquiteturais
+   1. Konga
+1. Padrões arquiteturais (ref: https://microservices.io/patterns)
     1. Microservice Architecture
     1. Monolithic Architecture
     1. Transactional outbox
@@ -73,4 +73,42 @@ A empresa de logística Boa Entrega está passando por mudanças e deseja se man
     1. SonarQube
     1. JMeter
 
-## Instalação e execução da prova de conceito
+## Execução da prova de conceito
+> **_NOTA:_** Os arquivos do ambiente estão na pasta .dev
+
+### Requisitos:
+1. Linux
+1. Docker com kubernetes ativado
+1. Docker Compose
+1. Postman
+
+### Subir ambiente
+1. Subir os serviços no docker compose: `.dev/environment/run-with-kafka.sh` (ele vai pegar o ip automaticamente)
+
+Opcional:
+1. Limpeza de ambiente sujo: `.dev/environment/run-clean.sh`
+
+### Procedimentos
+1. Docker: Gerar imagem de todos os serviços: `docker-build-all.sh`
+1. Kubernetes: Implantar (deploy) todas as imagens do docker no kubernetes: `kubernetes-deploy-all.sh`
+
+Opcional:
+1. Docker: Executar todos os serviços via docker: `docker-run-all.sh`
+1. Docker: Encerrar a execução de todos os serviços no docker: `docker-stop-all.sh`
+1. Kubernetes: Remover todas imagens implantadas: `kubernetes-delete-all.sh`
+
+### Teste de BDD (POSTMAN)
+> **_NOTA:_** Importar os arquivos do Postman de `.dev/postman/`
+1. Executar teste de como mostrado no video: Testabilidade
+1. Incluir delay entre os testes de: 2000ms
+
+## Resultados 
+1. Apresentação cenário 1 - Desempenho: 
+   - vídeo: https://drive.google.com/file/d/1iAyH8E8KhluQoNz_EnyCP2mbi-fh0-kG/view?usp=sharing
+1. Apresentação cenário 2 - Manutenibilidade: 
+   - vídeo: https://drive.google.com/file/d/1snEA8CDAozyKJIdkCz52Mid5DHE3Y17K/view?usp=sharing
+1. Apresentação cenário 3 - Testabilidade: 
+   - vídeo: https://drive.google.com/file/d/1YtuhUaq8U75TRdYqaXvL1yr6_qBO2dn3/view?usp=share_link
+1. Apresentação cenário 4 – Tolerância a falhas: 
+   - vídeo: https://drive.google.com/file/d/1WLMXLyUx_QeE9AcsTL-ynblHaNg_bcSB/view?usp=share_link
+1. POC monolito implantado: https://boa-entrega.herokuapp.com/
