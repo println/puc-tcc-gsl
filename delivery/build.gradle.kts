@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "2.6.7"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("com.github.davidmc24.gradle.plugin.avro") version "1.5.0"
+    id ("org.sonarqube") version "3.4.0.2513"
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
     kotlin("plugin.jpa") version "1.6.10"
@@ -85,6 +86,7 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "11"
     }
+
 }
 
 tasks.withType<Test> {
